@@ -1,7 +1,3 @@
-## SpTeisendusUhikMaatriks.m
-function SpTM3x3xz=SpTeisendusUhikMaatriks(VarrasN)
-##
-##   The sparse identity matrix of reaction at the node
 ##=========================================================================
 ## Copyright (c)  2013 by Tallinn University of Technology
 ## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2013-06-26
@@ -24,45 +20,49 @@ function SpTM3x3xz=SpTeisendusUhikMaatriks(VarrasN)
 ## 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
+
+function SpTM3x3xz = SpTeisendusUhikMaatriks(VarrasN)
+##
+##   The sparse identity matrix of reaction at the node
 ##
 ## NSARV - the number of frame nodes
 ## NEARV - the number of elements
 ## VarrasN - the number of the element
 ##
 #if nargin != 1
-if ~(nargin==1)
-error(' function SpTeisendusUhikMaatriks have wrong number of input arguments!')
+if ~ (nargin == 1)
+    error(' function SpTeisendusUhikMaatriks has wrong number of input arguments!')
 end
 #
 ##
-#%%http://www.network-theory.co.uk/docs/octave3/octave_87.html
-VarrasN=1;
-#if (AF1-eps1) > 0
+# %%http://www.network-theory.co.uk/docs/octave3/octave_87.html
+VarrasN = 1;
+#if (AF1 - eps1) > 0
 #switch (VarrasN);
 #case{1}
-#i=VarrasN;
+#i = VarrasN;
 #
-suunakosin= zeros(3,3);
-        suunakosin(1,1)=1.0;
-        suunakosin(1,2)=0.0;
-        suunakosin(1,3)=0.0;
-        suunakosin(2,1)=0.0;
-        suunakosin(2,2)=1.0;
-        suunakosin(2,3)=0.0;
-        suunakosin(3,1)=0.0;
-        suunakosin(3,2)=0.0;
-        suunakosin(3,3)=1.0;
+suunakosin = zeros(3, 3);
+suunakosin(1, 1) = 1.0;
+suunakosin(1, 2) = 0.0;
+suunakosin(1, 3) = 0.0;
+suunakosin(2, 1) = 0.0;
+suunakosin(2, 2) = 1.0;
+suunakosin(2, 3) = 0.0;
+suunakosin(3, 1) = 0.0;
+suunakosin(3, 2) = 0.0;
+suunakosin(3, 3) = 1.0;
 #suunakosin
-#TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
+#TJ = suunakosin(NEARV, cosAlpha(i, 1), cosBeta(i, 2));
 
-TM3x3=suunakosin;
-SpTM3k3=sparse(TM3x3);
+TM3x3 = suunakosin;
+SpTM3k3 = sparse(TM3x3);
 #
-#%%%%%%%%%%%
+# %%%%%%%%%%%
 
 #endswitch
 
-
-SpTM3x3xz=SpTM3k3;
+SpTM3x3xz = SpTM3k3;
 #
 endfunction
+

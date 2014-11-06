@@ -1,14 +1,3 @@
-## SpToeSiirdeFiVektor.m
-function SpTFiV=SpToeSiirdeFiVektor(VarrasN)
-##function SpTFiV=SpToeSiirdeFiVektor(NSARV,NEARV,VarrasN,krdn,selem)
-##
-##disp('==================================================================')
-##disp(' SpToeSiirdeFiVektor.m     ')
-##disp(' The vector for transformation the vector [u, w, Fi]'' ')
-##disp(' from local to Fiy in global coordinates.')
-##disp(' OUTPUT: SpTFiV -- the transformation vector as sparse vector. ')
-##
-## GNU octave version >= 3.0.x
 ##=========================================================================
 ## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2010-07-05
 ## Last modified: Andres Lahe, 2013-07-08
@@ -31,6 +20,15 @@ function SpTFiV=SpToeSiirdeFiVektor(VarrasN)
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
+
+function SpTFiV = SpToeSiirdeFiVektor(VarrasN)
+##function SpTFiV=SpToeSiirdeFiVektor(NSARV,NEARV,VarrasN,krdn,selem)
+##disp('==================================================================')
+##disp(' SpToeSiirdeFiVektor.m     ')
+##disp(' The vector for transformation the vector [u, w, Fi]'' ')
+##disp(' from local to Fiy in global coordinates.')
+##disp(' OUTPUT: SpTFiV -- the transformation vector as sparse vector. ')
+
 ##
 ## NSARV - the number of frame nodes
 ## NEARV - the number of elements
@@ -38,51 +36,50 @@ function SpTFiV=SpToeSiirdeFiVektor(VarrasN)
 ## selem - the topology
 ## VarrasN - the number of the element
 ##
-#if nargin != 1
-if ~(nargin==1)
-error(' function SpToeSiirdeFiVektor have wrong number of input arguments!')
+if nargin != 1
+    error(' function SpToeSiirdeFiVektor has wrong number of input arguments!')
 end
 #
-#%selem=[selemjl(:,1:23)];
-#EARV=size(selem);
-#NEARV=EARV(1,1);
-#%%http://www.network-theory.co.uk/docs/octave3/octave_87.html
-##if (AF1-eps1) > 0
+# %selem=[selemjl(:,1:23)];
+#EARV = size(selem);
+#NEARV = EARV(1, 1);
+# %%http://www.network-theory.co.uk/docs/octave3/octave_87.html
+##if (AF1 - eps1) > 0
 #switch (VarrasN);
 #case{1}
-#i=VarrasN;
+#i = VarrasN;
 #
-#LkoordN=selem(i,16);
-#AkoordN=selem(i,17);
-#DeltaX(i)=krdn(LkoordN,1)-krdn(AkoordN,1);
-#DeltaZ(i)=krdn(LkoordN,2)-krdn(AkoordN,2);
-#VGRx(i,1)=krdn(AkoordN,1);
-#VGRx(i,2)=krdn(LkoordN,1);
-#VGRz(i,1)=krdn(AkoordN,2);
-#VGRz(i,2)=krdn(LkoordN,2);
+#LkoordN = selem(i, 16);
+#AkoordN = selem(i, 17);
+#DeltaX(i) = krdn(LkoordN, 1) - krdn(AkoordN, 1);
+#DeltaZ(i) = krdn(LkoordN, 2) - krdn(AkoordN, 2);
+#VGRx(i, 1) = krdn(AkoordN, 1);
+#VGRx(i, 2) = krdn(LkoordN, 1);
+#VGRz(i, 1) = krdn(AkoordN, 2);
+#VGRz(i, 2) = krdn(LkoordN, 2);
 #
 ## lvarras -- the length of the element
 #
-#lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
+#lvarras(i, 1) = sqrt(DeltaX(i)^2 + DeltaZ(i) ^ 2);
 #
-#cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
-#cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
-#---------The direction cosines of element -------
-suunakosin= zeros(1,3);
-        suunakosin(1,1)=0.0;
-        suunakosin(1,2)=0.0;
-        suunakosin(1,3)=1.0;
+#cosAlpha(i, 1) = DeltaX(i) / lvarras(i, 1);
+#cosBeta(i, 1) = DeltaZ(i) / lvarras(i, 1);
+# --------- The direction cosines of element -------
+suunakosin = zeros(1, 3);
+suunakosin(1, 1) = 0.0;
+suunakosin(1, 2) = 0.0;
+suunakosin(1, 3) = 1.0;
 #suunakosin
-#TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
+#TJ = suunakosin(NEARV, cosAlpha(i, 1), cosBeta(i, 2));
 
-TM3x3=suunakosin;
-SpTM3k3=sparse(TM3x3);
+TM3x3 = suunakosin;
+SpTM3k3 = sparse(TM3x3);
 #
-#%%%%%%%%%%%
+# %%%%%%%%%%%
 
 #endswitch
 
-
-SpTFiV=SpTM3k3;
+SpTFiV = SpTM3k3;
 #
 endfunction
+
