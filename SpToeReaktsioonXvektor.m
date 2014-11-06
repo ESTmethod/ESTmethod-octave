@@ -1,19 +1,19 @@
 ## SpToeReaktsioonXvektor.m
 function SpTUv=SpToeReaktsioonXvektor(NSARV,NEARV,VarrasN,krdn,selem)
 ##
-## 
+##
 ##disp('==================================================================')
 ##disp(' SpToeSiirdeUvektor.m     ')
 ##disp(' The vector for transformation the vector [u, w, Fi]'' ')
 ##disp(' from local to Ux in global coordinates. ')
 ##disp(' OUTPUT: SpTUv -- the transformation vector as sparse vector. ')
-## 
+##
 ## GNU octave version >= 3.0.x
 ##=========================================================================
 ## This Program is writtwn by Andres Lahe,   2010-07-05
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2013-07-08
-## Copyright (c)  2010 by Tallinn University of Technology 
+## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -43,7 +43,7 @@ function SpTUv=SpToeReaktsioonXvektor(NSARV,NEARV,VarrasN,krdn,selem)
 ##
 #if nargin != 5
 if ~(nargin==5)
-error(' function SpToeSiirdeUvektor have wrong number of input arguments!') 
+error(' function SpToeSiirdeUvektor have wrong number of input arguments!')
 end
 #
 #%selem=[selemjl(:,1:23)];
@@ -67,20 +67,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #---------The direction cosines of element -------
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -103,20 +103,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -141,20 +141,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -179,20 +179,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -217,20 +217,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -255,20 +255,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -293,20 +293,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -330,20 +330,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -367,20 +367,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -404,20 +404,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -441,20 +441,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -478,20 +478,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -515,20 +515,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -552,20 +552,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -589,20 +589,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -625,20 +625,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -662,20 +662,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -699,20 +699,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -736,20 +736,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -773,20 +773,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -810,20 +810,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -846,20 +846,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -882,20 +882,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -918,20 +918,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -954,20 +954,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -990,20 +990,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1026,20 +1026,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1062,20 +1062,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1098,20 +1098,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1134,20 +1134,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1171,20 +1171,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1207,20 +1207,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1243,20 +1243,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1279,20 +1279,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1315,20 +1315,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1351,20 +1351,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1387,20 +1387,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1423,20 +1423,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1459,20 +1459,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1495,20 +1495,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1532,20 +1532,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1568,20 +1568,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1604,20 +1604,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1640,20 +1640,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1676,20 +1676,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1712,20 +1712,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1748,20 +1748,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1784,20 +1784,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1820,20 +1820,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 
@@ -1856,20 +1856,20 @@ VGRz(i,2)=krdn(LkoordN,2);
 # lvarras -- the length of the element
 #
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);
-# 
+#
 cosAlpha(i,1)=DeltaX(i)/lvarras(i,1);
 cosBeta(i,1)=DeltaZ(i)/lvarras(i,1);
 #
 suunakosin= zeros(1,3);
         suunakosin(1,1)=cosAlpha(i,1);
         suunakosin(1,2)=cosBeta(i,1);
-        suunakosin(1,3)=0.0;        
-           
-           
-                 
-          
-           
-                      
+        suunakosin(1,3)=0.0;
+
+
+
+
+
+
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 

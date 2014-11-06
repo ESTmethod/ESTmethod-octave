@@ -5,7 +5,7 @@ function lvarras=VardaPikkus(NSARV,NEARV,krdn,selem)
 ## This Program is writtwn by Andres Lahe,   2010-06-26
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2013-07-08
-## Copyright (c)  2010 by Tallinn University of Technology 
+## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -32,7 +32,7 @@ function lvarras=VardaPikkus(NSARV,NEARV,krdn,selem)
 ##
 #if nargin != 4
 if ~(nargin==4)
-error(' function VardaPikkus have wrong number of input arguments!') 
+error(' function VardaPikkus have wrong number of input arguments!')
 end
 #
 EARV=size(selem);
@@ -45,10 +45,10 @@ DeltaZ(i)=krdn(LkoordN,2)-krdn(AkoordN,2);
 VGRx(i,1)=krdn(AkoordN,1);
 VGRx(i,2)=krdn(LkoordN,1);
 VGRz(i,1)=krdn(AkoordN,2);
-VGRz(i,2)=krdn(LkoordN,2);                               
+VGRz(i,2)=krdn(LkoordN,2);
 endfor
 #
-#Varda pikkus  
+#Varda pikkus
 #lvarras
 for i=1:NEARV
 lvarras(i,1)=sqrt(DeltaX(i)^2+DeltaZ(i)^2);

@@ -1,14 +1,14 @@
 ## InsertBtoA.m
 function A=InsertBtoA(A,I,J,IM,JN,B,M,N)
 #
-# Inserted matrix B (dimension M, N)  into matrix A (dimension I, J) 
+# Inserted matrix B (dimension M, N)  into matrix A (dimension I, J)
 # starting at row index IM and column index JN.
-# 
+#
 ##=========================================================================
 ## This Program is writtwn by Andres Lahe,   2002-02-15
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2009-01-03
-## Copyright (c)  2002 by Tallinn University of Technology 
+## Copyright (c)  2002 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -30,7 +30,7 @@ function A=InsertBtoA(A,I,J,IM,JN,B,M,N)
 #%%%%%%%%%%%%%%%%%
 #if nargin != 8
 if ~(nargin==8)
-error(' function InsertBtoA have wrong number of input arguments!') 
+error(' function InsertBtoA have wrong number of input arguments!')
 end
 #%%%%%%%%%%%%%%%%%
 #

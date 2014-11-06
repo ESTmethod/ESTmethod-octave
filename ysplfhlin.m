@@ -8,7 +8,7 @@ function spF=ysplfhlin(baasi0,x,EA,GAr,EJ)
 # The Sign Convention II for normal-, shear force and bending moment
 #  http://digi.lib.ttu.ee/opik_eme/Ehitusmehaanika.pdf#page=397   page=693
 # ---------------------------------------------
-# W. D. Pilkey, W. Wunderlich. Mechanics of Structures. Variational and 
+# W. D. Pilkey, W. Wunderlich. Mechanics of Structures. Variational and
 # Computational Methods. CRC Press, Boca Raton, Ann Arbor, London, Tokyo, 1994.
 # 4.3.1 Transfer Matrix (the basic equations) p. 174
 #----------------------------------------------
@@ -23,7 +23,7 @@ function spF=ysplfhlin(baasi0,x,EA,GAr,EJ)
 ## This Program is writtwn by Andres Lahe,   2009-02-14
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2010-03-12
-## Copyright (c)  2009 by Tallinn University of Technology 
+## Copyright (c)  2009 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -45,7 +45,7 @@ function spF=ysplfhlin(baasi0,x,EA,GAr,EJ)
 ##
 #if nargin != 5
 if ~(nargin==5)
-error(' function ysplfhlin have wrong number of input arguments!') 
+error(' function ysplfhlin have wrong number of input arguments!')
 end
 #
 #

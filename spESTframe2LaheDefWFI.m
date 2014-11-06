@@ -1,7 +1,7 @@
 ## spESTframe2LaheDefWFI.m
-close all 
+close all
 clear
-## 
+##
 #dbwhere(175)
 ##
 disp('==================================================================')
@@ -23,7 +23,7 @@ disp(' The equations matrix are non-symmetric sparse matrix. ')
 ## This Program is written by Andres Lahe,   2010-07-16
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2013-07-21
-## Copyright (c)  2010 by Tallinn University of Technology 
+## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -46,12 +46,12 @@ disp(' The equations matrix are non-symmetric sparse matrix. ')
 ##siireVardaA
  eps1=0.000001;
  epsgraf=0.01;
- global spA 
-  global X 
+ global spA
+  global X
  global siireVardaA
 disp('---  ')
 disp(' daf -- the displacements and the forces at the ends of element. ')
-disp(' The element of plane frame have 12 daf''s (6+6). ') 
+disp(' The element of plane frame have 12 daf''s (6+6). ')
 disp(' The number of unknowns are 12*number_of_elements + number_of_support_reactions. ')
 disp(' The matrices are assembled into compressed column sparse matrices. ')
 disp('---  ')
@@ -81,11 +81,11 @@ EIp=20000
 #EIp=4.6*10^15
 #EIr=4.6*10^13
 #EIr=40000
-#EAp=4.6*10^6; 
+#EAp=4.6*10^6;
 EAp=4.6*10^15;
 #EAr=6.8*10^6;
-EAr=6.8*10^15; 
-GAp=0.4*EAp; 
+EAr=6.8*10^15;
+GAp=0.4*EAp;
 #GAp=0.4*4.6*10^6;
 GAr=0.4*EAr;
 disp('--------- Scaling multiplier for displacements----------')
@@ -98,7 +98,7 @@ Lp=8.0; # graphics axis
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ##Fjoud=esFjoud(:,1:2,i);
 #Fjoud=esFjoud(:,1:3,i);
-##qkoormus=esQkoormus(:,1:3,i); 
+##qkoormus=esQkoormus(:,1:3,i);
 #qkoormus=esQkoormus(:,1:4,i);
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ## ---- load variants -----
@@ -134,13 +134,13 @@ F3=0.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -218,16 +218,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -266,13 +266,13 @@ F3=0.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -350,16 +350,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -398,13 +398,13 @@ F3=50.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -482,16 +482,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -530,13 +530,13 @@ F3=0.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -614,16 +614,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -662,13 +662,13 @@ F3=0.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -746,16 +746,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -794,13 +794,13 @@ F3=40.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -878,16 +878,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -926,13 +926,13 @@ F3=0.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -1010,16 +1010,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -1058,13 +1058,13 @@ F3=0.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -1142,16 +1142,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -1190,13 +1190,13 @@ F3=30.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -1274,16 +1274,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -1322,13 +1322,13 @@ F3=0.0
 EIr=Isuhe*EIp
 #
 baasi0=EIp/h
-xi=0.6; 
+xi=0.6;
 l1=l;
 l2=l;
 h08=0.8*h
 deltah=(1.0*0.2*h)/l1;
 #% sqrt(h^2+l1^2);
-L1=h08;     
+L1=h08;
 ##L2=l1;
 L2=sqrt(deltah^2+1.0^2); # length of the element
 L3=sqrt((0.2*h)^2+l1^2); # length of the element
@@ -1406,16 +1406,16 @@ esQkoormus(1,1:4,5)=[0.0 0.0 0.0 L5];
 esQkoormus(1,1:4,6)=[0.0 0.0 0.0 L6];
 esQkoormus(1,1:4,7)=[0.0 0.0 0.0 L7];
 #esQkoormus
-# 
+#
 # Point load in local coordinate z and x direction  kN
 #  Fz, Fx, aF - the coordinate of the point of force application
-LoadsF_on_Element=5; 
+LoadsF_on_Element=5;
 esFjoud=zeros(LoadsF_on_Element,2,ElementideArv);
 esFjoud(1,1:3,1)=[0.0 0.0 L1];
 esFjoud(1,1:3,2)=[0.0 0.0 L2];
 esFjoud(1,1:3,3)=[0.0 0.0 L3];
-esFjoud(1,1:3,4)=[Fz4 0.0 aF4]; 
-esFjoud(1,1:3,5)=[Fz5 Fx5 aF5]; 
+esFjoud(1,1:3,4)=[Fz4 0.0 aF4];
+esFjoud(1,1:3,5)=[Fz5 Fx5 aF5];
 esFjoud(1,1:3,6)=[Fz6 0.0 aF6];
 esFjoud(1,1:3,7)=[0.0 0.0 L7];
 #esFjoud
@@ -1440,7 +1440,7 @@ tSiire = zeros(3,1,SolmedeArv);
 #%%%%%
 otherwise
 disp(' No load variant cases ')
-endswitch 
+endswitch
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  disp(' Elements loads q in local coordinates ')
 #%%%qz=qzZ'
@@ -1448,13 +1448,13 @@ endswitch
 disp(' qz, qx, qA, qL  ')
 disp('  For the element load q = 0,  qL = L - the end of element  ')
 esQkoormus
-disp(' Elements forces F  in local coordinates  ')                                      
+disp(' Elements forces F  in local coordinates  ')
 #%%%Fx=FZx'
 #%%%Fz=FZz'
 ##esFjoud
 disp(' Fz, Fx, aF -- coordinate of the point of force F  application in local coordinates ')
 #disp(' x = aL -- coordinate of the point of force F  application in local coordinates ')
-disp(' For the element force F = 0,  aL = L - the end of element  ') 
+disp(' For the element force F = 0,  aL = L - the end of element  ')
 #%aL=aLXx'
 esFjoud
 #%%%
@@ -1477,24 +1477,24 @@ sSolmF(:,1,:)=sSolmF(:,1,:)
 # Nodal coordinates
 #==========
 deltah=(1.0*0.2*h)/l1;
-krdn=[#	 x                z 
+krdn=[#	 x                z
         0.0               0.0;   % node 1
         0.0              -h08;   % node 2
-       -1.0       -h08+deltah;   % node 3 
-	l1                 -h;   % node 4       
+       -1.0       -h08+deltah;   % node 3
+	l1                 -h;   % node 4
         l1                0.0;   % node 5
-        l1+l2            -h08;   % node 6         
-        l1+l2             0.0;   % node 7 
+        l1+l2            -h08;   % node 6
+        l1+l2             0.0;   % node 7
         l1+l2+1.0 -h08+deltah];   % node 8
-#==========       
- # disp(' Nr      toel  u  w  fi  N   Q   M ')      
+#==========
+ # disp(' Nr      toel  u  w  fi  N   Q   M ')
 #==========
 #  Restrtictions on  support displacements.
 # Support  Nr   u   w  fi   hold on - 1, open - 0
-#==========       
+#==========
 tsolm=[1       1 1 1;   % node 1
        5       1 1 0;   % node 3
-       7       1 1 1];  % node 5        
+       7       1 1 1];  % node 5
 #==========
 # Support shift multiplied by scaling multiplier
 #tSiire(1,1,1)= 0.0
@@ -1504,11 +1504,11 @@ tsolm=[1       1 1 1;   % node 1
 #tSiire(3,1,3)= 0.0
 #tSiire(1,1,5)= 0.0
 #tSiire(2,1,5)= 0.0
-#==========      
+#==========
  # ------------- Element properties, topology and hinges ---------
 #-----------------------
-elasts=[# Element properties, 
-#                     n2 - end of the element, 
+elasts=[# Element properties,
+#                     n2 - end of the element,
 #                          n1 - beginning of the element,
 #                               N, Q, M hinges at end of the element
 #                                        N, Q, M hinges at beginning of the element.
@@ -1520,8 +1520,8 @@ elasts=[# Element properties,
 	EIp EAp GAp   7     6    0 0 0    0 0 1;    % element 6
 	EIr EAr GAr   8     6    0 0 0    0 0 0];   % element 7
 # 1-hinge 'true' (axial, shear, moment hinge)
-#      
-#========== 
+#
+#==========
 
 #==========
 SARV=size(krdn);
@@ -1536,7 +1536,7 @@ sJrNT=sJrN';
 #disp('-----------------------------')
 disp('===============================')
 disp(' Nodal coordinates ')
-disp('  Node     X        Z  ') 
+disp('  Node     X        Z  ')
 disp('-----------------------------')
 #disp([krdn])
 for i=1:NSARV
@@ -1659,7 +1659,7 @@ for i=1:NTSARV
   for j=2:4
      if (tsolm(i,j) == 1)
        ToeSidemeteArv=ToeSidemeteArv+1;
-     endif 
+     endif
   endfor
 endfor
 #
@@ -1758,16 +1758,16 @@ for i=1:NEARV
 #    aLx=aLXx(i,1);
 #    Fz=FZz(i,1);
 #    Fx=FZx(i,1);
-baasi0=1.0;   
+baasi0=1.0;
 #Fjoud=esFjoud(:,1:2,i);
 Fjoud=esFjoud(:,1:3,i);
 #%       Fz    Fx     a
 #%Fjoud=[0.0    0.0   0.0;
-#qkoormus=esQkoormus(:,1:3,i); 
+#qkoormus=esQkoormus(:,1:3,i);
 qkoormus=esQkoormus(:,1:4,i);
 #%       qz     qx     qA      qL
-#%qkoormus=[0.0   0.0   0.0  0.0   0.0];     
-   
+#%qkoormus=[0.0   0.0   0.0  0.0   0.0];
+
    xsamm=Li/Nmitmeks; % element is divided into 4-th parts
    xx=0;
    AP=AlgPar(i,:)';
@@ -1776,24 +1776,24 @@ qkoormus=esQkoormus(:,1:4,i);
        vvF=ylfhlin(1.0,xx,EA,GAr,EI);
 #       vvB=yzhqz(1.0,xx,qx,qz,EA,EI);
 #       vvFz=yzfzv(1.0,xx,aLx,Fx,Fz,EA,EI);
- Sj=ESTFrKrmus(1.0,xx,Li,Fjoud,qkoormus,EA,EI); 
- vB=Sj;       
-   Fvv(:,ij)=vvF*AP+vB; 
+ Sj=ESTFrKrmus(1.0,xx,Li,Fjoud,qkoormus,EA,EI);
+ vB=Sj;
+   Fvv(:,ij)=vvF*AP+vB;
 #       Fvv(:,ij)=vvF*AP+vvB+vvFz;
        xx=xx+xsamm;
      endfor
-#-------------The element displacements and forces---------- 
+#-------------The element displacements and forces----------
    #
    VardaNr=i;
-   disp(sprintf('%13s %2i %15s %5.3f %2s', 'Displacements and forces of element no',VardaNr,'  length of element ',Li,'m,  '))  
+   disp(sprintf('%13s %2i %15s %5.3f %2s', 'Displacements and forces of element no',VardaNr,'  length of element ',Li,'m,  '))
     disp('    element is divided into 4 th parts ')
    %disp('  ')
 #
-     for i=1:3 
+     for i=1:3
        disp(sprintf('%14s %9.5e   %9.5e   %9.5e   %9.5e  %9.5e',suurused(i,:), Fvv(i,1),   Fvv(i,2),   Fvv(i,3),  Fvv(i,4),  Fvv(i,5)))
      endfor
 #
-     for i=4:6 
+     for i=4:6
        disp(sprintf('%14s %9.5f   %9.5f   %9.5f   %9.5f  %9.5f',suurused(i,:), Fvv(i,1),   Fvv(i,2),   Fvv(i,3),  Fvv(i,4),  Fvv(i,5)))
      endfor
 #
@@ -1881,7 +1881,7 @@ figure(1)
    #
      for j=1:NEARV
          IR=j;
-         # 
+         #
          #   axis([-d Lpikk+d -H-2.0 1.0], "ij")
 #         axis([-d Lpikk+d  -Lpikk-0.2*d d], "ij")
          axis([-d Lpikk+d  -H-8.0 0.5*d], "ij")
@@ -1910,7 +1910,7 @@ figure(1)
       IR=i;
       TTT=eval(sprintf('%i',IR));
       TST=int2str(TTT);
-       
+
       #text(krdn(IR,1), krdn(IR,2)+0.17, TST)
       text(krdn(IR,1), krdn(IR,2)+0.25, TST)
       #
@@ -1933,12 +1933,12 @@ yvalg=-H-6.0;
 sammuga=0.5;
 #sammuga=0.8;
 text(-1.0, yvalg-1.5*sammuga, 'Numeration of displacements and forces ')
-#TSA=[TSA1 Tyhk TSA2 Tyhk TSA3] ; 
+#TSA=[TSA1 Tyhk TSA2 Tyhk TSA3] ;
 text(-2.0, yvalg, 'u w fi N Q M at the beginning')
 #%xvalg=xvalg+sammuga;
-yvalg=yvalg+sammuga; 
+yvalg=yvalg+sammuga;
 
-for i=1:NEARV;     
+for i=1:NEARV;
    #siireVardaA  joudVardaA(i,1:3)
    TTA1=eval(sprintf('%3i',siireVardaA(i,1)));
    TTA2=eval(sprintf('%3i',siireVardaA(i,2)));
@@ -1947,18 +1947,18 @@ for i=1:NEARV;
    TTA5=eval(sprintf('%3i',joudVardaA(i,2)));
    TTA6=eval(sprintf('%3i',joudVardaA(i,3)));
       TSA1=int2str(TTA1);
-      TSA2=int2str(TTA2);   
-      TSA3=int2str(TTA3);  
+      TSA2=int2str(TTA2);
+      TSA3=int2str(TTA3);
       TSA4=int2str(TTA4);
-      TSA5=int2str(TTA5);   
-      TSA6=int2str(TTA6);    
+      TSA5=int2str(TTA5);
+      TSA6=int2str(TTA6);
       Tyhk='  ';
-   TSA=[TSA1 Tyhk TSA2 Tyhk TSA3 Tyhk TSA4 Tyhk TSA5 Tyhk TSA6] ;                                                          
+   TSA=[TSA1 Tyhk TSA2 Tyhk TSA3 Tyhk TSA4 Tyhk TSA5 Tyhk TSA6] ;
    text(xvalg, yvalg, TSA)
    #%xvalg=xvalg+sammuga;
    yvalg=yvalg+sammuga;
 endfor
-yvalg=yvalg+sammuga; 
+yvalg=yvalg+sammuga;
 
 text(-1.0, yvalg, 'Support reactions: 85 86 87 88 89 90 91 92 ')
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1968,7 +1968,7 @@ xvalg=7.0;
 yvalg=-H-6.0;
 sammuga=0.5;
 #sammuga=0.8;
-#TSA=[TSA1 Tyhk TSA2 Tyhk TSA3] ; 
+#TSA=[TSA1 Tyhk TSA2 Tyhk TSA3] ;
 text(6.0, yvalg, 'u w fi N Q M at the end')
 #text(9.5, yvalg, 'u w fi N Q M at the end')
 #%xvalg=xvalg+sammuga;
@@ -1982,13 +1982,13 @@ for i=1:NEARV;
    TTA5=eval(sprintf('%3i',joudVardaL(i,2)));
    TTA6=eval(sprintf('%3i',joudVardaL(i,3)));
      TSA1=int2str(TTA1);
-     TSA2=int2str(TTA2);   
-     TSA3=int2str(TTA3);  
+     TSA2=int2str(TTA2);
+     TSA3=int2str(TTA3);
      TSA4=int2str(TTA4);
-     TSA5=int2str(TTA5);   
-     TSA6=int2str(TTA6);   
+     TSA5=int2str(TTA5);
+     TSA6=int2str(TTA6);
      Tyhk='  ';
-   TSA=[TSA1 Tyhk TSA2 Tyhk TSA3 Tyhk TSA4 Tyhk TSA5 Tyhk TSA6] ; 
+   TSA=[TSA1 Tyhk TSA2 Tyhk TSA3 Tyhk TSA4 Tyhk TSA5 Tyhk TSA6] ;
    text(xvalg, yvalg, TSA)
    #%xvalg=xvalg+sammuga;
    yvalg=yvalg+sammuga;

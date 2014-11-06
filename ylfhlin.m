@@ -19,7 +19,7 @@ function F=ylfhlin(baasi0,x,EA,GAr,EJ)
 ## This Program is writtwn by Andres Lahe,   1998-05-20
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2009-02-13
-## Copyright (c)  2004 by Tallinn University of Technology 
+## Copyright (c)  2004 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -41,7 +41,7 @@ function F=ylfhlin(baasi0,x,EA,GAr,EJ)
 ##
 #if nargin != 5
 if ~(nargin==5)
-error(' function ylfhlin have wrong number of input arguments!') 
+error(' function ylfhlin have wrong number of input arguments!')
 end
 #
 #

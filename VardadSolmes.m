@@ -1,14 +1,14 @@
-# VardadSolmes.m 
+# VardadSolmes.m
 function Sv=VardadSolmes(NSARV,NEARV,Solm,AB,ABB)
 #
-# Sort the rows of matrix ABB according to the order of the (column=8) node 
+# Sort the rows of matrix ABB according to the order of the (column=8) node
 # number. Returned matrix with the order of the row reversed.
-# 
+#
 ##=========================================================================
 ## This Program is writtwn by Andres Lahe,   2013-06-26
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2013-06-27
-## Copyright (c)  2013 by Tallinn University of Technology 
+## Copyright (c)  2013 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -30,7 +30,7 @@ function Sv=VardadSolmes(NSARV,NEARV,Solm,AB,ABB)
 #%%%%%%%%%%%%%%%%%
 #if nargin != 5
 if ~(nargin==5)
-error(' function VardadSolmes have wrong number of input arguments!') 
+error(' function VardadSolmes have wrong number of input arguments!')
 end
 #%%%%%%%%%%%%%%%%%
 ##
@@ -38,7 +38,7 @@ end
 ## NEARV - the number of elements
 ## Solm - the node number
 ## AB -  the elements connected at the nodes
-## ABB - matrix[Element number, u w fi N Q M, Node, hinges N    Q    M ]  
+## ABB - matrix[Element number, u w fi N Q M, Node, hinges N    Q    M ]
 ##
 #
 NEARV2=NEARV*2;
@@ -64,7 +64,7 @@ for i=1:NSARV
    jl=jl+1;
 endfor
 ABBYYY;
-# 
+#
 
 #%%http://www.network-theory.co.uk/docs/octave3/octave_87.html
 #if (AF1-eps1) > 0
@@ -124,7 +124,7 @@ tmp = sum(inds');
 #ABBYYY4(:,:,i) = ABBYYY(tmp~=s(2),:,i);
 ABBYYY4(:,:) = ABBYYY(tmp~=s(2),:,i);
 #
-ABBYYY4; 
+ABBYYY4;
 #ascending
 [~,idx] = sortrows(ABBYYY4(:,11));
 #%
@@ -402,7 +402,7 @@ ABBYYY20;
 [~,idx] = sortrows(ABBYYY20(:,11));
 #%
 ABBYYY20=ABBYYY20(idx,:);
-ABBYYY0=ABBYYY20;  
+ABBYYY0=ABBYYY20;
 
 
 case{21}
@@ -572,7 +572,7 @@ ABBYYY30;
 [~,idx] = sortrows(ABBYYY30(:,11));
 ##
 ABBYYY30=ABBYYY30(idx,:);
-ABBYYY0=ABBYYY30;  
+ABBYYY0=ABBYYY30;
 
 
 case{31}
@@ -592,7 +592,7 @@ ABBYYY31=ABBYYY31(idx,:);
 ABBYYY0=ABBYYY31;
 
 
-case{32}    
+case{32}
 i=Solm;
 #
 s = size(ABBYYY(:,:,i));
@@ -932,7 +932,7 @@ case{60}
 #%?otherwise
 endswitch
 #else
-# disp(' Sõlm puudub  '); 
+# disp(' Sõlm puudub  ');
 %aaaaaaaaaa=0;
 #endif
 

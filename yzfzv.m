@@ -1,7 +1,7 @@
 ## yzfzv.m
 function Fzx=yzfzv(baasi0,x,a,Fx,Fz,EA,EJ)
-# 
-#  Fzx -The load vector  F (projections Fx and Fz) 
+#
+#  Fzx -The load vector  F (projections Fx and Fz)
 #  in the tranfer matrix method   ZL - U*ZA =Fzx (the II sign convention).
 #  http://digi.lib.ttu.ee/opik_eme/Ehitusmehaanika.pdf#page=396  page=694
 #  EA - the extension stiffness of the element
@@ -16,7 +16,7 @@ function Fzx=yzfzv(baasi0,x,a,Fx,Fz,EA,EJ)
 ## This Program is writtwn by Andres Lahe,   1998-05-20
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2009-02-13
-## Copyright (c)  2004 by Tallinn University of Technology 
+## Copyright (c)  2004 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -38,7 +38,7 @@ function Fzx=yzfzv(baasi0,x,a,Fx,Fz,EA,EJ)
 ##
 #if nargin != 7
 if ~(nargin==7)
-error(' function yzfzv have wrong number of input arguments!') 
+error(' function yzfzv have wrong number of input arguments!')
 end
 #
 ##

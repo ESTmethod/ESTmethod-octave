@@ -1,14 +1,14 @@
 ## spSisestaArv.m
 function spA=spSisestaArv(spA,iv,jv,sv)
-# 
-# Inserted the nunber into sparse matrix spA, 
+#
+# Inserted the nunber into sparse matrix spA,
 # starting at row index iv and column index jv.
 #
 ##=========================================================================
 ## This Program is written by Andres Lahe,   2010-03-22
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2010-06-21
-## Copyright (c)  2010 by Tallinn University of Technology 
+## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -29,11 +29,11 @@ function spA=spSisestaArv(spA,iv,jv,sv)
 ##==========
 ##
 #%%%%%%%%%%%%%%%%%
-if nargin<4, 
-error(' function InsertBtoA have wrong number of input arguments!') 
+if nargin<4,
+error(' function InsertBtoA have wrong number of input arguments!')
 end
-if nargin>4, 
-error(' function InsertBtoA have wrong number of input arguments!') 
+if nargin>4,
+error(' function InsertBtoA have wrong number of input arguments!')
 end
 #
 ##

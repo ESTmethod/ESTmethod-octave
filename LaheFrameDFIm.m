@@ -1,7 +1,7 @@
 ## LaheFrameDFIm.m
 function AlgParm=LaheFrameDFIm(baasi0,Ntoerkts,esQkoormus,esFjoud,sSolmF,tsolm,tSiire,krdn,selem)
 ##
-## 
+##
 ##dbwhere(618)
 ##disp('==================================================================')
 ##disp(' LaheBeamDFI.m     ')
@@ -10,13 +10,13 @@ function AlgParm=LaheFrameDFIm(baasi0,Ntoerkts,esQkoormus,esFjoud,sSolmF,tsolm,t
 ##disp(' Solving system of sparse equations. Find the initial parmeter vectors ')
 ##disp(' for elements displacements, forces and the support reactions.  ')
 ##disp(' OUTPUT: AlgParm -- the initial parmeter vector for elements. ')
-## 
+##
 ## GNU octave version >= 3.0.x
 ##=========================================================================
 ## This Program is written by Andres Lahe,   2010-07-16
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2013-07-21
-## Copyright (c)  2010 by Tallinn University of Technology 
+## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -45,22 +45,22 @@ function AlgParm=LaheFrameDFIm(baasi0,Ntoerkts,esQkoormus,esFjoud,sSolmF,tsolm,t
 ##           esFjoud(LoadsF_on_Element,2,ElementideArv),
 ## sSolmF - the node forces in global  coordinates
 ##          sSolmF(2,1,SolmedeArv),
-## tsolm - the restrtictions on the support displacements 
-## tSiire - the support shift 
+## tsolm - the restrtictions on the support displacements
+## tSiire - the support shift
 ##          tSiire(2,1,SolmedeArv)
 ## krdn - the nodal coordinates
-## selem - the topology of elements 
+## selem - the topology of elements
 ##         selem(ElementideArv,1:16)
 ##
 #if nargin != 9
 if ~(nargin==9)
-error(' function LaheBeamDFI have wrong number of input arguments!') 
+error(' function LaheBeamDFI have wrong number of input arguments!')
 end
 #
  global spA
    global X
  global siireVardaA
-#disp('---  ') 
+#disp('---  ')
 #%selem=[selemjl(:,1:23)];
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 EARV=size(selem);
@@ -90,13 +90,13 @@ sJrN(i)=i;
   for j=2:3
      if (tsolm(i,j) == 1)
        ToeSidemeteArv=ToeSidemeteArv+1;
-     endif 
+     endif
   endfor
 endfor
 #
      if (tsolm(i,j) == 1)
        ToeSidemeteArv=ToeSidemeteArv+1;
-     endif 
+     endif
   endfor
 endfor
 #
@@ -199,7 +199,7 @@ vFz=zeros(4,1);
    EA=selem(i,14);
    GAr=selem(i,15);
    Li=lvarras(i,1);
-xx=Li;   
+xx=Li;
    #SII=SI(i,1);
 #   SII=0;
 #   qx=qxZ(i,1);
@@ -207,16 +207,16 @@ xx=Li;
 #   aLx=aLXx(i,1);
 #   Fz=FZz(i,1);
 #   Fx=FZx(i,1);
-   
+
 #Fjoud=esFjoud(:,1:2,i);
 Fjoud=esFjoud(:,1:3,i);
 %       Fz    Fx     a
 %Fjoud=[0.0    0.0   0.0;
-#qkoormus=esQkoormus(:,1:3,i); 
+#qkoormus=esQkoormus(:,1:3,i);
 qkoormus=esQkoormus(:,1:4,i);
 %       qz     qx     qA      qL
 %qkoormus=[0.0   0.0   0.0  0.0   0.0;
-   
+
 #---------The transfer matrix equation --------
    spvF=ysplvfmhvI(baasi0,xx,Li,EA,GAr,EI);
 #   vB=yzhqz(baasi0,Li,qx,qz,EA,EI);
@@ -224,7 +224,7 @@ qkoormus=esQkoormus(:,1:4,i);
 #   vFz=yzfzv(baasi0,Li,aLx,Fx,Fz,EA,EI);
 #   Sj=ESTSKrmus(xx,Li,Fjoud,qkoormus)  % vB4=yzShqz(xx,qx4,qz4); % vFz5=yzSfzv(xx,aLx5,Fx5,Fz5)
     Sj=ESTFrKrmus(baasi0,Li,Li,Fjoud,qkoormus,EA,EI);
-#    Sj=ESTFrKrmus(baasi0,xx,Li,Fjoud,qkoormus,EA,EI)    
+#    Sj=ESTFrKrmus(baasi0,xx,Li,Fjoud,qkoormus,EA,EI)
 #   vB=vB+vFz;
    vB=Sj;
    IIv=krda*6-5;
@@ -257,12 +257,12 @@ Nr1=spRidu+1;
   SolmedeArv=NSARV;
 #%%%%
     Vord='=';
-    Kom=',' ;  
+    Kom=',' ;
     Semi=';';
-   #Tyhk='  ';     
+   #Tyhk='  ';
  Arv1=num2str(1);
  Arv2=num2str(2);
- Arv3=num2str(3);    
+ Arv3=num2str(3);
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Compatibility equations of displacements at nodes ')
 From_row=sprintf('Compatibility equations begin from row: %d', Nr1)
@@ -275,9 +275,9 @@ Node=Solm
 AVS=VardadSolmes(NSARV,NEARV,Solm,AB,ABB);
 #AVS
 #
-#disp('---------------------------------------------------------') 
+#disp('---------------------------------------------------------')
 #
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 NEARV2=NEARV*2;
 #
 SpTM3x3=sparse(3,3);
@@ -292,8 +292,8 @@ AVSdim=size(AVS) ;
 if AVSdim(1,1) > 1
 
     for j=2:AVSdim(1,1)
-    
-       Varras1=AVS(1,1);    
+
+       Varras1=AVS(1,1);
        VarrasN=AVS(j,1);
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #
@@ -304,45 +304,45 @@ if AVSdim(1,1) > 1
 #
     if AVSsum == 0
       SpTM3x3=SpTeisendusMaatriks(NSARV,NEARV,Varras1,krdn,selem);
-      TAVS2=eval(sprintf('%3i',AVS(1,2)));  
+      TAVS2=eval(sprintf('%3i',AVS(1,2)));
       TVS2=int2str(TAVS2);
-      str2=TVS2;    
+      str2=TVS2;
       str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM3x3',')',Semi];
       cmd = sprintf(str)
-      eval(cmd)  
+      eval(cmd)
       SpTM3x3=SpTeisendusMaatriks(NSARV,NEARV,VarrasN,krdn,selem);
       SpTM3x3m=-SpTM3x3;
-      TAVS2=eval(sprintf('%3i',AVS(j,2)));  
+      TAVS2=eval(sprintf('%3i',AVS(j,2)));
       TVS2=int2str(TAVS2);
       str2=TVS2;
       str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM3x3m',')',Semi];
       cmd = sprintf(str)
       eval(cmd);
-      Nr1=Nr1+3; 
-    else    
-# 
+      Nr1=Nr1+3;
+    else
+#
       SpTM2x2=SpTeisendusMaatriks2x2(NSARV,NEARV,Varras1,krdn,selem);
 #      SpTM2x2;
-      str1=num2str(Nr1);    
-      TAVS2=eval(sprintf('%3i',AVS(1,2)));  
+      str1=num2str(Nr1);
+      TAVS2=eval(sprintf('%3i',AVS(1,2)));
       TVS2=int2str(TAVS2);
-      str2=TVS2;    
+      str2=TVS2;
       str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM2x2',')',Semi];
       cmd = sprintf(str)
-      eval(cmd); 
+      eval(cmd);
       SpTM2x2=SpTeisendusMaatriks2x2(NSARV,NEARV,VarrasN,krdn,selem);
-      SpTM2x2m=-SpTM2x2; 
-      TAVS2=eval(sprintf('%3i',AVS(j,2)));  
+      SpTM2x2m=-SpTM2x2;
+      TAVS2=eval(sprintf('%3i',AVS(j,2)));
       TVS2=int2str(TAVS2);
       str2=TVS2;
       str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM2x2m',')',Semi];
       cmd = sprintf(str)
-      eval(cmd);        
-      Nr1=Nr1+2; 
+      eval(cmd);
+      Nr1=Nr1+2;
     endif
-# 
-  endfor  #% for j=2:AVSdim(1,1)                   
- endif #%if AVSdim(1,1) > 1                                       
+#
+  endfor  #% for j=2:AVSdim(1,1)
+ endif #%if AVSdim(1,1) > 1
 endfor  #% for i=1:NSARV
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp('----- ')
@@ -370,17 +370,17 @@ disp(' Joint equilibrium equations at nodes ')
 From_rows=sprintf('Joint equilibrium equations begin from row: %d', Nr1)
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 #
-str1=num2str(Nr1); 
+str1=num2str(Nr1);
 strSolm=num2str(Solm);
 koolonV=':';
 #strSolmB
 tsolmLaiend=zeros(NSARV,4);
   for i=1:NSARV
-      tsolmLaiend(i,1)=i; 
+      tsolmLaiend(i,1)=i;
     for j=1:NTSARV;
      if (tsolmLaiend(i,1)-tsolm(j,1)) == 0
       tsolmLaiend(i,2:4)=tsolm(j,2:4);
-     endif 
+     endif
     endfor
  endfor
 #  tsolm
@@ -394,9 +394,9 @@ for i=1:NSARV  % sõlmede arv
   AVS=VardadSolmes(NSARV,NEARV,Solm,AB,ABB);
   uvfiLaiend(Node,1)=tsolmLaiend(Node,2)+tsolmLaiend(Node,3)+tsolmLaiend(Node,4);
 #
-disp('---------------------------------------------------------') 
+disp('---------------------------------------------------------')
   vorrandeid=size(spA);
-  spRidu=vorrandeid(1,1); 
+  spRidu=vorrandeid(1,1);
   Nr1=spRidu+1;
 #%%%%%%%%%%%%%%%%%%
   NEARV2=NEARV*2;
@@ -411,36 +411,36 @@ uvfi=0;
 #
   AVSdim=size(AVS) ;
     if AVSdim(1,1) == 1
-    
-#%%%%%%%%%%%%%%%%    
-  if   uvfiLaiend(Node,1) == 0  
-      VarrasN=AVS(1,1); 
+
+#%%%%%%%%%%%%%%%%
+  if   uvfiLaiend(Node,1) == 0
+      VarrasN=AVS(1,1);
 %      AVS
 %%      AVS =2   19   20   21   22   23   24    3    0    0    0
 
         SpTM3x3=SpTeisendusMaatriks(NSARV,NEARV,VarrasN,krdn,selem);
-%        TAVS2=eval(sprintf('%3i',AVS(1,2))); 
-         TAVS2=eval(sprintf('%3i',AVS(1,5)));        
+%        TAVS2=eval(sprintf('%3i',AVS(1,2)));
+         TAVS2=eval(sprintf('%3i',AVS(1,5)));
          TVS2=int2str(TAVS2);
-         str2=TVS2;  
+         str2=TVS2;
          str1=num2str(Nr1);
          str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM3x3',')',Semi];
          cmd = sprintf(str)
-         eval(cmd) 
-    Arv123=Arv3;     
+         eval(cmd)
+    Arv123=Arv3;
   sF(:,1)= sSolmF(:,1,Solm);
-% siia tehtud parandus  
+% siia tehtud parandus
  strB1=num2str(Nr1);
  strB2=num2str(Nr1+2);
 %  strSolmB=Arv1;
-  strB=['B(',strB1, koolonV, strB2, Kom,Arv1,')','=','sF(', Arv1, koolonV, Arv123, Kom, Arv1,')',Semi];    
+  strB=['B(',strB1, koolonV, strB2, Kom,Arv1,')','=','sF(', Arv1, koolonV, Arv123, Kom, Arv1,')',Semi];
    cmd = sprintf(strB)
-      eval(cmd)         
-         
+      eval(cmd)
+
           Nr1=Nr1+3;
-   endif 
- #%%%%%%%%%%%%%%%%   
-    
+   endif
+ #%%%%%%%%%%%%%%%%
+
        TSARV=size(tsolm);
        NTSARV=TSARV(1,1);
       for k=1:NTSARV
@@ -449,119 +449,119 @@ uvfi=0;
         tsolSol=(tsolm(k,1)- Solm);
           if tsolSol == 0
            uvfi=tsolm(k,2)+tsolm(k,3)+tsolm(k,4);
-           Number_of_reaction=sprintf('The number of reaction at node (node_nr, reactions):  %d, %d',Node, uvfi)   
+           Number_of_reaction=sprintf('The number of reaction at node (node_nr, reactions):  %d, %d',Node, uvfi)
            vorrandeid=size(spA);
-           spRidu=vorrandeid(1,1); 
-           Nr1=spRidu+1; 
+           spRidu=vorrandeid(1,1);
+           Nr1=spRidu+1;
            str1=num2str(Nr1);
            strSolm=num2str(Solm);
            koolonV=':';
            AVStas= AVS(1,11);
-             if (uvfi-3) == 0 
+             if (uvfi-3) == 0
 #              olentoesolmes=tsolm(k,1);   # ADDED
                VarrasN=AVS(1,1);
-               SpTM3x3=SpTeisendusMaatriks(NSARV,NEARV,VarrasN,krdn,selem); 
-               TAVS2=eval(sprintf('%3i',AVS(1,5)));  
+               SpTM3x3=SpTeisendusMaatriks(NSARV,NEARV,VarrasN,krdn,selem);
+               TAVS2=eval(sprintf('%3i',AVS(1,5)));
                TVS2=int2str(TAVS2);
-               str2=TVS2;    
+               str2=TVS2;
                str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM3x3',')',Semi];
                cmd = sprintf(str)
-               eval(cmd)              
+               eval(cmd)
                SpTM3x3xz=SpTeisendusUhikMaatriks(1);
                SpTM3x3xz=-SpTM3x3xz;
                TAVS2=toemuutuja;
                TVS2=int2str(TAVS2);
-               str2=TVS2;    
+               str2=TVS2;
                str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM3x3xz',')',Semi];
                cmd = sprintf(str)
                eval(cmd)
-               
+
                Nr1=Nr1+3;
                toemuutuja=toemuutuja+3;
 
-             endif 
-   
-   
-        if (uvfi-2) == 0 
+             endif
+
+
+        if (uvfi-2) == 0
 #
             olentoesolmes=tsolm(k,1);   # ADDED
-            VarrasN=AVS(1,1);    
+            VarrasN=AVS(1,1);
       SpTM2x2=SpTeisendusMaatriks2x2(NSARV,NEARV,VarrasN,krdn,selem);
-# 
-      str1=num2str(Nr1);    
-      TAVS2=eval(sprintf('%3i',AVS(1,5)));  
+#
+      str1=num2str(Nr1);
+      TAVS2=eval(sprintf('%3i',AVS(1,5)));
       TVS2=int2str(TAVS2);
-      str2=TVS2;    
+      str2=TVS2;
       str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM2x2',')',Semi];
-      cmd = sprintf(str) 
-      eval(cmd) 
- 
+      cmd = sprintf(str)
+      eval(cmd)
+
        SpTM2x2xz=SpTeisendusUhikMaatriks2x2(1);
       SpTM2x2xz=-SpTM2x2xz;
-# 
+#
       TAVS2=toemuutuja;
       TVS2=int2str(TAVS2);
-      str2=TVS2;    
+      str2=TVS2;
       str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM2x2xz',')',Semi];
-      cmd = sprintf(str) 
+      cmd = sprintf(str)
       eval(cmd)
-       
+
       Nr1=Nr1+2;
 #      taskVorreid(1,k)=2 ;
       toemuutuja=toemuutuja+2;
      endif
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     
-     if (uvfi-1) == 0   
-  
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     if (uvfi-1) == 0
+
        olentoesolmes=tsolm(k,1);   # ADDED
-        VarrasN=AVS(1,1); 
+        VarrasN=AVS(1,1);
 #AVS
 TugiX=tsolm(k,2);
 TugiZ=tsolm(k,3);
  mArv1=num2str(1);
-           if (TugiX-1) == 0 
-                TAVS2=eval(sprintf('%3i',AVS(1,5)));  
+           if (TugiX-1) == 0
+                TAVS2=eval(sprintf('%3i',AVS(1,5)));
                 TVS2=int2str(TAVS2);
                 str2=TVS2
                 SpTM1xX=SpToeReaktsioonXvektor(NSARV,NEARV,VarrasN,krdn,selem);
-                str1=num2str(Nr1)   
+                str1=num2str(Nr1)
                 str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM1xX',')',Semi];
-                cmd = sprintf(str) 
+                cmd = sprintf(str)
                 eval(cmd)
-#                
+#
                 TAVS2=toemuutuja;
                 TVS2=int2str(TAVS2);
-                str2=TVS2;     
-       
-       
+                str2=TVS2;
+
+
                Nr1=Nr1+1
                toemuutuja=toemuutuja+1;
            endif
-# SIIN           
-           if (TugiZ-1) == 0 
-                TAVS2=eval(sprintf('%3i',AVS(1,5)));  
+# SIIN
+           if (TugiZ-1) == 0
+                TAVS2=eval(sprintf('%3i',AVS(1,5)));
                 TVS2=int2str(TAVS2);
                 str2=TVS2;
 #
               SpTM1xZ=SpToeReaktsioonZvektor(NSARV,NEARV,VarrasN,krdn,selem);
                 str1=num2str(Nr1);
                 str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM1xZ',')',Semi];
-                cmd = sprintf(str) 
+                cmd = sprintf(str)
                 eval(cmd)
-#                
+#
                 TAVS2=toemuutuja;
                 TVS2=int2str(TAVS2);
-                str2=TVS2   
+                str2=TVS2
 #
     str=['spA=spSisestaArv(spA',Kom, str1,Kom, str2, Kom, mArv1,')',Semi];
-      cmd = sprintf(str) 
+      cmd = sprintf(str)
       eval(cmd)
-    
-               Nr1=Nr1+1 
+
+               Nr1=Nr1+1
                toemuutuja=toemuutuja+1;
            endif
       endif # uvfi-1
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   endif
 endfor  #% for i=1:NTSARV
 #    endif
@@ -574,25 +574,25 @@ if AVSdim(1,1) > 1
 k=1;
 taskVorreid(1,k)=0;
 
-    for j=1:AVSdim(1,1)   
+    for j=1:AVSdim(1,1)
        VarrasN=AVS(j,1);
        str1=num2str(Nr1) ;
        AVS(1,11);
        AVS(j,11);
-       AVStas= AVS(j,11); 
+       AVStas= AVS(j,11);
 #
     if AVStas == 0
 #
-      SpTM3x3=SpTeisendusMaatriks(NSARV,NEARV,VarrasN,krdn,selem); 
-      TAVS2=eval(sprintf('%3i',AVS(j,5)));  
+      SpTM3x3=SpTeisendusMaatriks(NSARV,NEARV,VarrasN,krdn,selem);
+      TAVS2=eval(sprintf('%3i',AVS(j,5)));
       TVS2=int2str(TAVS2);
-      str2=TVS2;    
+      str2=TVS2;
       str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM3x3',')',Semi];
       cmd = sprintf(str)
-      eval(cmd)  
+      eval(cmd)
       k=k+1;
-      taskVorreid(1,k)=3;  
-      
+      taskVorreid(1,k)=3;
+
       strB1=str1;
       NrB2=Nr1+2;
       strB2=num2str(NrB2);
@@ -600,37 +600,37 @@ taskVorreid(1,k)=0;
        ontugesid=0;
       Kas_on_toe_solm=tsolmLaiend(Node,2)+tsolmLaiend(Node,3)+tsolmLaiend(Node,4);
   if  (Kas_on_toe_solm != 0)
-        if  ((uvfiLaiend(Node,1))-3) == 0  
-         ontugesid=3; 
+        if  ((uvfiLaiend(Node,1))-3) == 0
+         ontugesid=3;
         endif
          TSMLD1=tsolmLaiend(Node,2)+tsolmLaiend(Node,3);
         if (TSMLD1 - 2) == 0
-          ontugesid=2; 
-        endif 
-      if (TSMLD1 - 1) == 0        
+          ontugesid=2;
+        endif
+      if (TSMLD1 - 1) == 0
         if ((tsolmLaiend(Node,2)) - 1) == 0
           ontugesid=1;
-        endif  
+        endif
         if ((tsolmLaiend(Node,3))- 1) == 0
           ontugesid=11;
-        endif  
-       endif 
+        endif
+       endif
   endif
-#       
-    else    
+#
+    else
 #
       SpTM2x2=SpTeisendusMaatriks2x2(NSARV,NEARV,VarrasN,krdn,selem);
-# 
-      str1=num2str(Nr1);    
-      TAVS2=eval(sprintf('%3i',AVS(j,5)));  
+#
+      str1=num2str(Nr1);
+      TAVS2=eval(sprintf('%3i',AVS(j,5)));
       TVS2=int2str(TAVS2);
-      str2=TVS2;    
+      str2=TVS2;
       str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM2x2',')',Semi];
       cmd = sprintf(str)
-      eval(cmd); 
-      
+      eval(cmd);
+
       k=k+1;
-      taskVorreid(1,k)=2 ;     
+      taskVorreid(1,k)=2 ;
 
       strB1=str1;
       NrB2=Nr1+1;
@@ -640,26 +640,26 @@ taskVorreid(1,k)=0;
   Kas_on_toe_solm=tsolmLaiend(Node,2)+tsolmLaiend(Node,3)+tsolmLaiend(Node,4);
   Kas_on=Kas_on_toe_solm;
   if  (Kas_on_toe_solm != 0)
-         if  (uvfiLaiend(Node)-3) == 0  
-         ontugesid=3; 
+         if  (uvfiLaiend(Node)-3) == 0
+         ontugesid=3;
         endif
          TSMLD1=tsolmLaiend(Node,2)+tsolmLaiend(Node,3);
         if (TSMLD1 - 2) == 0
-          ontugesid=2; 
-        endif 
-      if (TSMLD1 - 1) == 0        
+          ontugesid=2;
+        endif
+      if (TSMLD1 - 1) == 0
         if ((tsolmLaiend(Node,2)) - 1) == 0
           ontugesid=1;
-        endif  
+        endif
         if ((tsolmLaiend(Node,3))- 1) == 0
           ontugesid=11;
-        endif  
-       endif 
-  endif     
-#      
+        endif
+       endif
+  endif
+#
  endif
  #
-endfor  %% for j=2:AVSdim(1,1) 
+endfor  %% for j=2:AVSdim(1,1)
 
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%r835 59    1    2    7    8    9    1
 if (ontugesid != 0)
@@ -670,9 +670,9 @@ Mitu=ontugesid
                SpTM1x0xz=-SpTM1x0xz;
                TAVS2=toemuutuja;
                TVS2=int2str(TAVS2);
-               str2=TVS2;    
+               str2=TVS2;
                str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM1x0xz',')',Semi];
-               cmd = sprintf(str) 
+               cmd = sprintf(str)
                eval(cmd)
                Nr1=Nr1+1;
 #              taskVorreid(1,k)=2 ;
@@ -685,9 +685,9 @@ case{2}
                SpTM2x2xz=-SpTM2x2xz;
                TAVS2=toemuutuja;
                TVS2=int2str(TAVS2);
-               str2=TVS2;    
+               str2=TVS2;
                str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM2x2xz',')',Semi];
-               cmd = sprintf(str) 
+               cmd = sprintf(str)
                eval(cmd)
                Nr1=Nr1+2;
 #              taskVorreid(1,k)=2 ;
@@ -700,11 +700,11 @@ case{3}
                SpTM3x3xz=-SpTM3x3xz;
                TAVS2=toemuutuja;
                TVS2=int2str(TAVS2);
-               str2=TVS2;    
+               str2=TVS2;
                str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM3x3xz',')',Semi];
                cmd = sprintf(str)
                eval(cmd)
-               
+
                Nr1=Nr1+3;
                toemuutuja=toemuutuja+3;
 #
@@ -736,9 +736,9 @@ case{11}
                SpTM0x1xz=-SpTM0x1xz;
                TAVS2=toemuutuja;
                TVS2=int2str(TAVS2);
-               str2=TVS2;    
+               str2=TVS2;
                str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTM0x1xz',')',Semi];
-               cmd = sprintf(str) 
+               cmd = sprintf(str)
                eval(cmd)
                Nr1=Nr1+1;
 #              taskVorreid(1,k)=2 ;
@@ -747,28 +747,28 @@ case{11}
 endswitch
 endif
 #
-#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%   strSolmB=num2str(Solm); 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   strSolmB=num2str(Solm);
 %    disp('      Nodal forces at the node')
 %      strB=['B(',strB1, koolonV, strB2, Kom,Arv1,')','=','sSolmF(', Arv1, koolonV, Arv123, Kom, %strSolmB,')',Semi];
 %      cmd = sprintf(strB)
-%      eval(cmd) 
+%      eval(cmd)
 #%%%%%%%%%%%%%%%%
   sF(:,1)= sSolmF(:,1,Solm);
   strSolmB=Arv1;
-  strB=['B(',strB1, koolonV, strB2, Kom,Arv1,')','=','sF(', Arv1, koolonV, Arv123, Kom, Arv1,')',Semi];    
+  strB=['B(',strB1, koolonV, strB2, Kom,Arv1,')','=','sF(', Arv1, koolonV, Arv123, Kom, Arv1,')',Semi];
    cmd = sprintf(strB)
       eval(cmd)
-  
-  
-#%%%%%%%%%%%%%%%%      
- maxtaskVorreid=max(taskVorreid(1,k)); 
-# 
+
+
+#%%%%%%%%%%%%%%%%
+ maxtaskVorreid=max(taskVorreid(1,k));
+#
   vorrandeid=size(spA);
-spRidu=vorrandeid(1,1); 
+spRidu=vorrandeid(1,1);
 Nr1=spRidu+1;
-  
- endif #%if AVSdim(1,1) > 1                                       
+
+ endif #%if AVSdim(1,1) > 1
 endfor  #% for i=1:NSARV
 #
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -790,7 +790,7 @@ non_zero_elements_in_equilibrium_equations= nnzE-nnzD
 %nnzE=nnz(spA)
 disp('  ')
 vorrandeid=size(spA);
-spRidu=vorrandeid(1,1); 
+spRidu=vorrandeid(1,1);
 Nr1=spRidu+1;
 ABB=ABB;
 ABBdim=size(ABB) ;
@@ -803,29 +803,29 @@ disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 for i=1:ABBdim(1,1)
 #
     if ABB(i,10) == 1
-      str1=num2str(Nr1); 
+      str1=num2str(Nr1);
       Arv1=num2str(1);
-      TAVS2=eval(sprintf('%3i',ABB(i,6)));  
+      TAVS2=eval(sprintf('%3i',ABB(i,6)));
       TVS2=int2str(TAVS2);
-      str2=TVS2;    
+      str2=TVS2;
       str=['spA=spSisestaArv(spA',Kom, str1,Kom, str2, Kom, Arv1,')',Semi];
-# 
+#
       cmd = sprintf(str)
-      eval(cmd); 
-      Nr1=Nr1+1  ;  
+      eval(cmd);
+      Nr1=Nr1+1  ;
     endif
-# 
+#
     if ABB(i,11) == 1
-      str1=num2str(Nr1); 
+      str1=num2str(Nr1);
       Arv1=num2str(1);
-      TAVS2=eval(sprintf('%3i',ABB(i,7)));  
+      TAVS2=eval(sprintf('%3i',ABB(i,7)));
       TVS2=int2str(TAVS2);
-      str2=TVS2;    
+      str2=TVS2;
       str=['spA=spSisestaArv(spA',Kom, str1,Kom, str2, Kom, Arv1,')',Semi];
-# 
+#
       cmd = sprintf(str)
-      eval(cmd); 
-      Nr1=Nr1+1  ;  
+      eval(cmd);
+      Nr1=Nr1+1  ;
     endif
 endfor
 Nr1=Nr1-1;
@@ -851,15 +851,15 @@ disp('  ')
 #disp('----- ')
 #
 vorrandeid=size(spA);
-spRidu=vorrandeid(1,1); 
-Nr1=spRidu+1;   
+spRidu=vorrandeid(1,1);
+Nr1=spRidu+1;
 #
   ABB;
   tsolm=tsolm;
   TSARV=size(tsolm);
   NTSARV=TSARV(1,1);
-toereaktsioonid_algavad=Nr1;  
-# 
+toereaktsioonid_algavad=Nr1;
+#
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Restrtictions on support displacements ')
 From_rows=sprintf('Restrtictions on support displacements begin from row: %d', Nr1)
@@ -877,7 +877,7 @@ tsolNr =tsolm(i,1);
   for j=2:4
     if (tsolm(i,j) == 1)
        ToeSidemeteArv=ToeSidemeteArv+1;
-   endif    
+   endif
   endfor
 endfor
 ToeSidemeteArv;
@@ -891,11 +891,11 @@ tsolNr =tsolm(i,1);
 LeidsinVarda=0;
   for j=1:ABBMoot
   if (LeidsinVarda == 0)
-    if (tsolNr-ABB(j,8)) == 0   
-      ToeSolmes(i,5:8)=ABB(j,1:4); 
+    if (tsolNr-ABB(j,8)) == 0
+      ToeSolmes(i,5:8)=ABB(j,1:4);
       LeidsinVarda=1;
-     endif   
-   endif     
+     endif
+   endif
   endfor
 endfor
 #%%%%%%%%%
@@ -905,34 +905,34 @@ nmr=0;
   for j=1:NTSARV
     for k=2:4
         KusOnYks=tsolm(j,k);
-      if (KusOnYks-1) == 0 
+      if (KusOnYks-1) == 0
            nmr=nmr+1;
-        ToeSiireRealNR = ToeSiireRealNR +1; 
+        ToeSiireRealNR = ToeSiireRealNR +1;
         ToeSidemed(nmr,1) = ToeSiireRealNR;
         ToeSidemed(nmr,2) = ToeSolmes(j,5);
         ToeSidemed(nmr,3) = k-1;
-        ToeSidemed(nmr,4:6) = ToeSolmes(j,6:8);    
+        ToeSidemed(nmr,4:6) = ToeSolmes(j,6:8);
         ToeSidemed(nmr,7) = ToeSolmes(j,1);
-       endif       
+       endif
      endfor
   endfor
 #%%%%%%%%%%%%%
 #ToeSidemed
 #%%%%%%%%%%%%%
- for i=1:ToeSidemeteArv   
+ for i=1:ToeSidemeteArv
      Nr11=ToeSidemed(i,1);
-      str1=num2str(Nr11); 
+      str1=num2str(Nr11);
       Arv1=num2str(1);
  UWFi=ToeSidemed(i,3);
 #
  switch (UWFi);
-case{1}    
+case{1}
 VarrasS=ToeSidemed(i,2);
 SpTUv=SpToeSiirdeUvektor(NSARV,NEARV,VarrasS,krdn,selem);
 TAVS=ToeSidemed(i,4);
                TVS2=int2str(TAVS);
-               str2=TVS2;    
-               
+               str2=TVS2;
+
                str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTUv',')',Semi];
                cmd = sprintf(str)
                eval(cmd)
@@ -941,25 +941,25 @@ TAVS=ToeSidemed(i,4);
     SolmB=ToeSidemed(i,7);
     strSolmB=num2str(SolmB);
     ToeSidemed(1,1);
-    Arv1x=num2str(1); 
+    Arv1x=num2str(1);
     shift1=tSiire(1,1,SolmB);
-    
+
     strShift1=num2str(shift1);
 %    disp('  ')
-     strTxt1=['Support shift  '  'tSiire(' Arv1x Kom Arv1 Kom strSolmB ')' ' = ' strShift1 '  in x direction at the node ' strSolmB ]; 
+     strTxt1=['Support shift  '  'tSiire(' Arv1x Kom Arv1 Kom strSolmB ')' ' = ' strShift1 '  in x direction at the node ' strSolmB ];
     disp(strTxt1)
       strB=['B(',strB1, Kom,Arv1,')','=','tSiire(', Arv1x, Kom, Arv1, Kom, strSolmB,')',Semi];
       cmd = sprintf(strB)
-      eval(cmd)  
-     disp('  ')                
+      eval(cmd)
+     disp('  ')
 case{2}
 VarrasS=ToeSidemed(i,2);
 SpTWv=SpToeSiirdeWvektor(NSARV,NEARV,VarrasS,krdn,selem);
 %TAVS=ToeSidemed(i,5);
 TAVS=ToeSidemed(i,4);
                TVS2=int2str(TAVS);
-               str2=TVS2;    
-               
+               str2=TVS2;
+
                str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTWv',')',Semi];
                cmd = sprintf(str)
                eval(cmd)
@@ -972,20 +972,20 @@ TAVS=ToeSidemed(i,4);
     shift2=tSiire(2,1,SolmB);
     strShift2=num2str(shift2);
 %    disp('  ')
-    strTxt2=['Support shift  '  'tSiire(' Arv1z Kom Arv1 Kom strSolmB ')' ' = ' strShift2 '  in z direction at the node ' strSolmB ]; 
+    strTxt2=['Support shift  '  'tSiire(' Arv1z Kom Arv1 Kom strSolmB ')' ' = ' strShift2 '  in z direction at the node ' strSolmB ];
     disp(strTxt2)
       strB=['B(',strB1, Kom,Arv1,')','=','tSiire(', Arv1z, Kom, Arv1, Kom, strSolmB,')',Semi];
       cmd = sprintf(strB)
-      eval(cmd)  
-    disp('  ')                 
+      eval(cmd)
+    disp('  ')
 case{3}
 VarrasS=ToeSidemed(i,2);
 SpTFiV=SpToeSiirdeFiVektor(1);
 %TAVS=ToeSidemed(i,6);
 TAVS=ToeSidemed(i,4);
                TVS2=int2str(TAVS);
-               str2=TVS2;    
-               
+               str2=TVS2;
+
                str=['spA=spInsertBtoA(spA',Kom, str1,Kom, str2,Kom, 'SpTFiV',')',Semi];
                cmd = sprintf(str)
                eval(cmd)
@@ -998,21 +998,21 @@ TAVS=ToeSidemed(i,4);
     shift3=tSiire(3,1,SolmB);
     strShift3=num2str(shift3);
 %    disp('  ')
-    strTxt3=['Support shift  '  'tSiire(' Arv1y Kom Arv1 Kom strSolmB ')' ' = ' strShift3 '  in y direction at the node ' strSolmB ]; 
+    strTxt3=['Support shift  '  'tSiire(' Arv1y Kom Arv1 Kom strSolmB ')' ' = ' strShift3 '  in y direction at the node ' strSolmB ];
     disp(strTxt3)
       strB=['B(',strB1, Kom,Arv1,')','=','tSiire(', Arv1y, Kom, Arv1, Kom, strSolmB,')',Semi];
       cmd = sprintf(strB)
-      eval(cmd)  
-    disp('  ')                 
+      eval(cmd)
+    disp('  ')
 #%%%%%
-endswitch  
-# 
+endswitch
+#
  endfor # for ToeSidemeteArv
 
 #%%%%%%%%%%%%%%%
 #
 vorrandeid=size(spA);
-spRidu=vorrandeid(1,1);   
+spRidu=vorrandeid(1,1);
 #
 disp('----- ')
 vorrandeidR=size(spA);
@@ -1050,7 +1050,7 @@ vorrandiNr=i;
 disp(sprintf('%3i %7.3f',vorrandiNr,B(i,1)))
 endfor
 disp('  ')
-# 
+#
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Solving system of sparse equations. ')
 disp(' X=spA\B; ')
@@ -1095,17 +1095,17 @@ endfor
 JrNT=JrN';
 #
 disp('=======================================================')
-disp('     Support displacements/(Cx, Cz, CMy) at nodes  ') 
+disp('     Support displacements/(Cx, Cz, CMy) at nodes  ')
 disp('   X_No,  Element_No,  u/w/fi_No, u_No,  w_No,  fi_No ')
 disp('-------------------------------------------------------')
-for i=1:ToeSidemeteArv 
+for i=1:ToeSidemeteArv
 disp(sprintf('     %2i     %2i         %2i        %3i    %3i     %3i  '  ,ToeSidemed(i,1),    ToeSidemed(i,2), ToeSidemed(i,3), ToeSidemed(i,4), ToeSidemed(i,5), ToeSidemed(i,6)))
 endfor
 disp('-------------------------------------------------------')
 #
 #The_displacement_DaF-s_numbers_at_beginning_of_the_element=sprintf('elementNr, displacement: %d',JrN(i,1) siireVardaA)
 disp('==================================================================')
-disp(' Displacements and force numbers at beginning of the element  ') 
+disp(' Displacements and force numbers at beginning of the element  ')
 disp('   No,    u,   w,   fi     N,   Q,   M  ')
 disp('------------------------------------------------------------------')
 for i=1:NEARV
@@ -1115,7 +1115,7 @@ endfor
 disp('-------------------------------------------------------')
 disp(' ')
 disp('==================================================================')
-disp(' Displacements and forces numbers at end of the element  ') 
+disp(' Displacements and forces numbers at end of the element  ')
 disp('   No,    u,   w,   fi     N,   Q,   M  ')
 disp('------------------------------------------------------------------')
 for i=1:NEARV

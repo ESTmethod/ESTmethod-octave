@@ -1,11 +1,11 @@
 ## ysplvfmhvI.m
 function spvF=ysplvfmhvI(baasi0,x,l,EA,GAr,EJ)
-# 
+#
 # The basic sparse matrix spvF (6,12) for a frame element with the transfer matrix U.
 #     spvF=Zp-U*Zv, Zp'=[up wp fip Np Qp Mp]
 # The Sign Convention II for normal-, shear force and bending moment
 # ---------------------------------------------
-# W. D. Pilkey, W. Wunderlich. Mechanics of Structures. Variational and 
+# W. D. Pilkey, W. Wunderlich. Mechanics of Structures. Variational and
 # Computational Methods. CRC Press, Boca Raton, Ann Arbor, London, Tokyo, 1994.
 # 4.3.1 Transfer Matrix (the basic equations) p. 174
 #----------------------------------------------
@@ -20,7 +20,7 @@ function spvF=ysplvfmhvI(baasi0,x,l,EA,GAr,EJ)
 ## This Program is writtwn by Andres Lahe,   2009-02-13
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2010-03-12
-## Copyright (c)  2009 by Tallinn University of Technology 
+## Copyright (c)  2009 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -42,7 +42,7 @@ function spvF=ysplvfmhvI(baasi0,x,l,EA,GAr,EJ)
 ##
 #if nargin != 6
 if ~(nargin==6)
-error(' function ysplvfmhvI have wrong number of input arguments!') 
+error(' function ysplvfmhvI have wrong number of input arguments!')
 end
 #
 #l=x;

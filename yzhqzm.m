@@ -15,7 +15,7 @@ function Zq0=yzhqzm(baasi0,x,a,qx,qz,EA,EJ)
 ## This Program is writtwn by Andres Lahe,   1998-05-20
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2009-02-13
-## Copyright (c)  2004 by Tallinn University of Technology 
+## Copyright (c)  2004 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -37,7 +37,7 @@ function Zq0=yzhqzm(baasi0,x,a,qx,qz,EA,EJ)
 ##
 #if nargin != 7
 if ~(nargin==7)
-error(' function yzhqz have wrong number of input arguments!') 
+error(' function yzhqz have wrong number of input arguments!')
 end
 #
 #
@@ -45,7 +45,7 @@ i0=baasi0;
 #
 ##
   xp=x-a;
-##disp(' olen yzh ... rida48  ')  
+##disp(' olen yzh ... rida48  ')
  if xp >= 0
 Zq0(1,1)=-i0*qx*x^2/(2*EA);
 Zq0(2,1)=i0*qz*x^4/(24*EJ);

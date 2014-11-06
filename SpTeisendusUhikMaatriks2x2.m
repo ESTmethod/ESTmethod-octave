@@ -6,7 +6,7 @@ function SpTM2x2xz=SpTeisendusUhikMaatriks2x2(VarrasN)
 ## This Program is written by Andres Lahe,   2013-06-26
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2013-06-27
-## Copyright (c)  2013 by Tallinn University of Technology 
+## Copyright (c)  2013 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -32,7 +32,7 @@ function SpTM2x2xz=SpTeisendusUhikMaatriks2x2(VarrasN)
 ##
 #if nargin != 1
 if ~(nargin==1)
-error(' function SpTeisendusUhikMaatriks2x2 have wrong number of input arguments!') 
+error(' function SpTeisendusUhikMaatriks2x2 have wrong number of input arguments!')
 end
 #
 #%%http://www.network-theory.co.uk/docs/octave3/octave_87.html
@@ -44,9 +44,9 @@ i=VarrasN;
 #
 suunakosin= zeros(2,2);
         suunakosin(1,1)=1.0;
-        suunakosin(1,2)=0.0;        
-        suunakosin(2,1)=0.0;  
-        suunakosin(2,2)=1.0;             
+        suunakosin(1,2)=0.0;
+        suunakosin(2,1)=0.0;
+        suunakosin(2,2)=1.0;
 #suunakosin
 #TJ=suunakosin(NEARV,cosAlpha(i,1),cosBeta(i,2));
 

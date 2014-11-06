@@ -1,16 +1,16 @@
 ## spInsertBtoA.m
 function sA=spInsertBtoA(spA,IM,JN,spB)
 #
-# Inserted sparse matrix spB  into sparse matrix spA, 
+# Inserted sparse matrix spB  into sparse matrix spA,
 # starting at row index IM and column index JN.
-# When matrix spA and matrix spB elements overlaped 
-# then they added together. 
+# When matrix spA and matrix spB elements overlaped
+# then they added together.
 #
 ##=========================================================================
 ## This Program is written by Andres Lahe,   2002-02-15
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,   2009-01-03
-## Copyright (c)  2002 by Tallinn University of Technology 
+## Copyright (c)  2002 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -34,16 +34,16 @@ function sA=spInsertBtoA(spA,IM,JN,spB)
 #%%%%%%%%%%%%%%%%%
 #if nargin != 4
 if ~(nargin==4)
-error(' function spInsertBtoA have wrong number of input arguments!') 
+error(' function spInsertBtoA have wrong number of input arguments!')
 end
 #
 OnHore=issparse(spA);
 if OnHore==0
    disp('!!!!!')
-   spA  
-   disp('!!!!!')  
+   spA
+   disp('!!!!!')
    disp('The matrix spA(M,N) must be sparse!')
-   error('The sparse matrix spA(M,N) must be instantiated!')   
+   error('The sparse matrix spA(M,N) must be instantiated!')
 ## return
 end
 #%%%%%%%%%%%%%%%%%
@@ -63,7 +63,7 @@ jjs=[jjA; jjB];
 aas=[aaA; aaB];
 
 Auus=sparse(iis, jjs, aas);
-#  
+#
 sA=Auus;
 #
 endfunction

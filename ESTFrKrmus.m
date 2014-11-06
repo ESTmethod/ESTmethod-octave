@@ -1,7 +1,7 @@
 # ESTFrKrmus.m
 function Sj=ESTFrKrmus(baasi0,xx,Li,Fjoud,qkoormus,EA,EI)
 #
-#  computed a loading vector for uniformly distributed load 
+#  computed a loading vector for uniformly distributed load
 #  and point load (q + F) for a frame
 #  EA -- axial stiffness of the element
 #  EJ -- bending stiffness of the element
@@ -11,7 +11,7 @@ function Sj=ESTFrKrmus(baasi0,xx,Li,Fjoud,qkoormus,EA,EI)
 ## This Program is written by Andres Lahe,    2006-02-25
 ##                    e-mail: andres.lahe@ttu.ee
 ## LAST MODIFIED: Andres Lahe,    2010-08-05
-## Copyright (c)  2006  by Tallinn University of Technology 
+## Copyright (c)  2006  by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -29,17 +29,17 @@ function Sj=ESTFrKrmus(baasi0,xx,Li,Fjoud,qkoormus,EA,EI)
 ## along with this program; if not, write to the Free Software
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-##========================================================================= 
+##=========================================================================
 #
 #if nargin != 7
 if ~(nargin==7)
-error(' function spInsertBtoA have wrong number of input arguments!') 
+error(' function spInsertBtoA have wrong number of input arguments!')
 end
 #
 #
 #L         # length of member
 #Fjoud     # point load and distance of a load point  from start point
-#qkoormus  # uniformly distributed load 
+#qkoormus  # uniformly distributed load
 ##%%%%%%%%%%%%%%%%
 #l=Li;
 Li=Li;
@@ -152,7 +152,7 @@ vFz=vFz1+vFz2+vFz3+vFz4+vFz5;
 #%?otherwise
 endswitch
 else
-# disp(' Koondatud force puudub  '); 
+# disp(' Koondatud force puudub  ');
 vFz=[0.0; 0.0; 0.0; 0.0; 0.0; 0.0];
 #vFz=vFz'
 endif
@@ -234,12 +234,12 @@ vB=vB1+vB2+vB3+vB4;
 #%?otherwise
 endswitch
 else
-# disp(' Jaotatud koormus puudub  '); 
+# disp(' Jaotatud koormus puudub  ');
 vB=[0.0; 0.0; 0.0; 0.0; 0.0; 0.0];
 #vB=vB;
 endif
 #%%%%%%%%%%%%%%
-#%vB=yzShqz(x,qx,qz)  #vB=yzhqz(baasi0,Li,qx,qz,EA,EI);    
+#%vB=yzShqz(x,qx,qz)  #vB=yzhqz(baasi0,Li,qx,qz,EA,EI);
 #%vFz=yzSfzv(xx,aLx,Fx,Fz) #yzTfzv(baasi0,xx,aLx,Fz,EI); #yzhqzm(baasi0,xx,Li,qx,qz,EA,EI);
 #vB=vB+vFz;
 #%%%%%%%%%%%%%%
