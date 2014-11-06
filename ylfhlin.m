@@ -16,9 +16,8 @@ function F=ylfhlin(baasi0,x,EA,GAr,EJ)
 #  baasi0 - scaling multiplier for the displacements (io= EJo/lo)
 #
 ##=========================================================================
-## This Program is writtwn by Andres Lahe,   1998-05-20
-##                    e-mail: andres.lahe@ttu.ee
-## LAST MODIFIED: Andres Lahe,   2009-02-13
+## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 1998-05-20
+## Last modified: Andres Lahe, 2009-02-13
 ## Copyright (c)  2004 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/

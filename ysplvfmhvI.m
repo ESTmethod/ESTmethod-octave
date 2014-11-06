@@ -17,9 +17,8 @@ function spvF=ysplvfmhvI(baasi0,x,l,EA,GAr,EJ)
 #  baasi0 - scaling multiplier for the displacements (io= EJo/lo)
 #
 ##=========================================================================
-## This Program is writtwn by Andres Lahe,   2009-02-13
-##                    e-mail: andres.lahe@ttu.ee
-## LAST MODIFIED: Andres Lahe,   2010-03-12
+## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2009-02-13
+## Last modified: Andres Lahe, 2010-03-12
 ## Copyright (c)  2009 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/

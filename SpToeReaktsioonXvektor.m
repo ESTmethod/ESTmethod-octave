@@ -10,9 +10,8 @@ function SpTUv=SpToeReaktsioonXvektor(NSARV,NEARV,VarrasN,krdn,selem)
 ##
 ## GNU octave version >= 3.0.x
 ##=========================================================================
-## This Program is writtwn by Andres Lahe,   2010-07-05
-##                    e-mail: andres.lahe@ttu.ee
-## LAST MODIFIED: Andres Lahe,   2013-07-08
+## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2010-07-05
+## Last modified: Andres Lahe, 2013-07-08
 ## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/

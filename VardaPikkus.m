@@ -2,9 +2,8 @@
 function lvarras=VardaPikkus(NSARV,NEARV,krdn,selem)
 ##
 ##=========================================================================
-## This Program is writtwn by Andres Lahe,   2010-06-26
-##                    e-mail: andres.lahe@ttu.ee
-## LAST MODIFIED: Andres Lahe,   2013-07-08
+## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2010-06-26
+## Last modified: Andres Lahe, 2013-07-08
 ## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/

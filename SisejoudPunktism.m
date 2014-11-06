@@ -2,10 +2,9 @@
 function SF=SisejoudPunktism(VardaNr,X,AlgPar,lvarras,selem,esQkoormus,esFjoud,suurused)
 ## The forces of frame element, ElementNr, at x = X
 ##=========================================================================
-## This Program is written by Andres Lahe,   2010-07-16
-##                    e-mail: andres.lahe@ttu.ee
-## LAST MODIFIED: Andres Lahe,   2010-08-03
-## Copyright (c)   2010 by Tallinn University of Technology
+## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2010-07-16
+## Last modified: Andres Lahe, 2010-08-03
+## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -13,17 +12,17 @@ function SF=SisejoudPunktism(VardaNr,X,AlgPar,lvarras,selem,esQkoormus,esFjoud,s
 ## modify it under the terms of the GNU General Public License
 ## as published by the Free Software Foundation; either version 2
 ## of the License, or (at your option) any later version.
-
+##
 ## This program is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-
+##
 ## You should have received a copy of the GNU General Public License
-## along with this program; if not, write to the Free Software
-## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+## along with this program; if not, write to the Free Software Foundation, Inc.
+## 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-##===========================================================================
+##=========================================================================
 #
 #if nargin != 8
 if ~(nargin==8)

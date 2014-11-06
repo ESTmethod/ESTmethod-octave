@@ -5,9 +5,8 @@ function Sv=VardadSolmes(NSARV,NEARV,Solm,AB,ABB)
 # number. Returned matrix with the order of the row reversed.
 #
 ##=========================================================================
-## This Program is writtwn by Andres Lahe,   2013-06-26
-##                    e-mail: andres.lahe@ttu.ee
-## LAST MODIFIED: Andres Lahe,   2013-06-27
+## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2013-06-26
+## Last modified: Andres Lahe, 2013-06-27
 ## Copyright (c)  2013 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
@@ -26,7 +25,7 @@ function Sv=VardadSolmes(NSARV,NEARV,Solm,AB,ABB)
 ## along with this program; if not, write to the Free Software
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-##===========================================================================
+##=========================================================================
 #%%%%%%%%%%%%%%%%%
 #if nargin != 5
 if ~(nargin==5)
