@@ -128,7 +128,7 @@ for i = 1:element_count
     IIv = i * 6 - 5;
     IJv = i * 12 - 11;
     spA = spInsertBtoA(spA, IIv, IJv, spvF);
-    B = InsertBtoA(B, NNK, 1, IIv, 1, vB, 6, 1);
+    B = addBtoA(B, vB, IIv, 1);
 endfor
 
 equation_count = size(spA);
