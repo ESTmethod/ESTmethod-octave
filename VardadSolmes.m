@@ -26,25 +26,24 @@ function Sv = VardadSolmes(NSARV, NEARV, Solm, AB, ABB)
 # Sort the rows of matrix ABB according to the order of the (column=8) node
 # number. Returned matrix with the order of the row reversed.
 #
-if nargin != 5
-    error(' function VardadSolmes has wrong number of input arguments!')
-end
-## NSARV - the number of frame_nodes
-## NEARV - the number of elements
 ## Solm - the node number
 ## AB - the elements connected at the nodes
 ## ABB - matrix[Element number, u w fi N Q M, Node, hinges N Q M]
 
-i = Solm;
+if nargin != 5
+    error(' function VardadSolmes has wrong number of input arguments!')
+end
+
 k = 1;
 for j = 1 : size(AB)
-    if AB(j) == i
-        ABB2(k, :) = ABB(j, :);
+    if AB(j) == Solm
+        A(k, :) = ABB(j, :);
         k += 1;
     endif
 endfor
 
-[!, idx] = sortrows(ABB2(:, 11));
-Sv = ABB2(idx, :);
+[~, idx] = sort(A(:, 8));
+A = flipud(A(idx, :));
+[~, idx] = sort(A(:, 11));
+Sv = A(idx, :);
 endfunction
-
