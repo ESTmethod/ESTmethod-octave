@@ -9,31 +9,22 @@
 ## modify it under the terms of the GNU General Public License
 ## as published by the Free Software Foundation; either version 2
 ## of the License, or (at your option) any later version.
-
+##
 ## This program is distributed in the hope that it will be useful,
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ## GNU General Public License for more details.
-
+##
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, write to the Free Software
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function SpTFiV = SpToeSiirdeFiVektor(VarrasN)
-##function SpTFiV=SpToeSiirdeFiVektor(NSARV,NEARV,VarrasN,krdn,selem)
-##disp('==================================================================')
-##disp(' SpToeSiirdeFiVektor.m     ')
+function SpTFiV = SpToeSiirdeFiVektor()
 ##disp(' The vector for transformation the vector [u, w, Fi]'' ')
 ##disp(' from local to Fiy in global coordinates.')
 ##disp(' OUTPUT: SpTFiV -- the transformation vector as sparse vector. ')
-
-## NSARV - the number of frame nodes
-## NEARV - the number of elements
-## krdn - the nodal coordinates
-## selem - the topology
-## VarrasN - the number of the element
 
 # This returns a sparse [0 0 1] matrix.
 SpTFiV = sparse(1, 3, 1);

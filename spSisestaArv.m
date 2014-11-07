@@ -25,10 +25,11 @@ function spA = spSisestaArv(spA, iv, jv, sv)
 #
 # Insert the number into sparse matrix spA,
 # starting at row index iv and column index jv.
-#
+
 if nargin != 4,
     error(' function InsertBtoA has wrong number of input arguments!')
 end
+
 spA = spInsertBtoA(spA, iv, jv, sv);
 endfunction
 

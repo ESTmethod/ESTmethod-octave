@@ -25,10 +25,6 @@ function unit = SpTeisendusUhikMaatriks2x2()
 ##
 ##   The sparse identity matrix of reaction at the node
 ##
-## NSARV - the number of frame nodes
-## NEARV - the number of elements
-## VarrasN - the number of the element
-##
 unit = sparse(eye(2))
 endfunction
 

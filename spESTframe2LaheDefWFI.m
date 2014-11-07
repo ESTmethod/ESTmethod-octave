@@ -1693,7 +1693,7 @@ otherwise
   # --------- Define a matrix spA to be sparse -----------
   disp('-------- Sparse matrix instantiation --------  ')
   disp('  spA=sparse(NNK,NNK)  ')
-  spA = sparse(NNK, NNK) % nullistan võrrandisüsteemi kordajate maatriksi
+  spA = sparse(NNK, NNK); % nullistan võrrandisüsteemi kordajate maatriksi
   # --------- Define a vector B ------------
   disp('-------- Right-hand side of the equations (RHS). --------  ')
   disp('  B=zeros(NNK,1);  ')
