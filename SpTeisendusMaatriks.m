@@ -22,7 +22,7 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function SpTM3x3 = SpTeisendusMaatriks(NSARV, NEARV, n, krdn, selem)
+function unit = SpTeisendusMaatriks(NSARV, NEARV, n, krdn, selem)
 ##disp(' The matrix for transformation the vector [N, Q, M]'' ')
 ##disp(' from local to global coordinates.')
 ##disp(' OUTPUT: SpTM3x3 -- the transformation Matrix as sparse matrix. ')
@@ -55,6 +55,6 @@ suunakosin(2, 3) = 0.0;
 suunakosin(3, 1) = 0.0;
 suunakosin(3, 2) = 0.0;
 suunakosin(3, 3) = 1.0;
-SpTM3x3 = sparse(suunakosin);
+unit = sparse(suunakosin);
 endfunction
 

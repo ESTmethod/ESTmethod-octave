@@ -507,10 +507,7 @@ sumM7 = - p3 * h08 * h08 / 2 + q3 * (l + 1.0) * ((l + 1.0) / 2 + l) ...
   - F1 * 0.6 * h + F3 * (0.6 * l) + F2 * 0.5 * h + X(87) + X(90) + l * X(89) + (l + l) * X(86)
 disp('  ')
 disp(' Calculations verified the static equilibrium of the frame   ')
-disp('  ')
 
-
-exit
 # %%%%%%%%%%%%
 figure(1)
 ax = gca ();
