@@ -23,20 +23,12 @@
 
 function spA = spSisestaArv(spA, iv, jv, sv)
 #
-# Inserted the nunber into sparse matrix spA,
+# Insert the number into sparse matrix spA,
 # starting at row index iv and column index jv.
 #
-##
-# %%%%%%%%%%%%%%%%%
-if nargin < 4,
+if nargin != 4,
     error(' function InsertBtoA has wrong number of input arguments!')
 end
-if nargin > 4,
-    error(' function InsertBtoA has wrong number of input arguments!')
-end
-#
-##
-sisse = sparse(1, 1, sv);
 spA = spInsertBtoA(spA, iv, jv, sv);
 endfunction
 

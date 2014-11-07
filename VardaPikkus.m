@@ -33,28 +33,13 @@ if nargin != 4
     error(' Function VardaPikkus has wrong number of input arguments.')
 end
 
-EARV = size(selem);
-NEARV = EARV(1, 1);
+NEARV = size(selem)(1);
 for i = 1:NEARV
     LkoordN = selem(i, 16);
     AkoordN = selem(i, 17);
-    DeltaX(i) = krdn(LkoordN, 1) - krdn(AkoordN, 1);
-    DeltaZ(i) = krdn(LkoordN, 2) - krdn(AkoordN, 2);
-    VGRx(i, 1) = krdn(AkoordN, 1);
-    VGRx(i, 2) = krdn(LkoordN, 1);
-    VGRz(i, 1) = krdn(AkoordN, 2);
-    VGRz(i, 2) = krdn(LkoordN, 2);
+    dX = krdn(LkoordN, 1) - krdn(AkoordN, 1);
+    dZ = krdn(LkoordN, 2) - krdn(AkoordN, 2);
+    lvarras(i, 1) = sqrt(dX^2 + dZ^2);
 endfor
-
-#Varda pikkus
-for i = 1:NEARV
-    lvarras(i, 1) = sqrt(DeltaX(i)^2 + DeltaZ(i) ^ 2);
-endfor
-# --------- The direction cosines of element -------
-#for i = 1:NEARV
-#cosAlpha(i, 1) = DeltaX(i) / lvarras(i, 1);
-#cosBeta(i, 1) = DeltaZ(i) / lvarras(i, 1);
-#endfor
-
 endfunction
 

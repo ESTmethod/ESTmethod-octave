@@ -29,57 +29,13 @@ function SpTFiV = SpToeSiirdeFiVektor(VarrasN)
 ##disp(' from local to Fiy in global coordinates.')
 ##disp(' OUTPUT: SpTFiV -- the transformation vector as sparse vector. ')
 
-##
 ## NSARV - the number of frame nodes
 ## NEARV - the number of elements
 ## krdn - the nodal coordinates
 ## selem - the topology
 ## VarrasN - the number of the element
-##
-if nargin != 1
-    error(' function SpToeSiirdeFiVektor has wrong number of input arguments!')
-end
-#
-# %selem=[selemjl(:,1:23)];
-#EARV = size(selem);
-#NEARV = EARV(1, 1);
-# %%http://www.network-theory.co.uk/docs/octave3/octave_87.html
-##if (AF1 - eps1) > 0
-#switch (VarrasN);
-#case{1}
-#i = VarrasN;
-#
-#LkoordN = selem(i, 16);
-#AkoordN = selem(i, 17);
-#DeltaX(i) = krdn(LkoordN, 1) - krdn(AkoordN, 1);
-#DeltaZ(i) = krdn(LkoordN, 2) - krdn(AkoordN, 2);
-#VGRx(i, 1) = krdn(AkoordN, 1);
-#VGRx(i, 2) = krdn(LkoordN, 1);
-#VGRz(i, 1) = krdn(AkoordN, 2);
-#VGRz(i, 2) = krdn(LkoordN, 2);
-#
-## lvarras -- the length of the element
-#
-#lvarras(i, 1) = sqrt(DeltaX(i)^2 + DeltaZ(i) ^ 2);
-#
-#cosAlpha(i, 1) = DeltaX(i) / lvarras(i, 1);
-#cosBeta(i, 1) = DeltaZ(i) / lvarras(i, 1);
-# --------- The direction cosines of element -------
-suunakosin = zeros(1, 3);
-suunakosin(1, 1) = 0.0;
-suunakosin(1, 2) = 0.0;
-suunakosin(1, 3) = 1.0;
-#suunakosin
-#TJ = suunakosin(NEARV, cosAlpha(i, 1), cosBeta(i, 2));
 
-TM3x3 = suunakosin;
-SpTM3k3 = sparse(TM3x3);
-#
-# %%%%%%%%%%%
-
-#endswitch
-
-SpTFiV = SpTM3k3;
-#
+# This returns a sparse [0 0 1] matrix.
+SpTFiV = sparse(1, 3, 1);
 endfunction
 

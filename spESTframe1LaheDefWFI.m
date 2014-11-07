@@ -1476,7 +1476,7 @@ otherwise
   # ==========
   # disp(' No      toel  u  w  fi  N   Q   M ')
   # ==========
-  # Restrtictions on support displacements.
+  # Restrictions on support displacements.
   # Support No u w fi hold on - 1, open - 0
   # ==========
   tsolm = [ 1 1 1 1;  % node 1
@@ -1625,11 +1625,11 @@ otherwise
   #
   sTJrNT = sJrN';
   # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  # Restrtictions on support displacements.
+  # Restrictions on support displacements.
   # disp(' No      toel  u  w  fi  N   Q   M ')
   %disp('--------------------------------')
   disp('==================================================')
-  disp(' Restrtictions on  support displacements. ')
+  disp(' Restrictions on support displacements. ')
   disp(' No    Node No   u  w  fi;  hold on-1, open-0')
   disp('--------------------------------------------------')
   #disp([tsolm])

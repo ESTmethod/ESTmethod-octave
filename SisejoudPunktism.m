@@ -44,7 +44,6 @@ Li = lvarras(i, 1);
 # %Fz=FZz(i,1);
 # %Fx=FZx(i,1);
 
-#Fjoud = esFjoud(:, 1:2, i);
 Fjoud = esFjoud(:, 1:3, i);
 # %       Fz    Fx     a
 # %Fjoud=[0.0    0.0   0.0;

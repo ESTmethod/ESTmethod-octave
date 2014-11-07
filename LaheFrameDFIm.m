@@ -44,16 +44,13 @@
 ##         selem(ElementideArv,1:16)
 ##
 function AlgParm = LaheFrameDFIm(baasi0, Ntoerkts, esQkoormus, esFjoud, sSolmF, tsolm, tSiire, krdn, selem)
-#if nargin != 9
-if ~ (nargin == 9)
+if nargin != 9
     error(' function LaheBeamDFI has wrong number of input arguments!')
 end
 #
 global spA
 global X
 global siireVardaA
-#disp('---  ')
-# %selem=[selemjl(:,1:23)];
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 EARV = size(selem);
 NEARV = EARV(1, 1);
@@ -849,8 +846,8 @@ NTSARV = TSARV(1, 1);
 toereaktsioonid_algavad = Nr1;
 #
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
-disp(' Restrtictions on support displacements ')
-From_rows = sprintf('Restrtictions on support displacements begin from row: %d', Nr1)
+disp(' Restrictions on support displacements ')
+From_rows = sprintf('Restrictions on support displacements begin from row: %d', Nr1)
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 #
 toesiirdedN = 1;
@@ -1013,7 +1010,7 @@ spA_cols = vorrandeidR(1, 2)
 nnzR = nnz(spA);
 spA_nnz = sprintf('non_zero_elements_in_spA: %d', nnz(spA))
 disp('  ')
-disp('----- Restrtictions equations are inserted into spA  ----  ')
+disp('----- Restriction equations are inserted into spA  ----  ')
 disp('  ')
 restrtictions_equations_rows = spA_rowsR - spA_rowsN
 non_zero_elements_in_restrtictions_equations = nnzR - nnzN

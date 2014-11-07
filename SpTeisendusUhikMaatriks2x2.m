@@ -21,7 +21,7 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function SpTM2x2xz = SpTeisendusUhikMaatriks2x2(VarrasN)
+function unit = SpTeisendusUhikMaatriks2x2()
 ##
 ##   The sparse identity matrix of reaction at the node
 ##
@@ -29,32 +29,6 @@ function SpTM2x2xz = SpTeisendusUhikMaatriks2x2(VarrasN)
 ## NEARV - the number of elements
 ## VarrasN - the number of the element
 ##
-if nargin != 1
-    error('Function SpTeisendusUhikMaatriks2x2 has wrong number of input arguments.')
-end
-
-VarrasN = 1;
-#if (AF1 - eps1) > 0
-switch (VarrasN);
-    case{1}
-    i = VarrasN;
-    #
-    suunakosin = zeros(2, 2);
-    suunakosin(1, 1) = 1.0;
-    suunakosin(1, 2) = 0.0;
-    suunakosin(2, 1) = 0.0;
-    suunakosin(2, 2) = 1.0;
-    #suunakosin
-    #TJ = suunakosin(NEARV, cosAlpha(i, 1), cosBeta(i, 2));
- 
-    TM2x2 = suunakosin;
-    SpTM2k2 = sparse(TM2x2);
-    #
-    # %%%%%%%%%%%
- 
-endswitch
-
-SpTM2x2xz = SpTM2k2;
-#
+unit = sparse(eye(2))
 endfunction
 

@@ -47,7 +47,7 @@ if xp >= 0
     Fzx(5, 1) = - Fz;
     Fzx(6, 1) = - Fz * xp;
 else
-    Fzx = zeros(6, 1)
+    Fzx = zeros(6, 1);
 endif
 endfunction
 

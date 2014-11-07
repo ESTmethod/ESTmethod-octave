@@ -30,25 +30,22 @@ function sA = spInsertBtoA(spA, IM, JN, spB)
 
 #% 1 row, then   iiB = iiB( : )'; jjB = jjB( : )' ;
 #% colunm, then   iiB = iiB( : ); jjB = jjB( : );
-#%%%%%%%%%%%%%%%%%
+
 if nargin != 4
     error(' function spInsertBtoA has wrong number of input arguments!')
 end
-#
-OnHore = issparse(spA);
-if OnHore == 0
+
+if !issparse(spA)
     disp('!!!!!')
     spA
     disp('!!!!!')
     disp('The matrix spA(M,N) must be sparse!')
     error('The sparse matrix spA(M,N) must be instantiated!')
-    ## return
 end
-# %%%%%%%%%%%%%%%%%
-#
+
 IMB = IM - 1;
 JNB = JN - 1;
-#
+
 [iiA, jjA, aaA] = find(spA);
 [iiB, jjB, aaB] = find(spB);
 iiB = iiB .+ IMB;
@@ -60,9 +57,6 @@ iis = [iiA; iiB];
 jjs = [jjA; jjB];
 aas = [aaA; aaB];
 
-Auus = sparse(iis, jjs, aas);
-#
-sA = Auus;
-#
+sA = sparse(iis, jjs, aas);
 endfunction
 
