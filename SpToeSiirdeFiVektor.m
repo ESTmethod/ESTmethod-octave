@@ -21,12 +21,12 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function SpTFiV = SpToeSiirdeFiVektor()
+function transform = SpToeSiirdeFiVektor()
 ##disp(' The vector for transformation the vector [u, w, Fi]'' ')
 ##disp(' from local to Fiy in global coordinates.')
-##disp(' OUTPUT: SpTFiV -- the transformation vector as sparse vector. ')
+##disp(' OUTPUT: transform -- the transformation vector as sparse vector. ')
 
 # This returns a sparse [0 0 1] matrix.
-SpTFiV = sparse(1, 3, 1);
+transform = sparse(1, 3, 1);
 endfunction
 

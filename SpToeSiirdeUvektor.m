@@ -22,31 +22,31 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function SpTUv = SpToeSiirdeUvektor(NSARV, NEARV, n, krdn, selem)
+function transform = SpToeSiirdeUvektor(node_count, element_count, eid, coordinates, element_properties)
 ##disp(' The vector for transformation the vector [u, w, Fi]'' ')
 ##disp(' from local to Ux in global coordinates. ')
-##disp(' OUTPUT: SpTUv -- the transformation vector as sparse vector. ')
+##disp(' OUTPUT: transform -- the transformation vector as sparse vector. ')
 ##
-## NSARV - the number of frame nodes
-## NEARV - the number of elements
-## krdn - the nodal coordinates
-## selem - the topology
-## n - the number of the element
+## node_count - the number of frame nodes
+## element_count - the number of elements
+## coordinates - the nodal coordinates
+## element_properties - the topology
+## eid - the number of the element
 
 if nargin != 5
-    error(' function SpToeSiirdeUvektor has wrong number of input arguments!')
+    error('Function SpToeSiirdeUvektor has wrong number of input arguments!')
 end
 
-LkoordN = selem(n, 16);
-AkoordN = selem(n, 17);
-dX = krdn(LkoordN, 1) - krdn(AkoordN, 1);
-dZ = krdn(LkoordN, 2) - krdn(AkoordN, 2);
-len = sqrt(dX^2 + dZ ^ 2);
-# --------- The direction cosines of element -------
-suunakosin = zeros(1, 3);
-suunakosin(1, 1) = dX / len; # Cosalpha
-suunakosin(1, 2) = dZ / len; # Cosbeta
-suunakosin(1, 3) = 0.0;
-SpTUv = sparse(suunakosin);
+end_nid = element_properties(eid, 16);
+start_nid = element_properties(eid, 17);
+dX = coordinates(end_nid, 1) - coordinates(start_nid, 1);
+dZ = coordinates(end_nid, 2) - coordinates(start_nid, 2);
+len = sqrt(dX^2 + dZ^2);
+# The direction cosines of element
+dir_cosine = zeros(1, 3);
+dir_cosine(1, 1) = dX / len; # Cosalpha
+dir_cosine(1, 2) = dZ / len; # Cosbeta
+# Returns [alpha beta 0]
+transform = sparse(dir_cosine);
 endfunction
 

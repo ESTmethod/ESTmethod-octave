@@ -21,7 +21,7 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function spvF = ysplvfmhvI(baasi0, x, l, EA, GAr, EJ)
+function spvF = ysplvfmhvI(scale, x, l, EA, GAr, EJ)
 # The basic sparse matrix spvF (6,12) for a frame element with the transfer matrix U.
 #     spvF=Zp-U*Zv, Zp'=[up wp fip Np Qp Mp]
 # The Sign Convention II for normal-, shear force and bending moment
@@ -35,16 +35,16 @@ function spvF = ysplvfmhvI(baasi0, x, l, EA, GAr, EJ)
 #  EJ -  the bending stiffness of the element
 #  x - coordinate
 #  l - the length of the element
-#  baasi0 - scaling multiplier for the displacements (io= EJo/lo)
+#  scale - scaling multiplier for the displacements (io= EJo/lo)
 
 if nargin != 6
-    error(' function ysplvfmhvI has wrong number of input arguments!')
+    error('Function ysplvfmhvI has wrong number of input arguments!')
 end
 
 spvF = sparse(6, 12);
 spvI = speye(6);
 spvF = spInsertBtoA(spvF, 1, 1, spvI);
-spvU1 = ysplfhlin(baasi0, x, EA, GAr, EJ);
+spvU1 = ysplfhlin(scale, x, EA, GAr, EJ);
 spvU = spvU1 .* (-1);
 spvF = spInsertBtoA(spvF, 1, 7, spvU);
 

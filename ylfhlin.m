@@ -21,7 +21,7 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function F = ylfhlin(baasi0, x, EA, GAr, EJ)
+function F = ylfhlin(scale, x, EA, GAr, EJ)
 # The matrix F (6,6) for linear equations of frame element with the transfer matrix U.
 #  Zx=F*Zo+lq
 #  Zo'=[uo wo fio No Qo Mo]
@@ -34,20 +34,19 @@ function F = ylfhlin(baasi0, x, EA, GAr, EJ)
 #  EJ -  the bending stiffness of the element
 #  x - coordinate
 #  l - the length of the element
-#  baasi0 - scaling multiplier for the displacements (io= EJo/lo)
+#  scale - scaling multiplier for the displacements (io= EJo/lo)
 
 if nargin != 5
-    error(' function ylfhlin has wrong number of input arguments!')
+    error('Function ylfhlin has wrong number of input arguments!')
 end
 
-i0 = baasi0;
 F = eye(6);
-F(1, 4) = -i0 * x / EA;
+F(1, 4) = -scale * x / EA;
 F(2, 3) = -x;
-F(2, 5) = i0 * x^3 / (6 * EJ);
-F(2, 6) = i0 * x^2 / (2 * EJ);
-F(3, 5) = -i0 * x^2 / (2 * EJ);
-F(3, 6) = -i0 * x / EJ;
+F(2, 5) = scale * x^3 / (6 * EJ);
+F(2, 6) = scale * x^2 / (2 * EJ);
+F(3, 5) = -scale * x^2 / (2 * EJ);
+F(3, 6) = -scale * x / EJ;
 F(4, 4) = -1;
 F(5, 5) = -1;
 F(6, 5) = -x;

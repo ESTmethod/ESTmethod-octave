@@ -31,44 +31,28 @@ endif
 i = VardaNr;
 xx = X;
 baasi0 = 1.0;
-%%%%%%%%%%
-%vF=zeros(6,12);
+
 EI = selem(i, 13); %  from topology
-EA = selem(i, 14); %    "      "
-GAr = selem(i, 15); %    "      "
+EA = selem(i, 14);
+GAr = selem(i, 15);
 Li = lvarras(i, 1);
 
-# %qx=qxZ(i,1);
-# %qz=qzZ(i,1);
-# %aLx=aLXx(i,1);
-# %Fz=FZz(i,1);
-# %Fx=FZx(i,1);
-
 Fjoud = esFjoud(:, 1:3, i);
-# %       Fz    Fx     a
-# %Fjoud=[0.0    0.0   0.0;
-#qkoormus = esQkoormus(:, 1:3, i);
 qkoormus = esQkoormus(:, 1:4, i);
-# %       qz     qx     qA      qL
-# %qkoormus=[0.0   0.0   0.0  0.0   0.0];
 
 AP = AlgPar(i, :)';
 # --------- The transfer matrix equation --------
 vvF = ylfhlin(1.0, xx, EA, GAr, EI);
-# %vvB=yzhqz(1.0,xx,qx,qz,EA,EI);
-# %vvFz=yzfzv(1.0,xx,aLx,Fx,Fz,EA,EI);
 Sj = ESTFrKrmus(baasi0, xx, Li, Fjoud, qkoormus, EA, EI);
 vB = Sj;
 Fvv(:, 1) = vvF * AP + vB;
 
-# %Fvv(:,1)=vvF*AP+vvB+vvFz;
-## %9.2f %9.2e
 disp(sprintf('%15s %2i %9s  %4.7f   ', 'Forces of element', VardaNr, ' at x =', X))
-%
+
 for i = 1:3
     disp(sprintf('%14s %9.5e   ', suurused(i, :), Fvv(i, 1)))
 endfor
-%
+
 for i = 4:6
     disp(sprintf('%14s %9.5f   ', suurused(i, :), Fvv(i, 1)))
 endfor

@@ -31,7 +31,7 @@ function inner_forces = ESTFrKrmus(baasi0, xx ,Li, Fjoud, qkoormus, EA, EI)
 #  baasi0 - scaling multiplier for the displacements (i = EJ/l)
 
 if nargin != 7
-    error('Function spInsertBtoA has wrong number of input arguments.')
+    error('Function ESTFrKrmus has wrong number of input arguments.')
 end
 
 #L # length of member
@@ -56,7 +56,6 @@ end
 # 0.0 0.0 0.0 0.0 0.0; # uniformly distributed load qz2
 # 0.0 0.0 0.0 0.0 0.0]; # uniformly distributed load qz3
 # ==========
-eps1 = 0.000001;
 
 % Initialize vector for inner forces.
 inner_forces = zeros(6, 1);
@@ -65,19 +64,15 @@ inner_forces = zeros(6, 1);
 nonzero_forces = find(Fjoud(:, 1));
 
 for i = nonzero_forces
-    Fz = Fjoud(i, 1);
-    Fx = Fjoud(i, 2);
-    aLx = Fjoud(i, 3);
+    [Fz Fx aLx] = num2cell(Fjoud(i, 1:3)){:};
     inner_forces += yzfzv(baasi0, xx, aLx, Fx, Fz, EA, EI);
 end
 
-% Find forces which are not zero.
+% Find loads which are not zero.
 nonzero_loads = find(qkoormus(:, 1));
 
 for i = nonzero_loads
-    qz = qkoormus(i, 1);
-    qx = qkoormus(i, 2);
-    Li = qkoormus(i, 3);
+    [qz qx Li] = num2cell(qkoormus(i, 1:3)){:};
     inner_forces += yzhqzm(baasi0, xx, Li, qx, qz, EA, EI);
     #Li = qkoormus(1, 4); # aqL - kui koormus lõppeb enne lõppu
     #Li = qkoormus(1, 5); # varda lõpp (vaja kohendada)

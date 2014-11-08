@@ -21,7 +21,7 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function Fzx = yzfzv(baasi0, x, a, Fx, Fz, EA, EJ)
+function Fzx = yzfzv(scale, x, a, Fx, Fz, EA, EJ)
 #  Fzx -The load vector  F (projections Fx and Fz)
 #  in the tranfer matrix method   ZL - U*ZA =Fzx (the II sign convention).
 #  http://digi.lib.ttu.ee/opik_eme/Ehitusmehaanika.pdf#page=396  page=694
@@ -31,18 +31,18 @@ function Fzx = yzfzv(baasi0, x, a, Fx, Fz, EA, EJ)
 #  a - the point of load
 #  qx - the uniformly distributed load in x direction
 #  qz - the uniformly distributed load in z direction
-#  baasi0 - scaling multiplier for the displacements (io= EJo/lo)
+#  scale - scaling multiplier for the displacements (io= EJo/lo)
 #
 
 if nargin != 7
-    error(' function yzfzv has wrong number of input arguments!')
+    error('Function yzfzv has wrong number of input arguments!')
 end
 
 xp = x - a;
 if xp >= 0
-    Fzx(1, 1) = - baasi0 * Fx * xp / EA;
-    Fzx(2, 1) = baasi0 * Fz * xp^3 / (6 * EJ);
-    Fzx(3, 1) = - baasi0 * Fz * xp^2 / (2 * EJ);
+    Fzx(1, 1) = - scale * Fx * xp / EA;
+    Fzx(2, 1) = scale * Fz * xp^3 / (6 * EJ);
+    Fzx(3, 1) = - scale * Fz * xp^2 / (2 * EJ);
     Fzx(4, 1) = - Fx;
     Fzx(5, 1) = - Fz;
     Fzx(6, 1) = - Fz * xp;

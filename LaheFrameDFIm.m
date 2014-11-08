@@ -90,7 +90,7 @@ for eid = 1:element_count
 endfor
 
 disp('================================================================================')
-disp('  Element number;     DaF numbers;    Node number;   axial, shear, moment hinge ')
+disp(' Element number;     DaF numbers;    Node number;   axial, shear, moment hinge  ')
 disp('--------------------------------------------------------------------------------')
 disp(' Element number   u w fi N Q M        Node  N    Q    M  hinge -  true=1        ')
 disp('--------------------------------------------------------------------------------')
@@ -160,16 +160,16 @@ for nid = 1:node_count
             node_elemssum = node_elems(1, 11) + node_elems(eid, 11);
 
             if node_elemssum == 0
-                identity = spTransformation(3, element_first, coordinates, element_properties);
-                spA = spInsertBtoA(spA, row, node_elems(1, 2), identity);
-                identity = spTransformation(3, element_n, coordinates, element_properties);
-                spA = spInsertBtoA(spA, row, node_elems(eid, 2), -identity);
+                transform = spTransformation(3, element_first, coordinates, element_properties);
+                spA = spInsertBtoA(spA, row, node_elems(1, 2), transform);
+                transform = spTransformation(3, element_n, coordinates, element_properties);
+                spA = spInsertBtoA(spA, row, node_elems(eid, 2), -transform);
                 row += 3;
             else
-                identity = spTransformation(2, element_first, coordinates, element_properties);
-                spA = spInsertBtoA(spA, row, node_elems(1, 2), identity);
-                identity = spTransformation(2, element_n, coordinates, element_properties);
-                spA = spInsertBtoA(spA, row, node_elems(eid, 2), -identity);
+                transform = spTransformation(2, element_first, coordinates, element_properties);
+                spA = spInsertBtoA(spA, row, node_elems(1, 2), transform);
+                transform = spTransformation(2, element_n, coordinates, element_properties);
+                spA = spInsertBtoA(spA, row, node_elems(eid, 2), -transform);
                 row += 2;
             endif
         endfor
@@ -211,8 +211,8 @@ for nid = 1:node_count
     if node_elemsdim == 1
         if uvfiLaiend(nid, 1) == 0
             element_n = node_elems(1, 1);
-            identity = spTransformation(3, element_n, coordinates, element_properties);
-            spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
+            transform = spTransformation(3, element_n, coordinates, element_properties);
+            spA = spInsertBtoA(spA, row, node_elems(1, 5), transform);
             Arv123 = 3;
             B(row : row+2) = node_forces(nid, 1, 1:3);
             row += 3;
@@ -225,14 +225,14 @@ for nid = 1:node_count
 
                 element_n = node_elems(1, 1);
                 if uvfi == 3
-                    identity = spTransformation(3, element_n, coordinates, element_properties);
-                    spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
+                    transform = spTransformation(3, element_n, coordinates, element_properties);
+                    spA = spInsertBtoA(spA, row, node_elems(1, 5), transform);
                     spA = spInsertBtoA(spA, row, toemuutuja, -speye(uvfi));
                     row += uvfi;
                     toemuutuja += uvfi;
                 elseif uvfi == 2
-                    identity = spTransformation(2, element_n, coordinates, element_properties);
-                    spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
+                    transform = spTransformation(2, element_n, coordinates, element_properties);
+                    spA = spInsertBtoA(spA, row, node_elems(1, 5), transform);
                     spA = spInsertBtoA(spA, row, toemuutuja, -speye(uvfi));
                     row += uvfi;
                     toemuutuja += uvfi;
@@ -240,13 +240,13 @@ for nid = 1:node_count
                     TugiX = support_nodes(k, 2);
                     TugiZ = support_nodes(k, 3);
                     if TugiX == 1
-                        identity = SpToeReaktsioonXvektor(node_count, element_count, element_n, coordinates, element_properties);
-                        spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
+                        reaction_x_vector = SpToeReaktsioonXvektor(node_count, element_count, element_n, coordinates, element_properties);
+                        spA = spInsertBtoA(spA, row, node_elems(1, 5), reaction_x_vector);
                         row += uvfi
                         toemuutuja += uvfi;
                     elseif TugiZ == 1
-                        identity = SpToeReaktsioonZvektor(node_count, element_count, element_n, coordinates, element_properties);
-                        spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
+                        reaction_z_vector = SpToeReaktsioonZvektor(node_count, element_count, element_n, coordinates, element_properties);
+                        spA = spInsertBtoA(spA, row, node_elems(1, 5), reaction_z_vector);
                         spA = spSisestaArv(spA, row, toemuutuja, 1);
                         row += uvfi
                         toemuutuja += uvfi;
@@ -265,13 +265,13 @@ for nid = 1:node_count
             Arv123 = 3;
 
             if node_elemstas == 0
-                identity = spTransformation(3, element_n, coordinates, element_properties);
+                transform = spTransformation(3, element_n, coordinates, element_properties);
             else
-                identity = spTransformation(2, element_n, coordinates, element_properties);
+                transform = spTransformation(2, element_n, coordinates, element_properties);
                 b2 -= 1;
                 Arv123 -= 1;
             endif
-            spA = spInsertBtoA(spA, row, node_elems(eid, 5), identity);
+            spA = spInsertBtoA(spA, row, node_elems(eid, 5), transform);
 
             has_supports = 0;
             is_support_node = sum(support_nodes_extension(Node, 2:4));
@@ -388,7 +388,7 @@ endfor
 # Support reactions
 for i = 1:number_of_support_reactions
     n = support_reactions(i, 1);
-    VarrasS = support_reactions(i, 2);
+    eid = support_reactions(i, 2);
     UWFi = support_reactions(i, 3);
     NodeA = support_reactions(i, 4);
     NodeB = support_reactions(i, 7);
@@ -396,17 +396,17 @@ for i = 1:number_of_support_reactions
 
     switch (UWFi);
         case{1}
-            SpTv = SpToeSiirdeUvektor(node_count, element_count, VarrasS, coordinates, element_properties);
+            sup_displ_vector_U = SpToeSiirdeUvektor(node_count, element_count, eid, coordinates, element_properties);
+            spA = spInsertBtoA(spA, n, NodeA, sup_displ_vector_U);
             B(n) = shift;
-            spA = spInsertBtoA(spA, n, NodeA, SpTv);
             d = 'x';
         case{2}
-            SpTv = SpToeSiirdeWvektor(node_count, element_count, VarrasS, coordinates, element_properties);
-            spA = spInsertBtoA(spA, n, NodeA, SpTv);
+            sup_displ_vector_W = SpToeSiirdeWvektor(node_count, element_count, eid, coordinates, element_properties);
+            spA = spInsertBtoA(spA, n, NodeA, sup_displ_vector_W);
             d = 'z';
         case{3}
-            SpTV = sparse(1, 3, 1);
-            spA = spInsertBtoA(spA, n, NodeA, SpTV);
+            sup_displ_vector = sparse(1, 3, 1);
+            spA = spInsertBtoA(spA, n, NodeA, sup_displ_vector);
             d = 'y';
     endswitch
     disp(sprintf('support_shift(%i, 1, %i) = %i in %s direction at the node %i', UWFi, NodeB, shift, d, NodeB))
