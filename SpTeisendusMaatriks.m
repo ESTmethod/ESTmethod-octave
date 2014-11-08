@@ -22,35 +22,31 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function identity = SpTeisendusMaatriks(node_count, element_count, eid, coordinates, element_properties)
-##disp(' The matrix for transformation the vector [N, Q, M]'' ')
-##disp(' from local to global coordinates.')
-##disp(' OUTPUT: SpTM3x3 -- the transformation Matrix as sparse matrix. ')
-
-## node_count - the number of frame nodes
-## element_count - the number of elements
-## coordinates - the nodal coordinates
-## element_properties - the topology
-## eid - the number of the element
-##
+%======================================================================
+%> @file SpTeisendusMaatriks.m
+%> @brief Transformation 3x3 matrix from directional cosines
+%> (deprecated, use spTransformation()).
+%======================================================================
+%> @brief Transformation matrix from directional cosines (deprecated).
+%>
+%> Generate a transformation matrix from directional cosines.
+%> Used to transform vector [N, Q, M] from local to global coordinates.
+%> It is deprecated, use spTransformation() with first argument 3 instead.
+%>
+%> @param node_count Total number of nodes (not used).
+%> @param element_count Total number of elements (not used).
+%> @param eid Element id.
+%> @param coordinates Matrix containing all node coordinates.
+%> @param element_properties Topology matrix containing all element properties,
+%>            used to determine the beginning and ending nodes of element eid.
+%>
+%> @retval 3x3 transformation sparse matrix.
+%======================================================================
+function transform = SpTeisendusMaatriks(node_count, element_count, eid, coordinates, element_properties)
 if nargin != 5
     error(' Function SpTeisendusMaatriks has wrong number of input arguments.')
 end
-
-end_nid = element_properties(eid, 16);
-start_nid = element_properties(eid, 17);
-dX = coordinates(end_nid, 1) - coordinates(start_nid, 1);
-dZ = coordinates(end_nid, 2) - coordinates(start_nid, 2);
-len = sqrt(dX^2 + dZ^2);
-cosAlpha = dX / len;
-cosBeta = dZ / len;
-# The direction cosines of element
-dir_cosine = zeros(3, 3);
-dir_cosine(1, 1) = cosAlpha;
-dir_cosine(1, 2) = -cosBeta;
-dir_cosine(2, 1) = cosBeta;
-dir_cosine(2, 2) = cosAlpha;
-dir_cosine(3, 3) = 1.0;
-identity = sparse(dir_cosine);
+transform = spTransformation(3, eid, coordinates, element_properties)
+warning('SpTeisendusMaatriks() is deprecated, use spTransformation(3, ...) instead.')
 endfunction
 

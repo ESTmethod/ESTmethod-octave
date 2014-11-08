@@ -1,6 +1,7 @@
 ##=========================================================================
 ## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2002-02-15
 ## Last modified: Andres Lahe, 2009-01-03
+##                Mattias Põldaru 2014-11-07
 ## Copyright (c)  2002 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
@@ -48,6 +49,6 @@ if nargin != 8
     error('Function InsertBtoA has wrong number of input arguments!')
 end
 A = addBtoA(A, B, IM, JN)
-warning('InsertBtoA() is deprecated, used addBtoA() instead.')
+warning('InsertBtoA() is deprecated, use addBtoA() instead.')
 endfunction
 
