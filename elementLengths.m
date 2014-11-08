@@ -1,8 +1,8 @@
 ##=========================================================================
-## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2013-06-26
-## Last modified: Andres Lahe, 2013-06-27
+## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2010-06-26
+## Last modified: Andres Lahe, 2013-07-08
 ##                Mattias Põldaru, 2014-11-08
-## Copyright (c)  2013 by Tallinn University of Technology
+## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
 ##
@@ -23,29 +23,30 @@
 ##=========================================================================
 
 %======================================================================
-%> @file VardadSolmes.m
-%> @brief Find and sort elements connected to a given node (deprecated, use elementsInNode()).
+%> @file elementLengths.m
+%> @brief Calculate lengths of all elements.
 %======================================================================
-%> @brief Find and sort elements connected to a given node (deprecated).
+%> @brief Calculate lengths of all elements.
 %>
-%> Find all elements which are connected to a given node, sort elements by
-%> nids (ABB column 8), flip the results and sort by column 11.
-%> This function is deprecated, use elementsInNode() instead.
+%> Calculate lengths for all elements and return result as a vector.
 %>
-%> @param node_count Total number of nodes (unused).
-%> @param element_count Total number of elements (unused).
-%> @param nid The original matrix.
-%> @param AB A matrix indicating which elements are connected to nodes.
-%> @param ABB A element properties matrix.
-%>            [eid, u w fi N Q M, nid, hinges N Q M]
+%> @param coordinates Node coordinates in a table.
+%> @param elements Elements topology and properties in a huge matrix.
 %>
-%> @retval elements All elements which are connected to node nid.
+%> @retval element_lengths Vector of lengths of all elements.
 %======================================================================
-function elements = VardadSolmes(node_count, element_count, nid, AB, ABB)
-if nargin != 5
-    error(' function Vardadnides has wrong number of input arguments!')
+function element_lengths = elementLengths(coordinates, elements)
+if nargin != 2
+    error('Function VardaPikkus has wrong number of input arguments.')
 end
 
-elements = elementsInNode(nid, AB, ABB)
-warning('VardadSolmes() is deprecated. Use elementsInNode() instead.')
+element_count = size(elements)(1);
+for i = 1:element_count
+    end_nid = elements(i, 16);
+    start_nid = elements(i, 17);
+    dX = coordinates(end_nid, 1) - coordinates(start_nid, 1);
+    dZ = coordinates(end_nid, 2) - coordinates(start_nid, 2);
+    element_lengths(i, 1) = sqrt(dX^2 + dZ^2);
+endfor
 endfunction
+

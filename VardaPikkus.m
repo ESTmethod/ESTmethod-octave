@@ -1,6 +1,7 @@
 ##=========================================================================
 ## This program is written by Andres Lahe <andres.lahe@ttu.ee>, 2010-06-26
 ## Last modified: Andres Lahe, 2013-07-08
+##                Mattias Põldaru, 2014-11-08
 ## Copyright (c)  2010 by Tallinn University of Technology
 ##                Department of Mechanics
 ##                http://www.ttu.ee/
@@ -21,25 +22,28 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function element_lengths = VardaPikkus(NSARV, NEARV, coordinates, elements)
-
-## NSARV - the number of frame nodes
-## NEARV - the number of elements
-## coordinates - the nodal coordinates
-## elements - the topology
-## element_lengths - the length of the element
+%======================================================================
+%> @file VardaPikkus.m
+%> @brief Calculate lengths of all elements (deprecated, use elementLengths()).
+%======================================================================
+%> @brief Calculate lengths of all elements (deprecated).
+%>
+%> Calculate lengths for all elements and return result as a vector.
+%> Deprecated, use elementLengths() instead.
+%>
+%> @param node_count Total number of nodes (unused).
+%> @param element_count Total number of elements (unused).
+%> @param coordinates Node coordinates in a table.
+%> @param elements Elements topology and properties in a huge matrix.
+%>
+%> @retval element_lengths Vector of lengths of all elements.
+%======================================================================
+function element_lengths = VardaPikkus(node_count, element_count, coordinates, elements)
 
 if nargin != 4
     error('Function VardaPikkus has wrong number of input arguments.')
 end
-
-element_count = size(elements)(1);
-for i = 1:element_count
-    LkoordN = elements(i, 16);
-    AkoordN = elements(i, 17);
-    dX = coordinates(LkoordN, 1) - coordinates(AkoordN, 1);
-    dZ = coordinates(LkoordN, 2) - coordinates(AkoordN, 2);
-    element_lengths(i, 1) = sqrt(dX^2 + dZ^2);
-endfor
+element_lengths = elementLengths(coordinates, elements)
+warning('VardaPikkus() is deprecated. Use elementLengths() instead.')
 endfunction
 

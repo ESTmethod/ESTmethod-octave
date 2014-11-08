@@ -340,7 +340,7 @@ load_variant
 disp('')
 
 # Calculate lengths for all elements.
-element_lengths = VardaPikkus(node_count, element_count, node_coordinates, element_properties);
+element_lengths = elementLengths(node_coordinates, element_properties);
 
 # Names for rows types.
 row_names = [ 'displace u'

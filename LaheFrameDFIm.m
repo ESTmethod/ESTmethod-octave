@@ -71,7 +71,7 @@ for id = 1:support_nodes_count
     endfor
 endfor
 
-lvarras = VardaPikkus(node_count, element_count, coordinates, element_properties);
+lvarras = elementLengths(coordinates, element_properties);
 
 # Nr; daf''s at the end: u, w, fi, N, Q, M; Node number; axial -, shear -, moment hinge.
 # disp(' Nr;  daf''s at the end:  u, w, fi, N, Q, M; Node number; axial-, shear-, moment hinge ')
@@ -149,7 +149,7 @@ disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 
 for nid = 1:node_count
     Node = nid;
-    node_elems = VardadSolmes(node_count, element_count, nid, AB, ABB);
+    node_elems = elementsInNode(nid, AB, ABB);
     node_elemsdim = size(node_elems, 1);
 
     if node_elemsdim > 1
@@ -201,7 +201,7 @@ endfor
 toemuutuja = equation_count(2) + 1;
 
 for nid = 1:node_count
-    node_elems = VardadSolmes(node_count, element_count, nid, AB, ABB);
+    node_elems = elementsInNode(nid, AB, ABB);
     uvfiLaiend(nid, 1) = sum(support_nodes_extension(nid, 2:4));
 
     row = size(spA, 1) + 1;

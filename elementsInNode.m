@@ -23,17 +23,14 @@
 ##=========================================================================
 
 %======================================================================
-%> @file VardadSolmes.m
-%> @brief Find and sort elements connected to a given node (deprecated, use elementsInNode()).
+%> @file elementsInNode.m
+%> @brief Find and sort elements connected to a given node.
 %======================================================================
-%> @brief Find and sort elements connected to a given node (deprecated).
+%> @brief Find and sort elements connected to a given node.
 %>
 %> Find all elements which are connected to a given node, sort elements by
 %> nids (ABB column 8), flip the results and sort by column 11.
-%> This function is deprecated, use elementsInNode() instead.
 %>
-%> @param node_count Total number of nodes (unused).
-%> @param element_count Total number of elements (unused).
 %> @param nid The original matrix.
 %> @param AB A matrix indicating which elements are connected to nodes.
 %> @param ABB A element properties matrix.
@@ -41,11 +38,20 @@
 %>
 %> @retval elements All elements which are connected to node nid.
 %======================================================================
-function elements = VardadSolmes(node_count, element_count, nid, AB, ABB)
-if nargin != 5
-    error(' function Vardadnides has wrong number of input arguments!')
+function elements = elementsInNode(nid, AB, ABB)
+if nargin != 3
+    error('Function elementsInNode() has wrong number of input arguments!')
 end
 
-elements = elementsInNode(nid, AB, ABB)
-warning('VardadSolmes() is deprecated. Use elementsInNode() instead.')
+A = [];
+for j = 1 : size(AB)
+    if AB(j) == nid
+        A = [A; ABB(j, :)];
+    endif
+endfor
+
+[~, idx] = sort(A(:, 8));
+A = flipud(A(idx, :));
+[~, idx] = sort(A(:, 11));
+elements = A(idx, :);
 endfunction
