@@ -21,10 +21,23 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
+%======================================================================
+%> @file SpTeisendusUhikMaatriks2x2.m
+%> @brief Create a sparse identity matrix 2x2 (deprecated,
+%> use speye(2)).
+%======================================================================
+%> @brief Create a sparse identity matrix 2x2 (deprecated).
+%>
+%> Create a sparse identity matrix 2x2. It has been deprecated in
+%> favour of built-in speye() function, so use speye(2) instead.
+%>
+%> @retval New 2x2 identity matrix.
+%======================================================================
 function identity = SpTeisendusUhikMaatriks2x2()
 ##
 ##   The sparse identity matrix of reaction at the node
 ##
-identity = speye(2))
+identity = speye(2)
+warning('SpTeisendusUhikMaatriks2x2() is deprecated. Use speye(2) instead.')
 endfunction
 
