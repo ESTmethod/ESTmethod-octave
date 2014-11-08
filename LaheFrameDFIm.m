@@ -35,7 +35,7 @@
 %>
 %> @param scale Scaling multiplier for the displacements.
 %> @param number_of_support_reactions The number of the support reactions.
-%> @param distributed_load The uniformly distributed load in local
+%> @param distributed_loads The uniformly distributed load in local
 %>            coordinate z direction. [loadvalue, 3, element_count]
 %> @param point_forces The point load in local coordinate z direction.
 %>            [loadvalue, 2, element_count]
@@ -48,7 +48,7 @@
 %>
 %> @retval The initial parameter vector for elements.
 %======================================================================
-function AlgPar = LaheFrameDFIm(scale, support_reactions_count, distributed_load, point_forces, node_forces, support_nodes, support_shift, coordinates, element_properties)
+function AlgPar = LaheFrameDFIm(scale, support_reactions_count, distributed_loads, point_forces, node_forces, support_nodes, support_shift, coordinates, element_properties)
 if nargin != 9
     error('Function LaheBeamDFIm() has wrong number of input arguments!')
 end
@@ -76,17 +76,17 @@ lvarras = VardaPikkus(node_count, element_count, coordinates, element_properties
 # Nr; daf''s at the end: u, w, fi, N, Q, M; Node number; axial -, shear -, moment hinge.
 # disp(' Nr;  daf''s at the end:  u, w, fi, N, Q, M; Node number; axial-, shear-, moment hinge ')
 
-for i = 1:element_count
+for eid = 1:element_count
     # Beginning
-    elemvabNode(i, 1) = i;
-    elemvabNode(i, 2:7) = element_properties(i, 1:6);
-    elemvabNode(i, 8) = element_properties(i, 16);
-    elemvabNode(i, 9:11) = element_properties(i, 18:20);
+    element_free_node(eid, 1) = eid;
+    element_free_node(eid, 2:7) = element_properties(eid, 1:6);
+    element_free_node(eid, 8) = element_properties(eid, 16);
+    element_free_node(eid, 9:11) = element_properties(eid, 18:20);
     # End
-    elemvabNode(element_count+i, 1) = i;
-    elemvabNode(element_count+i, 2:7) = element_properties(i, 7:12);
-    elemvabNode(element_count+i, 8) = element_properties(i, 17);
-    elemvabNode(element_count+i, 9:11) = element_properties(i, 21:23);
+    element_free_node(element_count+eid, 1) = eid;
+    element_free_node(element_count+eid, 2:7) = element_properties(eid, 7:12);
+    element_free_node(element_count+eid, 8) = element_properties(eid, 17);
+    element_free_node(element_count+eid, 9:11) = element_properties(eid, 21:23);
 endfor
 
 disp('================================================================================')
@@ -94,9 +94,9 @@ disp('  Element number;     DaF numbers;    Node number;   axial, shear, moment 
 disp('--------------------------------------------------------------------------------')
 disp(' Element number   u w fi N Q M        Node  N    Q    M  hinge -  true=1        ')
 disp('--------------------------------------------------------------------------------')
-AB = sortrows(elemvabNode(:, 8));
-[!, idx] = sortrows(elemvabNode(:, 8));
-ABB = elemvabNode(idx, :)
+AB = sortrows(element_free_node(:, 8));
+[!, idx] = sortrows(element_free_node(:, 8));
+ABB = element_free_node(idx, :)
 
 # Define a sparse matrix spA for the left side of the equation.
 spA = sparse(NNK, NNK);
@@ -109,24 +109,24 @@ disp('----- Writing basic equations of frame with the transfer matrix ---- ')
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
 # http://digi.lib.ttu.ee/opik_eme/Ehitusmehaanika.pdf#page=397
 
-for i = 1:element_count
-    EI = element_properties(i, 13);
-    EA = element_properties(i, 14);
-    GAr = element_properties(i, 15);
-    Li = lvarras(i, 1);
+for eid = 1:element_count
+    EI = element_properties(eid, 13);
+    EA = element_properties(eid, 14);
+    GAr = element_properties(eid, 15);
+    Li = lvarras(eid, 1);
     xx = Li;
 
     # Force matrix [Fx Fx a]
-    Fjoud = point_forces(:, 1:3, i);
+    forces = point_forces(eid, :, 1:3);
     
     # Load matrix [qz qx qA qL]
-    qkoormus = distributed_load(:, 1:4, i);
+    loads = distributed_loads(eid, :, 1:4);
 
     # The transfer matrix equation
     spvF = ysplvfmhvI(scale, xx, Li, EA, GAr, EI);
-    vB = ESTFrKrmus(scale, Li, Li, Fjoud, qkoormus, EA, EI);
-    position_row = i * 6 - 5;
-    position_col = i * 12 - 11;
+    vB = ESTFrKrmus(scale, Li, Li, forces, loads, EA, EI);
+    position_row = eid * 6 - 5;
+    position_col = eid * 12 - 11;
     spA = spInsertBtoA(spA, position_row, position_col, spvF);
     B = addBtoA(B, vB, position_row, 1);
 endfor
@@ -143,34 +143,34 @@ disp('')
 
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Compatibility equations of displacements at nodes ')
-Nr1 = equation_count(1) + 1;
-From_row = sprintf('Compatibility equations begin from row: %d', Nr1)
+row = equation_count(1) + 1;
+From_row = sprintf('Compatibility equations begin from row: %d', row)
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 
-for i = 1:node_count
-    Node = i;
-    AVS = VardadSolmes(node_count, element_count, i, AB, ABB);
-    AVSdim = size(AVS);
+for nid = 1:node_count
+    Node = nid;
+    el_node = VardadSolmes(node_count, element_count, nid, AB, ABB);
+    el_nodedim = size(el_node, 1);
 
-    if AVSdim(1) > 1
-        for j = 2:AVSdim(1)
-            Varras1 = AVS(1, 1);
-            VarrasN = AVS(j, 1);
+    if el_nodedim > 1
+        for eid = 2:el_nodedim
+            Varras1 = el_node(1, 1);
+            VarrasN = el_node(eid, 1);
 
-            AVSsum = AVS(1, 11) + AVS(j, 11);
+            el_nodesum = el_node(1, 11) + el_node(eid, 11);
 
-            if AVSsum == 0
+            if el_nodesum == 0
                 identity = SpTeisendusMaatriks(node_count, element_count, Varras1, coordinates, element_properties);
-                spA = spInsertBtoA(spA, Nr1, AVS(1, 2), identity);
+                spA = spInsertBtoA(spA, row, el_node(1, 2), identity);
                 identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
-                spA = spInsertBtoA(spA, Nr1, AVS(j, 2), -identity);
-                Nr1 += 3;
+                spA = spInsertBtoA(spA, row, el_node(eid, 2), -identity);
+                row += 3;
             else
                 identity = SpTeisendusMaatriks2x2(node_count, element_count, Varras1, coordinates, element_properties);
-                spA = spInsertBtoA(spA, Nr1, AVS(1, 2), identity);
+                spA = spInsertBtoA(spA, row, el_node(1, 2), identity);
                 identity = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
-                spA = spInsertBtoA(spA, Nr1, AVS(j, 2), -identity);
-                Nr1 += 2;
+                spA = spInsertBtoA(spA, row, el_node(eid, 2), -identity);
+                row += 2;
             endif
         endfor
     endif
@@ -185,73 +185,70 @@ non_zero_elements_in_compatibility_equations = nnzD - non_zero_elements_in_the_b
 disp('')
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Joint equilibrium equations at nodes ')
-From_rows = sprintf('Joint equilibrium equations begin from row: %d', Nr1)
+From_rows = sprintf('Joint equilibrium equations begin from row: %d', row)
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 
 support_nodes_extension = zeros(node_count, 4);
-for i = 1:node_count
-    support_nodes_extension(i, 1) = i;
-    for j = 1:support_nodes_count;
-        if support_nodes_extension(i, 1) == support_nodes(j, 1)
-            support_nodes_extension(i, 2:4) = support_nodes(j, 2:4);
+for nid = 1:node_count
+    support_nodes_extension(nid, 1) = nid;
+    for sid = 1:support_nodes_count;
+        if support_nodes_extension(nid, 1) == support_nodes(sid, 1)
+            support_nodes_extension(nid, 2:4) = support_nodes(sid, 2:4);
         endif
     endfor
 endfor
 
 toemuutuja = equation_count(2) + 1;
 
-for i = 1:node_count
-    Node = i;
-    AVS = VardadSolmes(node_count, element_count, Node, AB, ABB);
-    uvfiLaiend(Node, 1) = sum(support_nodes_extension(Node, 2:4));
+for nid = 1:node_count
+    el_node = VardadSolmes(node_count, element_count, nid, AB, ABB);
+    uvfiLaiend(nid, 1) = sum(support_nodes_extension(nid, 2:4));
 
-    Nr1 = size(spA, 1) + 1;
+    row = size(spA, 1) + 1;
     uvfi = 0;
 
-    AVSdim = size(AVS);
-    if AVSdim(1) == 1
-        if uvfiLaiend(Node, 1) == 0
-            VarrasN = AVS(1, 1);
+    el_nodedim = size(el_node, 1);
+    if el_nodedim == 1
+        if uvfiLaiend(nid, 1) == 0
+            VarrasN = el_node(1, 1);
             identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
-            spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
+            spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
             Arv123 = 3;
-            B(Nr1 : Nr1+2, 1) = node_forces(1:3, 1, Node);
-            Nr1 += 3;
+            B(row : row+2, 1) = node_forces(nid, 1, 1:3);
+            row += 3;
         endif
 
         for k = 1 : size(support_nodes, 1)
-            if support_nodes(k, 1) == Node
+            if support_nodes(k, 1) == nid
                 uvfi = sum(support_nodes(k, 2:4));
-                Nr1 = size(spA, 1) + 1;
+                row = size(spA, 1) + 1;
 
-                VarrasN = AVS(1, 1);
+                VarrasN = el_node(1, 1);
                 if uvfi == 3
                     identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
-                    spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
-                    spA = spInsertBtoA(spA, Nr1, toemuutuja, -sparse(eye(uvfi)));
-                    Nr1 += uvfi;
+                    spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
+                    spA = spInsertBtoA(spA, row, toemuutuja, -speye(uvfi));
+                    row += uvfi;
                     toemuutuja += uvfi;
                 elseif uvfi == 2
                     identity = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
-                    spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
-                    spA = spInsertBtoA(spA, Nr1, toemuutuja, -sparse(eye(uvfi)));
-                    Nr1 += uvfi;
+                    spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
+                    spA = spInsertBtoA(spA, row, toemuutuja, -speye(uvfi));
+                    row += uvfi;
                     toemuutuja += uvfi;
                 elseif uvfi == 1
                     TugiX = support_nodes(k, 2);
                     TugiZ = support_nodes(k, 3);
                     if TugiX == 1
                         identity = SpToeReaktsioonXvektor(node_count, element_count, VarrasN, coordinates, element_properties);
-                        spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
-                        Nr1 += uvfi
+                        spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
+                        row += uvfi
                         toemuutuja += uvfi;
-                    endif
-
-                    if TugiZ == 1
+                    elseif TugiZ == 1
                         identity = SpToeReaktsioonZvektor(node_count, element_count, VarrasN, coordinates, element_properties);
-                        spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
-                        spA = spSisestaArv(spA, Nr1, toemuutuja, 1);
-                        Nr1 += uvfi
+                        spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
+                        spA = spSisestaArv(spA, row, toemuutuja, 1);
+                        row += uvfi
                         toemuutuja += uvfi;
                     endif
                 endif
@@ -259,22 +256,22 @@ for i = 1:node_count
         endfor
     endif
 
-    if AVSdim(1) > 1
-        for j = 1:AVSdim(1)
-            VarrasN = AVS(j, 1);
-            AVStas = AVS(j, 11);
-            b1 = Nr1
-            b2 = Nr1 + 2;
+    if el_nodedim > 1
+        for eid = 1:el_nodedim
+            VarrasN = el_node(eid, 1);
+            el_nodetas = el_node(eid, 11);
+            b1 = row
+            b2 = row + 2;
             Arv123 = 3;
 
-            if AVStas == 0
+            if el_nodetas == 0
                 identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
             else
                 identity = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
                 b2 -= 1;
                 Arv123 -= 1;
             endif
-            spA = spInsertBtoA(spA, Nr1, AVS(j, 5), identity);
+            spA = spInsertBtoA(spA, row, el_node(eid, 5), identity);
 
             has_supports = 0;
             is_support_node = sum(support_nodes_extension(Node, 2:4));
@@ -297,19 +294,19 @@ for i = 1:node_count
 
         if has_supports == 11
             transmatrix = -SpTeisendusUhikMaatriks0x1v(1);
-            spA = spInsertBtoA(spA, Nr1, toemuutuja, transmatrix);
-            Nr1 += 1;
+            spA = spInsertBtoA(spA, row, toemuutuja, transmatrix);
+            row += 1;
             toemuutuja += 1;
         elseif has_supports != 0
-            transmatrix = -sparse(eye(has_supports));
-            spA = spInsertBtoA(spA, Nr1, toemuutuja, transmatrix);
-            Nr1 += has_supports;
+            transmatrix = -speye(has_supports);
+            spA = spInsertBtoA(spA, row, toemuutuja, transmatrix);
+            row += has_supports;
             toemuutuja += has_supports;
         endif
 
-    B(b1:b2, 1) = node_forces(1:Arv123, 1, Node);
+    B(b1:b2, 1) = node_forces(Node, 1, 1:Arv123);
  
-    Nr1 = size(spA, 1) + 1;
+    row = size(spA, 1) + 1;
     endif
 endfor
 
@@ -321,22 +318,22 @@ disp('')
 equilibrium_equations_rows = spA_rowsE - spA_rowsD
 non_zero_elements_in_equilibrium_equations = nnzE - nnzD
 
-Nr1 = size(spA, 1) + 1;
+row = size(spA, 1) + 1;
 ABBdim = size(ABB);
-#
+
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Side conditions (hinges) ')
-From_rows = sprintf('Side conditions begin from row: %d', Nr1)
+From_rows = sprintf('Side conditions begin from row: %d', row)
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 
 for i = 1:ABBdim(1)
     if ABB(i, 10) == 1
-        spA = spSisestaArv(spA, Nr1, ABB(i, 6), 1);
-        Nr1 += 1;
+        spA = spSisestaArv(spA, row, ABB(i, 6), 1);
+        row += 1;
     endif
     if ABB(i, 11) == 1
-        spA = spSisestaArv(spA, Nr1, ABB(i, 7), 1);
-        Nr1 += 1;
+        spA = spSisestaArv(spA, row, ABB(i, 7), 1);
+        row += 1;
     endif
 endfor
 
@@ -395,7 +392,7 @@ for i = 1:number_of_support_reactions
     UWFi = support_reactions(i, 3);
     NodeA = support_reactions(i, 4);
     NodeB = support_reactions(i, 7);
-    shift = support_shift(UWFi, 1, NodeB);
+    shift = support_shift(NodeB, 1, UWFi);
 
     switch (UWFi);
         case{1}
@@ -412,7 +409,7 @@ for i = 1:number_of_support_reactions
             spA = spInsertBtoA(spA, n, NodeA, SpTV);
             d = 'y';
     endswitch
-    disp(sprintf('Support shift support_shift(%i, 1, %i) = %i in %s direction at the node %i', UWFi, NodeB, shift, d, NodeB))
+    disp(sprintf('support_shift(%i, 1, %i) = %i in %s direction at the node %i', UWFi, NodeB, shift, d, NodeB))
 endfor
 
 nnzR = nnz(spA);
@@ -423,13 +420,17 @@ non_zero_elements_in_restrtictions_equations = nnzR - nnzN
 
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 
-Bsuurus = size(B, 1);
+B_size = size(B, 1);
 
-disp(' No    B ')
-disp('')
-for i = 1:Bsuurus
-    disp(sprintf('%2i %7.3f', i, B(i, 1)))
+disp(' No     B   ')
+disp('------------')
+for i = 1:B_size
+    b = B(i, 1);
+    if b != 0
+        disp(sprintf('%3i %8.3f', i, b))
+    endif
 endfor
+disp('Note: only nonzero b values are shown.')
 disp('')
 
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
@@ -441,53 +442,52 @@ disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % spA * X = B, solve for X
 X = spA \ B;
 
-disp(' No     X ')
-disp('')
-for i = 1:Bsuurus
-    disp(sprintf('%2i   %9.3e', i, X(i, 1)))
+disp('   No       X     ')
+disp('------------------')
+for i = 1:B_size
+    disp(sprintf('  %3i   %10.3e', i, X(i, 1)))
 endfor
 disp('')
 
 display(sprintf('Support reactions begin from row X: %d', support_reactions_start))
 disp('')
 
-for i = 1:element_count
-    elemendiN(i, 1) = i;
-    siireVardaA(i, 1:3) = element_properties(i, 7:9);
-    siireVardaL(i, 1:3) = element_properties(i, 1:3);
-    joudVardaA(i, 1:3) = element_properties(i, 10:12);
-    joudVardaL(i, 1:3) = element_properties(i, 4:6);
+for eid = 1:element_count
+    siireVardaA(eid, 1:3) = element_properties(eid, 7:9);
+    siireVardaL(eid, 1:3) = element_properties(eid, 1:3);
+    joudVardaA(eid, 1:3) = element_properties(eid, 10:12);
+    joudVardaL(eid, 1:3) = element_properties(eid, 4:6);
 endfor
 
 
 disp('=======================================================')
-disp('     Support displacements/(Cx, Cz, CMy) at nodes  ')
-disp('   X_No,  Element_No,  u/w/fi_No, u_No,  w_No,  fi_No ')
+disp('     Support displacements/(Cx, Cz, CMy) at nodes      ')
+disp('    X_No    eid     u/w/fi_No    u_No   w_No   fi_No   ')
 disp('-------------------------------------------------------')
-for i = 1:number_of_support_reactions
-    disp(sprintf('     %2i     %2i         %2i        %3i    %3i     %3i  ', support_reactions(i, 1:6)))
+for rid = 1:number_of_support_reactions
+    disp(sprintf('     %2i     %2i         %2i        %3i    %3i     %3i  ', support_reactions(rid, 1:6)))
 endfor
-disp('==================================================================')
-disp(' Displacements and force numbers at beginning of the element  ')
-disp('   No,    u,   w,   fi     N,   Q,   M  ')
-disp('------------------------------------------------------------------')
-for i = 1:element_count
-    disp(sprintf('  %2i     %2i   %2i   %2i     %2i   %2i   %2i  ', i, siireVardaA(i, 1:3), joudVardaA(i, 1:3)))
+disp('-------------------------------------------------------')
+disp('')
+disp('=================================================================')
+disp(' Displacements and force numbers at the beginning of the element ')
+disp('  eid     u    w   fi      N    Q    M                           ')
+disp('-----------------------------------------------------------------')
+for eid = 1:element_count
+    disp(sprintf('  %2i     %2i   %2i   %2i     %2i   %2i   %2i  ', eid, siireVardaA(eid, 1:3), joudVardaA(eid, 1:3)))
 endfor
+disp('-----------------------------------------------------------')
+disp('')
+disp('===========================================================')
+disp(' Displacements and force numbers at the end of the element ')
+disp('  eid     u    w   fi      N    Q    M                     ')
+disp('-----------------------------------------------------------')
+for eid = 1:element_count
+    disp(sprintf('  %2i     %2i   %2i   %2i     %2i   %2i   %2i ', eid, siireVardaL(eid, 1:3), joudVardaL(eid, 1:3)))
+endfor
+disp('-----------------------------------------------------------')
+disp('')
 
-disp('-------------------------------------------------------')
-disp('')
-disp('==================================================================')
-disp(' Displacements and forces numbers at end of the element  ')
-disp('   No,    u,   w,   fi     N,   Q,   M  ')
-disp('------------------------------------------------------------------')
-for i = 1:element_count
-    disp(sprintf('  %2i     %2i   %2i   %2i     %2i   %2i   %2i ', i, siireVardaL(i, 1:3), joudVardaL(i, 1:3)))
-endfor
-#
-disp('-------------------------------------------------------')
-disp('')
-#
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Initial parameter vectors for elements displacements and forces  ')
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
@@ -495,7 +495,7 @@ disp('')
 disp('-------- Descaling multiplier for the displacements = 1/scale --------  ')
 disp('')
 
-AlgPar = zeros(element_count, 6)
+AlgPar = zeros(element_count, 6);
 for i = 1:element_count
     displacement = X(siireVardaA(i, 1:3))' / scale;
     force = X(joudVardaA(i, 1:3), 1)';
@@ -508,41 +508,34 @@ endfor
 
 disp('============================================================================')
 disp(' Unscaled initial parameter vector ')
-disp('Element No    u          w          fi             N          Q          M ')
+disp('  eid      u           w          fi              N          Q          M   ')
 disp('----------------------------------------------------------------------------')
-for i = 1:element_count
-    disp(sprintf('  %2i   %9.2e   %9.2e   %9.2e    %9.2f  %9.2f  %9.2f', i, AlgPar(i, 1:6)))
+for eid = 1 : element_count
+    disp(sprintf('  %2i   %9.2e   %9.2e   %9.2e    %9.2f  %9.2f  %9.2f', eid, AlgPar(eid, 1:6)))
 endfor
 disp('----------------------------------------------------------------------------')
-
-for i = 1:element_count
-    JrN2(2*i - 1) = i;
-    JrN2(2*i) = i;
-endfor
-
-#SiirdeJoud
 disp('============================================================================')
-disp('      Unscaled daf-s at beginning/end of elements ')
-disp('Element No    u          w          fi             N          Q          M  ')
+disp('      Unscaled daf-s at beginning/end of elements                           ')
+disp('  eid      u           w          fi              N          Q          M   ')
 disp('----------------------------------------------------------------------------')
 for i = 1 : element_count*2
-    disp(sprintf('  %2i   %9.2e   %9.2e   %9.2e    %9.2f  %9.2f  %9.2f', JrN2(i), SiireJoud(i, :)))
+    disp(sprintf('  %2i   %9.2e   %9.2e   %9.2e    %9.2f  %9.2f  %9.2f', ceil(i/2), SiireJoud(i, :)))
 endfor
 disp('----------------------------------------------------------------------------')
 disp('')
-disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
-Support_reactions = sprintf('Support reactions begin from row X: %d', support_reactions_start)
-disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+disp(sprintf('Support reactions begin from row X: %d', support_reactions_start))
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
 disp('')
 disp('======================================================================')
-disp(' No         X          Node   (Cx <=> 1 /Cz <=> x / Cy(moment) <=> 3) ')
+disp(' No         X           nid        (Cx - 1 / Cz - 2 / Cy(moment) - 3) ')
 disp('----------------------------------------------------------------------')
 disp('')
-for i = support_reactions_start:Bsuurus
-    toenr = i - support_reactions_start + 1
+for i = support_reactions_start:B_size
+    toenr = i - support_reactions_start + 1;
     disp(sprintf('%3i   %+12.6e    %3i            %3i ', i, X(i, 1), support_reactions(toenr, 7), support_reactions(toenr, 3)))
 endfor
-disp('--------------------------------------------------------------')
+disp('----------------------------------------------------------------------')
 disp('')
 
 AlgPar;

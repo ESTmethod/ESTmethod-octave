@@ -44,9 +44,10 @@ global siireVardaA
 
 disp(' daf -- the displacements and the forces at the ends of element.')
 disp(' The element of plane frame have 12 daf''s (6+6).')
-disp(' The number of unknowns are 12*number_of_elements + number_of_support_reactions.')
-disp(' The matrixes are assembled into compressed column sparse matrices.')
+disp(' The number of unknowns are 12*number_of_elements + support_reactions_count.')
+disp(' The matrices are assembled into compressed column sparse matrices.')
 disp('')
+
 
 # Basic information
 # =================
@@ -54,8 +55,8 @@ disp('')
 # It is used to find possible errors in data later.
 number_of_nodes = 8;
 number_of_elements = 7;
-number_of_support_reactions = 8;
-number_of_unknowns = 12 * number_of_elements + number_of_support_reactions;
+support_reactions_count = 8;
+number_of_unknowns = 12 * number_of_elements + support_reactions_count;
 
 # Element properties
 EIp = 20000;
@@ -64,6 +65,7 @@ EAr = 6.8 * 10^15;
 GAp = 0.4 * EAp;
 GAr = 0.4 * EAr;
 divisions = 4;
+
 
 # Load variants
 # =============
@@ -81,12 +83,15 @@ load_variants = [
    10    4    3    0    0   14    0    0   30
    12    5    3   10    0    0   20    0    0];
 
-# Extract the values to their names.
+disp('=======================================')
 disp(' Current loads according to the variant')
+disp('---------------------------------------')
 load_variant = 1
+# Extract the values to their names.
 [l h Isuhe p1 p2 p3 F1 F2 F3] = num2cell(load_variants(load_variant, :)){:}
+disp('')
 
-# Precalculations to fill in node coordinates later.
+# Precalculations to fill in node coordinates and force matrices later.
 EIr = Isuhe * EIp;
 scale = EIp / h;
 xi = 0.6;
@@ -114,7 +119,7 @@ d = h1;
 H = h;
 
 q1 = p3;
-q = max(p1, p2)
+q = max(p1, p2);
 
 qz3v = q * l / L3; # load / length of the element
 qz3 = qz3v * cosA3; # projection onto z - axis
@@ -134,49 +139,6 @@ aF5 = 0.4 * L5;
 Fz6 = F2;
 aF6 = 0.3 * h;
 
-#disp(' Element load in local node_coordinates ')
-#disp('    qz     qx     qA      qL ')
-# Uniformly distributed load in local coordinate z and x direction kN / m^2
-esQkoormus = zeros(1, 4, number_of_elements);
-esQkoormus(1, 1:4, 1) = [q1 0.0 0.0 L1];
-esQkoormus(1, 1:4, 2) = [qz2 qx2 0.0 L2];
-esQkoormus(1, 1:4, 3) = [qz3 qx3 0.0 L3];
-
-# Point load in local coordinate z and x direction kN
-# Fz, Fx, aF - coordinate of the point of force application
-esFjoud = zeros(1, 3, number_of_elements);
-esFjoud(1, 1:3, 1) = [0.0 0.0 L1];
-esFjoud(1, 1:3, 2) = [0.0 0.0 L2];
-esFjoud(1, 1:3, 3) = [0.0 0.0 L3];
-esFjoud(1, 1:3, 4) = [Fz4 0.0 aF4];
-esFjoud(1, 1:3, 5) = [Fz5 Fx5 aF5];
-esFjoud(1, 1:3, 6) = [Fz6 0.0 aF6];
-esFjoud(1, 1:3, 7) = [0.0 0.0 L7];
-
-#disp(' Node forces in global node_coordinates ')
-# sSolmF(forces, 1, nodes); forces = [Fx; Fz; My]
-sSolmF = zeros(3, 1, number_of_nodes);
-
-# Support shift - tSiire#
-# Support shift multiplied by scaling multiplier
-tSiire = zeros(3, 1, number_of_nodes);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp(' Elements loads q in local node_coordinates ')
-disp(' qz, qx, qA, qL  ')
-disp('  For the element load q = 0,  qL = L - the end of element  ')
-esQkoormus
-disp(' Elements forces F in local node_coordinates  ')
-disp(' Fz, Fx, aF -- coordinate of the point of force F  application in local node_coordinates ')
-#disp(' x = aL -- coordinate of the point of force F  application in local node_coordinates ')
-disp(' For the element force F = 0,  aL = L - the end of element  ')
-esFjoud
-
-disp('------  ')
-disp(' Node forces in global  node_coordinates ')
-disp(' Fx Fz My; : ; Node number; ')
-disp('------  ')
-sSolmF(:, 1, :)
 
 # Node coordinates
 # ================
@@ -197,11 +159,13 @@ node_count = size(node_coordinates, 1);
 
 # Restrictions on support displacements
 # =====================================
-# [node_id x y fi]
-# x - support fixation in x-direction
-# z - support fixation in z-direction
-# fi- support fixation for revolving around y-axis
-# Supports: 1 - fixed, 0 - open/free
+# [nid x y fi]
+# nid - Node id.
+# x - Support fixation in x-direction.
+# z - Support fixation in z-direction.
+# fi- Support fixation for revolving around y-axis.
+# Supports: 1 - fixed, 0 - open/free.
+#              [nid x y fi]
 support_nodes = [ 1 1 1 1;
                   5 1 1 1;
                   7 1 1 0];
@@ -214,185 +178,216 @@ support_nodes = [ 1 1 1 1;
 # end, start - node numbers of element
 # N, Q, M at end and start - hinges for axial, shear and moment forces
 # Hinges: 1 - fixed, 0 - open/free
-element_properties = [
-EIp EAp GAp 2 1 0 0 1 0 0 0; % element 1
-EIr EAr GAr 3 2 0 0 0 0 0 0; % element 2
-EIr EAr GAr 4 2 0 0 0 0 0 0; % element 3
-EIp EAp GAp 5 4 0 0 0 0 0 0; % element 4
-EIr EAr GAr 6 4 0 0 0 0 0 0; % element 5
-EIp EAp GAp 7 6 0 0 1 0 0 0; % element 6
-EIr EAr GAr 8 6 0 0 0 0 0 0];% element 7
+element_topology_hinges = [
+EIp EAp GAp 2 1 0 0 1 0 0 0; % eid = 1
+EIr EAr GAr 3 2 0 0 0 0 0 0; % eid = 2
+EIr EAr GAr 4 2 0 0 0 0 0 0; % eid = 3 etc
+EIp EAp GAp 5 4 0 0 0 0 0 0;
+EIr EAr GAr 6 4 0 0 0 0 0 0;
+EIp EAp GAp 7 6 0 0 1 0 0 0;
+EIr EAr GAr 8 6 0 0 0 0 0 0];
+
+element_count = size(element_topology_hinges, 1);
 
 
+# Element loads
+# =============
+# Uniformly distributed element loads in local coordinate z and x direction.
+#
+# eid - Element id.
+# lid - Load id, one element may carry multiple loads.
+# qz - Load in local z direction, kN/m.
+# qx - Load in local x direction, kN/m.
+#  a - Load start position from the start of the element, m.
+#  l - Load length in m (make sure to not exceed the length of element).
+#               eid lid        [ qz  qx  a  l ]
+distributed_loads = zeros(number_of_elements, 1, 4);
+distributed_loads(1, 1, 1:4) = [q1  0.0 0.0 L1];
+distributed_loads(2, 1, 1:4) = [qz2 qx2 0.0 L2];
+distributed_loads(3, 1, 1:4) = [qz3 qx3 0.0 L3];
+
+
+# Element forces
+# ==============
+# Elements forces F in local coordinates z and x direction.
+#
+# eid - Element id.
+# fid - Force id, one element may have multiple forces.
+# Fz - Force in local z direction, kN.
+# Fx - Force in local x direction, kN.
+#  a - Force position from the start of the element, m. Please do not exceed
+#          the length of the element.
+#          eid fid        [ Fz  Fx  a ]
+point_forces = zeros(number_of_elements, 1, 3);
+point_forces(1, 1, 1:3) = [0.0 0.0  L1];
+point_forces(2, 1, 1:3) = [0.0 0.0  L2];
+point_forces(3, 1, 1:3) = [0.0 0.0  L3];
+point_forces(4, 1, 1:3) = [Fz4 0.0 aF4];
+point_forces(5, 1, 1:3) = [Fz5 Fx5 aF5];
+point_forces(6, 1, 1:3) = [Fz6 0.0 aF6];
+point_forces(7, 1, 1:3) = [0.0 0.0  L7];
+
+
+# Node forces
+# ===========
+# Node forces in global coordinates X and Z.
+# nid - Node id.
+# fid - Force id, one node can have multiple forces.
+# Fx - Force in global X direction, kN.
+# Fz - Force in global Z direction, kN.
+# My - Moment around global Y axis, kNm.
+#         nid fid        [ Fx  Fz  My]
+node_forces = zeros(number_of_nodes, 1, 3);
+node_forces(1, 1, 1:3) = [0.0 0.0 0.0];
+
+
+# Support shifts
+# ==============
+# Support shift multiplied by scaling multiplier
+# nid - Support node id.
+# sid - Shift id.
+# dx - Shift in global coordinate X direction, multiplied by scale.
+# dz - Shift in global coordinate Z direction, multiplied by scale.
+# fi - Revolving around global Y axis.
+# Hinges: 1 - fixed, 0 - open/free
+#           nid  sid       [ dx  dz  fi]
+support_shift = zeros(number_of_nodes, 1, 3);
+support_shift(1, 1, 1:3) = [0.0 0.0 0.0];
+
+
+disp('')
 disp('=============================')
-disp(' Node coordinates            ')
+disp('     Node coordinates        ')
 disp('  nid       X        Z       ')
 disp('-----------------------------')
-for i = 1:node_count
-    disp(sprintf('  %2i     %7.4f  %7.4f', i, node_coordinates(i, 1:2)))
+for nid = 1 : node_count
+    disp(sprintf('  %2i     %7.4f  %7.4f', nid, node_coordinates(nid, 1:2)))
 endfor
 disp('-----------------------------')
-# %%%
+
 if number_of_nodes != node_count
     display(sprintf('Number of nodes must be %d, but is %d', number_of_nodes, node_count))
     error(' Faulty node data.')
 endif
 
-disp('===============================================')
-disp('        Topology and  hinges. ')
-disp('  End of the element, beginning of the element,  ')
-disp('  axial-, shear-, moment hinge; 1 - hinge ''true'' ')
-disp('-----------------------------------------------')
-topology_and_hinges = element_properties(:, 4:11)
 
-# -------- Displacements and force numbers at the end and the beginning of element. ----------
-element_count = size(element_properties)(1);
-for i = 1 : element_count
-    displacements_forces_numbers(i, :) = [i*12 - 11 : i*12];
+disp('===============================================')
+disp('        Topology and  hinges                   ')
+disp('  End of the element, beginning of the element,')
+disp('  axial-, shear-, moment hinge; 1 - fixed hinge')
+disp('-----------------------------------------------')
+topology_and_hinges = element_topology_hinges(:, 4:11)
+
+
+# Displacements and force numbers at the end and the beginning of element.
+for eid = 1 : element_count
+    displacements_forces_numbers(eid, :) = [eid*12 - 11 : eid*12];
 endfor
-#
-disp('====================================================')
-disp('  Displacements and  forces numbers (DaFs) ')
-disp('  at the end and at the beginning of elements.  ')
-disp('----------------------------------------------------')
-displacements_forces_numbers;
-#
-disp_force_numbers_properties = [displacements_forces_numbers element_properties];
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#disp_force_numbers_properties = [
+
+# Combine all element information into one matrix.
 #  1  2  3  4  5  6  7  8  9 10 11 12 EIp EAp GAp 2 1; # element 1
 # 13 14 15 16 17 18 19 20 21 22 23 24 EIr EAr GAr 4 2; # element 2
 # 25 26 27 28 29 30 31 32 33 34 35 36 EIp EAp GAp 4 3; # element 3
-#
-disp('========================================================================================================================================')
-disp(' Topology of elements                                                                                                       Moment hinge')
-disp('                                                                                                               Node number   ''true''=1 ')
-disp(' No  At the end:  u, w, fi, N, Q, M.  At the beginning: u, w, fi, N, Q, M.      EI         EA          GA    End Beginning  M    M')
-disp('----------------------------------------------------------------------------------------------------------------------------------------')
-#
-for i = 1:element_count
-    disp(sprintf('%2i  %2i  %2i  %2i  %2i %2i  %2i  %2i  %2i  %2i  %2i  %2i  %2i  %9.2e %9.2e %9.2e %2i %2i %2i %2i', i, disp_force_numbers_properties(i, 1:17), disp_force_numbers_properties(i, 20), disp_force_numbers_properties(i, 23)))
+element_properties = [displacements_forces_numbers element_topology_hinges];
+
+
+disp('===========================================================================')
+disp(' Topology of elements                                          Moment hinge')
+disp('   |    At the end    | At the beginning |                       | nid | ^ ')
+disp('eid| u  w fi  N  Q  M | u  w fi  N  Q  M |   EI     EA      GA   | s  e|s e')
+disp('---------------------------------------------------------------------------')
+cols = [1:17 20 23];
+sformat = '%2i  %2i %2i %2i %2i %2i %2i  %2i %2i %2i %2i %2i %2i  %7.1e %7.1e %7.1e %2i %2i %1i %1i';
+for eid = 1:element_count
+    disp(sprintf(sformat, eid, element_properties(eid, cols)))
 endfor
-disp('----------------------------------------------------------------------------------------------------------------------------------------')
+disp('---------------------------------------------------------------------------')
+disp('')
 
 
 # Checking data
-element_count = size(element_properties)(1)
 if number_of_elements != element_count
     disp(sprintf('Number of elements must  %d, but is %d', number_of_elements, element_count))
     error('Faulty elements data')
 endif
 
-disp('==================================================')
-disp(' Restrictions on support displacements. ')
-disp(' No    Node No   u  w  fi;  hold on-1, open-0')
-disp('--------------------------------------------------')
-n = size(support_nodes)(1);
-for i = 1 : n
-    disp(sprintf('  %2i     %5i   %2i %2i %2i %2i %2i', i, support_nodes(i, 1:4)))
+disp('=========================================')
+disp(' Restrictions on support displacements   ')
+disp('  sid  nid   u  w fi                     ')
+disp('-----------------------------------------')
+for sid = 1 : size(support_nodes, 1)
+    disp(sprintf('  %2i   %2i   %2i %2i %2i %2i %2i', sid, support_nodes(sid, 1:4)))
 endfor
-disp('--------------------------------------------------')
+disp('-----------------------------------------')
 
 # Checking data
-support_reactions_count = sum(sum(support_nodes(:, 2:4)))
-if number_of_support_reactions != support_reactions_count
-    disp(sprintf('Number of support reactions must be %d, but is %d', number_of_support_reactions, support_reactions_count))
+support_reactions_found = sum(sum(support_nodes(:, 2:4)))
+if support_reactions_count != support_reactions_found
+    disp(sprintf('Number of support reactions must be %d, but is %d', support_reactions_count, support_reactions_found))
     error('Faulty support reactions data')
 endif
 
-lvarras = VardaPikkus(node_count, element_count, node_coordinates, disp_force_numbers_properties);
-
-for i = 1:element_count
-    elemendiN(i, 1) = i;
-    siireVardaA(i, 1:3) = disp_force_numbers_properties(i, 7:9);
-    siireVardaL(i, 1:3) = disp_force_numbers_properties(i, 1:3);
-    joudVardaA(i, 1:3) = disp_force_numbers_properties(i, 10:12);
-    joudVardaL(i, 1:3) = disp_force_numbers_properties(i, 4:6);
-endfor
-
-# Size of equation system matrix
-NNK = 12 * element_count + number_of_support_reactions;
 
 # Do the actual calculation.
-AlgPar = LaheFrameDFIm(scale, number_of_support_reactions, esQkoormus, esFjoud, sSolmF, support_nodes, tSiire, node_coordinates, disp_force_numbers_properties);
+AlgPar = LaheFrameDFIm(scale, support_reactions_count, distributed_loads, point_forces, node_forces, support_nodes, support_shift, node_coordinates, element_properties);
 
-disp('  ')
-disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-disp(' Element displacements and forces  determined by transfer matrix ')
-disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+
+disp('')
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+disp(' Element displacements and forces determined by transfer matrix             ')
+disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
 load_variant
-disp('  ')
-# ------------- The element displacements and forces ----------
-row_names = [
-    'displacement u';
-    'displacement w';
-    'rotation    fi';
-    'normal force N';
-    'shear force  Q';
-    'moment force M'];
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#i = 1
-for i = 1:element_count
-    EI = disp_force_numbers_properties(i, 13); % from topology
-    EA = disp_force_numbers_properties(i, 14);
-    GAr = disp_force_numbers_properties(i, 15);
-    Li = lvarras(i, 1);
-    scale = 1.0;
-    Fjoud = esFjoud(:, 1:3, i);
-    # %       Fz    Fx     a
-    # %Fjoud=[0.0    0.0   0.0;
-    #qkoormus = esQkoormus(:, 1:3, i);
-    qkoormus = esQkoormus(:, 1:4, i);
-    # %       qz     qx     qA      qL
-    # %qkoormus=[0.0   0.0   0.0  0.0   0.0];
- 
-    xsamm = Li / divisions; % element is divided into 4-th parts
-    xx = 0;
-    AP = AlgPar(i, :)';
-    # --------- The transfer matrix equation --------
-    for ij = 1:divisions + 1 # 5 - displacements and forces at x = 0.0
-        vvF = ylfhlin(1.0, xx, EA, GAr, EI);
-        # vvB = yzhqz(1.0, xx, qx, qz, EA, EI);
-        # vvFz = yzfzv(1.0, xx, aLx, Fx, Fz, EA, EI);
-        Sj = ESTFrKrmus(1.0, xx, Li, Fjoud, qkoormus, EA, EI);
-        vB = Sj;
-        Fvv(:, ij) = vvF * AP + vB;
-        # Fvv(:, ij) = vvF * AP + vvB + vvFz;
-        xx += xsamm;
-    endfor
-    # ------------- Element displacements and forces ----------
-    disp(sprintf('Element %i (l=%5.3f m)', i, Li))
+disp('')
 
+# Calculate lengths for all elements.
+element_lengths = VardaPikkus(node_count, element_count, node_coordinates, element_properties);
+
+# Names for rows types.
+row_names = [ 'displace u'
+              'displace w'
+              'rotat   fi'
+              'normal f N'
+              'shear fo Q'
+              'moment f M'];
+
+# The element displacements and forces
+for eid = 1 : element_count
+    [EI, EA, GAr] = num2cell(element_properties(eid, 13:15)){:};
+    Li = element_lengths(eid);
+    x_step = Li / divisions; % element is divided into parts
+    force = point_forces(eid, :, :);
+    dist_load = distributed_loads(eid, :, :);
+    AP = AlgPar(eid, :)';
+
+    x = 0;
+    for j = 1 : divisions + 1 # 5 - displacements and forces at x = 0.0
+        vvF = ylfhlin(1.0, x, EA, GAr, EI);
+        vB = ESTFrKrmus(1.0, x, Li, force, dist_load, EA, EI);
+        Fvv(:, j) = vvF * AP + vB;
+        x += x_step;
+    endfor
+
+    # Output element displacements and forces
+    disp(sprintf('Element %i (l=%5.3f m)', eid, Li))
     for i = 1:3
-        disp(sprintf(' %s   %9.2e   %9.2e   %9.2e   %9.2e  %9.2e', row_names(i), Fvv(i, 1:5)))
+        disp(sprintf(' %10s   %9.1e   %9.1e   %9.1e   %9.1e  %9.1e', row_names(i, :), Fvv(i, 1:5)))
     endfor
     for i = 4:6
-        disp(sprintf(' %s   %9.5f   %9.5f   %9.5f   %9.5f  %9.5f', row_names(i), Fvv(i, 1:5)))
+        disp(sprintf(' %10s %9.3f   %9.3f   %9.3f   %9.3f  %9.3f', row_names(i, :), Fvv(i, 1:5)))
     endfor
-    disp('--------------------------------------------------------------------------')
+    disp('----------------------------------------------------------------------')
 endfor
 
-for i = 1:element_count
-    LkoordN = disp_force_numbers_properties(i, 16);
-    AkoordN = disp_force_numbers_properties(i, 17);
-    DeltaX(i) = node_coordinates(LkoordN, 1) - node_coordinates(AkoordN, 1);
-    DeltaZ(i) = node_coordinates(LkoordN, 2) - node_coordinates(AkoordN, 2);
-    VGRx(i, 1) = node_coordinates(AkoordN, 1);
-    VGRx(i, 2) = node_coordinates(LkoordN, 1);
-    VGRz(i, 1) = node_coordinates(AkoordN, 2);
-    VGRz(i, 2) = node_coordinates(LkoordN, 2);
-endfor
 
 disp('  ')
 disp(' Testing for static equilibrium:  ')
 disp('  ')
-disp(' Support_reactions=[X(85) X(86) X(87) X(88) X(89) X(90) X(91) X(92)] ')
+disp(' Support_reactions = [X(85) X(86) X(87) X(88) X(89) X(90) X(91) X(92)] ')
 Support_reactions = [X(85) X(86) X(87) X(88) X(89) X(90) X(91) X(92)]
 disp('The_lengths=[l1 l2 h08 h1  h] ')
 The_lengths = [l l h08 h1 h]
 disp(' q3=p1 or q3=p2  ')
 q3 = q
-p3 = p3
 disp('  ')
 disp(' sumZ=q3*(l1+1.0)+F3+X(86)+X(89)+X(92) ')
 sumZ = q3 * (l + 1.0) + F3 + X(86) + X(89) + X(92)
@@ -402,107 +397,108 @@ sumX = p3 * h08 + F1 - F2 + X(85) + X(88) + X(91)
 disp('  ')
 disp(' Sum of the moments acting  about point 1: ')
 disp(' sumM1=-p3*h08*h08/2-q3*(l1+1.0)*((l1+1.0)/2-1.0)-F1*0.6*h... ')
-  disp('       -F3*(l1+0.4*l2)+F2*0.5*h+X(87)+X(90)-l1*X(89)-(l1+l2)*X(92) ')
+disp('       -F3*(l1+0.4*l2)+F2*0.5*h+X(87)+X(90)-l1*X(89)-(l1+l2)*X(92) ')
 sumM1 = -p3 * h08 * h08 / 2 - q3 * (l + 1.0) * ((l + 1.0) / 2 - 1.0) ...
   - F1 * h1 - F3 * (l + 0.4 * l) + ...
   F2 * 0.5 * h + X(87) + X(90) - l * X(89) - (l*2) * X(92)
-disp('  ')
+disp('')
 disp('  Sum of the moments acting  about point 5:  ')
 disp(' sumM5=-p3*h08*h08/2+q3*(l1+1.0)*((l1+1.0)/2+l2)-F1*0.6*h... ')
-  disp('       +F3*(0.6*l2)+F2*0.5*h+X(87)+X(90)+l1*X(89)+(l1+l2)*X(86) ')
-sumM7 = - p3 * h08 * h08 / 2 + q3 * (l + 1.0) * ((l + 1.0) / 2 + l) ...
+disp('       +F3*(0.6*l2)+F2*0.5*h+X(87)+X(90)+l1*X(89)+(l1+l2)*X(86) ')
+sumM5 = - p3 * h08 * h08 / 2 + q3 * (l + 1.0) * ((l + 1.0) / 2 + l) ...
   - F1 * 0.6 * h + F3 * (0.6 * l) + F2 * 0.5 * h + X(87) + X(90) + l * X(89) + (l + l) * X(86)
-disp('  ')
+disp('')
 disp(' Calculations verified the static equilibrium of the frame   ')
 
 
+
 # Drawing figures
-figure(1)
-ax = gca ();
-#axy = [0 0 1 0.55];
-#joonepaksus = 0.50000
-#joonepaksus = 0.75000
-#joonepaksus = 3
-#set (ax, "outerposition", axy);
-#set (ax, "outerposition", [0 0 1 0.55])
-#ax = gca ();
-#set (ax, "linewidth", joonepaksus);
-#
-grid off
-#
-Lpikk = Lp;
-d = 4.0;
-#
-for j = 1:element_count
-    IR = j;
-    axis([-d Lpikk+d -H-8.0 0.5*d], "ij")
-    plot(VGRx(IR, :), VGRz(IR, :), "3")
-    hold on
+# ===============
+
+# First we need to extract some data.
+for eid = 1 : element_count
+    siireVardaA(eid, 1:3) = element_properties(eid, 7:9);
+    siireVardaL(eid, 1:3) = element_properties(eid, 1:3);
+    joudVardaA(eid, 1:3) = element_properties(eid, 10:12);
+    joudVardaL(eid, 1:3) = element_properties(eid, 4:6);
+
+    LkoordN = element_properties(eid, 16);
+    AkoordN = element_properties(eid, 17);
+    DeltaX(eid) = node_coordinates(LkoordN, 1) - node_coordinates(AkoordN, 1);
+    DeltaZ(eid) = node_coordinates(LkoordN, 2) - node_coordinates(AkoordN, 2);
+    VGRx(eid, 1) = node_coordinates(AkoordN, 1);
+    VGRx(eid, 2) = node_coordinates(LkoordN, 1);
+    VGRz(eid, 1) = node_coordinates(AkoordN, 2);
+    VGRz(eid, 2) = node_coordinates(LkoordN, 2);
 endfor
-#
-jaotT = 2;
-#
-title('spESTframe1DefWFI', "fontsize", 12)
+
+# Draw the first figure, picture of frame.
+figure(1)
+hold on
 ax = gca();
-xlabel('x', "fontsize", 12)
-ylabel('z', "fontsize", 12)
-xticks(1, :) = - d:jaotT:Lpikk + d;
-set (ax, "xtick", xticks)
+set(ax, 'linewidth', 1);
+grid off
+d = 4.0;
+axis([-d Lp+d -H-8.0 0.5*d], 'ij')
+
+# Draw elements as lines
+for eid = 1:element_count
+    plot(VGRx(eid, :), VGRz(eid, :), '3', 'linewidth', 5)
+endfor
+
+divs = 2;
+title('spESTframe1DefWFI', 'fontsize', 12)
+ax = gca();
+xlabel('x', 'fontsize', 12)
+ylabel('z', 'fontsize', 12)
+xticks(1, :) = - d:divs:Lp + d;
+set (ax, 'xtick', xticks)
 
 # Numbering nodes
-for i = 1:node_count;
-    text(node_coordinates(IR, 1), node_coordinates(IR, 2) + 0.25, sprintf('%i', i))
+for nid = 1:node_count;
+    text(node_coordinates(nid, 1), node_coordinates(nid, 2) + 0.25, sprintf('%i', nid))
 endfor
 
 # Numbering elements
-for j = 1:element_count;
-    text((VGRx(IR, 1) + VGRx(IR, 2)) / 2 + 0.1, (VGRz(IR, 1) + VGRz(IR, 2)) / 2, sprintf('%i', j))
+for eid = 1:element_count;
+    text(mean(VGRx(eid, 1:2)) + 0.1, mean(VGRz(eid, 1:2)) - 0.2, sprintf('%i', eid))
 endfor
 
-xvalg = - 1.0;
-yvalg = - H - 6.0;
-samm = 0.5;
+# Writing title and displacement and force numbers for elements
+x1 = -1;
+x2 = 7;
+y1 = -H - 6;
+y2 = -H - 6;
+step = 0.5;
 
-text(- 1.0, yvalg - 1.5 * samm, 'Numeration of displacements and forces ')
-text(- 2.0, yvalg, 'u w fi N Q M at the beginning')
-yvalg = yvalg + samm;
+text(x1, y1 - 1.5*step, 'Numeration of displacements and forces', 'fontweight', 'bold')
+text(x1, y1, '  u   w  fi   N   Q   M', 'fontsize', 9)
+text(x2, y2, '  u   w  fi   N   Q   M', 'fontsize', 9)
+text(x1-0.4, y1+3.5, 'at the beginning', 'rotation', 90)
+text(x2-0.4, y2+2.8, 'at the end', 'rotation', 90)
 
-for i = 1:element_count;
-    str = sprintf('%3i  %3i  %3i  %3i  %3i  %3i', siireVardaA(i, 1:3), joudVardaA(i, 1:3));
-    text(xvalg, yvalg, str)
-    yvalg = yvalg + samm;
+for eid = 1:element_count;
+    y1 += step;
+    y2 += step;
+    str = sprintf('%3i %3i %3i %3i %3i %3i', siireVardaA(eid, 1:3), joudVardaA(eid, 1:3));
+    text(x1, y1, str, 'fontsize', 9)
+    str = sprintf('%3i %3i %3i %3i %3i %3i', siireVardaL(i, 1:3), joudVardaL(i, 1:3));
+    text(x2, y2, str, 'fontsize', 9)
 endfor
-yvalg = yvalg + samm;
+y1 += 2*step;
+text(x1, y1, 'Support reactions: 85 86 87 88 89 90 91 92 ')
 
-text(- 1.0, yvalg, 'Support reactions: 85 86 87 88 89 90 91 92 ')
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-xvalg = 7.0;
-yvalg = - H - 6.0;
-samm = 0.5;
-text(6.0, yvalg, 'u w fi N Q M at the end')
-
-yvalg = yvalg + samm;
-for i = 1:element_count;
-    str = sprintf('%3i  %3i  %3i  %3i  %3i  %3i', siireVardaL(i, 1:3), joudVardaL(i, 1:3));
-    text(xvalg, yvalg, str)
-    yvalg = yvalg + samm;
-endfor
-###### hold off
-
-#Vaata: http://www.gnu.org/software/octave/doc/interpreter/Printing-Plots.html
-#print('-deps', 'spESTframe1DefWFI.eps');
-#print('-dpng', 'spESTframe1DefWFI.png');
+# http://www.gnu.org/software/octave/doc/interpreter/Printing-Plots.html
+print('-dpng', 'spESTframe1DefWFI.png');
 print('-dfig', '-landscape', '-mono', '-solid', 'spESTframe1DefWFI.fig');
 refresh
 
 figure(2)
 spy(spA)
-title('spy(spA,14) - the sparse matrix spA(92,92) non zero elements [3%] ')
+title('spy(spA) - The non-zero elements of sparse matrix spA() [3%]')
 refresh
-#print('-deps', 'spESTframe1DefWFI_h6remaatriks.eps');
-#print('-dpng', 'spESTframe1DefWFI_h6remaatriks.png');
+print('-dpng', 'spESTframe1DefWFI_sparse_matrix.png');
 print('-dfig', '-landscape', 'spESTframe1DefWFI_sparse_matrix.fig');
-%%print('-dfig','-landscape','-mono','-solid','spESTframe1DefWFI_sparse_matrix.fig');
 refresh
 
 disp('')
