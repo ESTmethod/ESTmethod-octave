@@ -22,28 +22,33 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-##disp(' The compiler of a basic-, compatibility-, joint equilibrium-, ')
-##disp(' side conditions- and support restrtictions sparse equations.  ')
-##disp(' Solving system of sparse equations. Find the initial parameter vectors ')
-##disp(' for elements displacements, forces and the support reactions.  ')
-##disp(' OUTPUT: AlgParm -- the initial parameter vector for elements. ')
-##
-## baasi0 - scaling multiplier for the displacements,
-## Ntoerkt - the number of the support reactions,
-## esQkoormus - the uniformly distributed load in local coordinate z direction
-##              esQkoormu(LoadsqONelement,3,ElementideArv),
-## esFjoud - the point load in local coordinate z direction
-##           esFjoud(LoadsF_on_Element,2,ElementideArv),
-## sNodeF - the node forces in global  coordinates
-##          sNodeF(2,1,NodeedeArv),
-## support_nodes - the restrtictions on the support displacements
-## tSiire - the support shift
-##          tSiire(2,1,NodeedeArv)
-## coordinates - the nodal coordinates
-## element_properties - the topology of elements
-##         element_properties(ElementideArv,1:16)
-
-function AlgPar = LaheFrameDFIm(baasi0, support_reactions_count, esQkoormus, esFjoud, sNodeF, support_nodes, tSiire, coordinates, element_properties)
+%======================================================================
+%> @file LaheFramedfim.m
+%> @brief Function to compile all conditions for the equation matrix.
+%======================================================================
+%> @brief Function to compile all conditions for the equation matrix.
+%>
+%> The compiler of a basic-, compatibility-, joint equilibrium-,
+%> side conditions- and support restrtictions sparse equations.
+%> Solving system of sparse equations. Find the initial parameter vectors
+%> for elements displacements, forces and the support reactions.
+%>
+%> @param scale Scaling multiplier for the displacements.
+%> @param number_of_support_reactions The number of the support reactions.
+%> @param distributed_load The uniformly distributed load in local
+%>            coordinate z direction. [loadvalue, 3, element_count]
+%> @param point_forces The point load in local coordinate z direction.
+%>            [loadvalue, 2, element_count]
+%> @param node_forces The node forces in global coordinates.
+%>            [2, 1, node_count]
+%> @param support_nodes The restrtictions on the support displacements.
+%> @param support_shift The support shift. [2, 1, count_of_nodes]
+%> @param coordinates The nodal coordinates.
+%> @param element_properties The topology of elements. [elem_id, 1:16]
+%>
+%> @retval The initial parameter vector for elements.
+%======================================================================
+function AlgPar = LaheFrameDFIm(scale, support_reactions_count, distributed_load, point_forces, node_forces, support_nodes, support_shift, coordinates, element_properties)
 if nargin != 9
     error('Function LaheBeamDFIm() has wrong number of input arguments!')
 end
