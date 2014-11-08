@@ -65,123 +65,26 @@ GAp = 0.4 * EAp;
 GAr = 0.4 * EAr;
 divisions = 4;
 
-# ---- Load variants -----
-load_variant = 1;
+# Load variants
+# =============
+# For shorter notation we express variants as a table, one per row.
+# [ l    h    Is  p1   p2   p3   F1   F2   F3]
+load_variants = [
+    6    3    2   12    0    0   50    0    0
+    8    4    2    0   14    0    0   50    0
+   10    4    2    0    0    8    0    0   50
+    6    4    2   14    0    0   40    0    0
+    8    5    2    0    8    0    0   40    0
+   10    5    3    0    0   12    0    0   40
+    6    3    3    8    0    0   30    0    0
+    8    4    3    0   16    0    0   30    0
+   10    4    3    0    0   14    0    0   30
+   12    5    3   10    0    0   20    0    0];
 
-switch (load_variant)
-    case{1}
-        disp(' Load variant 1 ')
-        l = 6.0
-        h = 3.0
-        Isuhe = 2 % Isuhe=I1/I2
-        p1 = 12.0
-        p2 = 0.0
-        p3 = 0.0
-        F1 = 50.0
-        F2 = 0.0
-        F3 = 0.0
-    case{2}
-        disp(' Load variant 2 ')
-        l = 8.0
-        h = 4.0
-        Isuhe = 2 % Isuhe=I1/I2
-        p1 = 0.0
-        p2 = 14.0
-        p3 = 0.0
-        F1 = 0.0
-        F2 = 50.0
-        F3 = 0.0
-    case{3}
-        disp(' Load variant 3 ')
-        l = 10.0
-        h = 4.0
-        Isuhe = 2 % Isuhe=I1/I2
-        p1 = 0.0
-        p2 = 0.0
-        p3 = 8.0
-        F1 = 0.0
-        F2 = 0.0
-        F3 = 50.0
-    case{4}
-        disp(' Load variant 4 ')
-        l = 6.0
-        h = 4.0
-        Isuhe = 2 % Isuhe=I1/I2
-        p1 = 14.0
-        p2 = 0.0
-        p3 = 0.0
-        F1 = 40.0
-        F2 = 0.0
-        F3 = 0.0
-    case{5}
-        disp(' Load variant 5 ')
-        l = 8.0
-        h = 5.0
-        Isuhe = 2 % Isuhe=I1/I2
-        p1 = 0.0
-        p2 = 8.0
-        p3 = 0.0
-        F1 = 0.0
-        F2 = 40.0
-        F3 = 0.0
-    case{6}
-        disp(' Load variant 6 ')
-        l = 10.0
-        h = 5.0
-        Isuhe = 3 % Isuhe=I1/I2
-        p1 = 0.0
-        p2 = 0.0
-        p3 = 12.0
-        F1 = 0.0
-        F2 = 0.0
-        F3 = 40.0
-    case{7}
-        disp(' Load variant 7 ')
-        l = 6.0
-        h = 3.0
-        Isuhe = 3 % Isuhe=I1/I2
-        p1 = 8.0
-        p2 = 0.0
-        p3 = 0.0
-        F1 = 30.0
-        F2 = 0.0
-        F3 = 0.0
-    case{8}
-        disp(' Load variant 8 ')
-        l = 8.0
-        h = 4.0
-        Isuhe = 3 % Isuhe=I1/I2
-        p1 = 0.0
-        p2 = 16.0
-        p3 = 0.0
-        F1 = 0.0
-        F2 = 30.0
-        F3 = 0.0
-    case{9}
-        disp(' Load variant 9 ')
-        l = 10.0
-        h = 4.0
-        Isuhe = 3 % Isuhe=I1/I2
-        p1 = 0.0
-        p2 = 0.0
-        p3 = 14.0
-        F1 = 0.0
-        F2 = 0.0
-        F3 = 30.0
-    case{10}
-        disp(' Load variant 10 ')
-        l = 12.0
-        h = 5.0
-        Isuhe = 3 % Isuhe=I1/I2
-        p1 = 10.0
-        p2 = 0.0
-        p3 = 0.0
-        F1 = 20.0
-        F2 = 0.0
-        F3 = 0.0
-endswitch
-
-## %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Extract the values to their names.
+disp(' Current loads according to the variant')
+load_variant = 1
+[l h Isuhe p1 p2 p3 F1 F2 F3] = num2cell(load_variants(load_variant, :)){:}
 
 # Precalculations to fill in node coordinates later.
 EIr = Isuhe * EIp;
