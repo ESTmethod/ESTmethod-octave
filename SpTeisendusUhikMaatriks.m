@@ -23,6 +23,6 @@
 
 function identity = SpTeisendusUhikMaatriks()
 ##   The sparse identity matrix of reaction at the node
-identity = sparse(eye(3));
+identity = speye(3));
 endfunction
 
