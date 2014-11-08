@@ -48,7 +48,10 @@ disp(' The number of unknowns are 12*number_of_elements + number_of_support_reac
 disp(' The matrixes are assembled into compressed column sparse matrices.')
 disp('')
 
-# Number nodes, elements, support reactions.
+# Basic information
+# =================
+# Number of nodes, elements, support reactions.
+# It is used to find possible errors in data later.
 number_of_nodes = 8;
 number_of_elements = 7;
 number_of_support_reactions = 8;
@@ -179,16 +182,18 @@ switch (load_variant)
 endswitch
 
 ## %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+# Precalculations to fill in node coordinates later.
 EIr = Isuhe * EIp;
-baasi0 = EIp / h;
+scale = EIp / h;
 xi = 0.6;
 h08 = 0.8 * h;
 deltah = (1.0 * 0.2 * h) / l;
 L1 = h08;
-L2 = sqrt(deltah^2 + 1.0 ^ 2); # length of the element
-L3 = sqrt((0.2 * h)^2 + l ^ 2); # length of the element
+L2 = sqrt(deltah^2 + 1.0 ^ 2);
+L3 = sqrt((0.2 * h)^2 + l ^ 2);
 L4 = h;
-L5 = sqrt((0.2 * h)^2 + l ^ 2); # length of the element
+L5 = sqrt((0.2 * h)^2 + l ^ 2);
 L6 = L1;
 L7 = L2;
 
@@ -218,19 +223,15 @@ qx2 = qz2v * sinA2; # projection onto x - axis
 qz2 = - qz3;
 qx2 = - qx3;
 
-Lpunkt1 = 0.4 * h;
-Lpunkt2 = 0.3 * h;
-Lpunkt3 = 0.4 * L5;
-
 Fz4 = - F1;
-aF4 = Lpunkt1;
+aF4 = 0.4 * h;
 Fz5 = F3 * cosA5; % Fz2 projection onto z-axis
 Fx5 = F3 * sinA5; % Fx2 projection onto x-axis
-aF5 = Lpunkt3;
+aF5 = 0.4 * L5;
 Fz6 = F2;
-aF6 = Lpunkt2;
+aF6 = 0.3 * h;
 
-#disp(' Element load  in local node_coordinates ')
+#disp(' Element load in local node_coordinates ')
 #disp('    qz     qx     qA      qL ')
 # Uniformly distributed load in local coordinate z and x direction kN / m^2
 esQkoormus = zeros(1, 4, number_of_elements);
@@ -253,7 +254,6 @@ esFjoud(1, 1:3, 7) = [0.0 0.0 L7];
 # sSolmF(forces, 1, nodes); forces = [Fx; Fz; My]
 sSolmF = zeros(3, 1, number_of_nodes);
 
-# %%%%%
 # Support shift - tSiire#
 # Support shift multiplied by scaling multiplier
 tSiire = zeros(3, 1, number_of_nodes);
@@ -275,37 +275,43 @@ disp(' Fx Fz My; : ; Node number; ')
 disp('------  ')
 sSolmF(:, 1, :)
 
-# ==========
 # Node coordinates
-# ==========
-deltah = (1.0 * 0.2 * h) / l;
+# ================
+# [x z]
+# Each row stands for one node, numbering starts from 1.
+deltah = 0.2 * h / l;
+node_coordinates = [#  X         Z
+                      0.0       0.0;          # nid = 1
+                      0.0       -h08;         # nid = 2
+                      -1.0      -h08+deltah;  # nid = 3 etc
+                      l         -h;
+                      l         0.0;
+                      l*2       -h08;
+                      l*2       0.0;
+                      l*2+1.0   -h08+deltah];
+node_count = size(node_coordinates, 1);
 
-node_coordinates = [# x  z
-          0.0       0.0;          % node 1
-          0.0       -h08;         % node 2
-          -1.0      -h08+deltah;  % node 3
-          l         -h;           % node 4
-          l         0.0;          % node 5
-          l*2       -h08;         % node 6
-          l*2       0.0;          % node 7
-          l*2+1.0   -h08+deltah]; % node 8
-node_count = size(node_coordinates)(1);
-# ==========
-# disp(' No      toel  u  w  fi  N   Q   M ')
-# ==========
-# Restrictions on support displacements.
-# Support node u w fi hold on - 1, open - 0
-# ==========
+
+# Restrictions on support displacements
+# =====================================
+# [node_id x y fi]
+# x - support fixation in x-direction
+# z - support fixation in z-direction
+# fi- support fixation for revolving around y-axis
+# Supports: 1 - fixed, 0 - open/free
 support_nodes = [ 1 1 1 1;
                   5 1 1 1;
                   7 1 1 0];
 
-# ------------- Element properties, topology and hinges ---------
-element_properties = [# Element properties,
-# n2 - end of the element,
-# n1 - beginning of the element,
-# N, Q, M hinges at end of the element
-# N, Q, M hinges at beginning of the element.
+
+# Element properties, topology and hinges
+# =======================================
+# [EI EA GA end start Nend Qend Mend Nstart Qstart Mstart]
+# EI, EA, GA - element stiffess
+# end, start - node numbers of element
+# N, Q, M at end and start - hinges for axial, shear and moment forces
+# Hinges: 1 - fixed, 0 - open/free
+element_properties = [
 EIp EAp GAp 2 1 0 0 1 0 0 0; % element 1
 EIr EAr GAr 3 2 0 0 0 0 0 0; % element 2
 EIr EAr GAr 4 2 0 0 0 0 0 0; % element 3
@@ -313,12 +319,11 @@ EIp EAp GAp 5 4 0 0 0 0 0 0; % element 4
 EIr EAr GAr 6 4 0 0 0 0 0 0; % element 5
 EIp EAp GAp 7 6 0 0 1 0 0 0; % element 6
 EIr EAr GAr 8 6 0 0 0 0 0 0];% element 7
-# 1 - hinge 'true' (axial, shear, moment hinge)
-# ==========
+
 
 disp('=============================')
-disp(' Nodal node_coordinates ')
-disp('  Node      X        Z  ')
+disp(' Node coordinates            ')
+disp('  nid       X        Z       ')
 disp('-----------------------------')
 for i = 1:node_count
     disp(sprintf('  %2i     %7.4f  %7.4f', i, node_coordinates(i, 1:2)))
@@ -406,7 +411,7 @@ endfor
 NNK = 12 * element_count + number_of_support_reactions;
 
 # Do the actual calculation.
-AlgPar = LaheFrameDFIm(baasi0, number_of_support_reactions, esQkoormus, esFjoud, sSolmF, support_nodes, tSiire, node_coordinates, disp_force_numbers_properties);
+AlgPar = LaheFrameDFIm(scale, number_of_support_reactions, esQkoormus, esFjoud, sSolmF, support_nodes, tSiire, node_coordinates, disp_force_numbers_properties);
 
 disp('  ')
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
@@ -429,7 +434,7 @@ for i = 1:element_count
     EA = disp_force_numbers_properties(i, 14);
     GAr = disp_force_numbers_properties(i, 15);
     Li = lvarras(i, 1);
-    baasi0 = 1.0;
+    scale = 1.0;
     Fjoud = esFjoud(:, 1:3, i);
     # %       Fz    Fx     a
     # %Fjoud=[0.0    0.0   0.0;
@@ -458,7 +463,6 @@ for i = 1:element_count
     for i = 1:3
         disp(sprintf(' %s   %9.2e   %9.2e   %9.2e   %9.2e  %9.2e', row_names(i), Fvv(i, 1:5)))
     endfor
-
     for i = 4:6
         disp(sprintf(' %s   %9.5f   %9.5f   %9.5f   %9.5f  %9.5f', row_names(i), Fvv(i, 1:5)))
     endfor
@@ -508,7 +512,8 @@ sumM7 = - p3 * h08 * h08 / 2 + q3 * (l + 1.0) * ((l + 1.0) / 2 + l) ...
 disp('  ')
 disp(' Calculations verified the static equilibrium of the frame   ')
 
-# %%%%%%%%%%%%
+
+# Drawing figures
 figure(1)
 ax = gca ();
 #axy = [0 0 1 0.55];
@@ -540,112 +545,53 @@ xlabel('x', "fontsize", 12)
 ylabel('z', "fontsize", 12)
 xticks(1, :) = - d:jaotT:Lpikk + d;
 set (ax, "xtick", xticks)
-#
-# %Sõlmede numbrid
-TTT = ' ';
-TST = ' ';
-TT1 = ' ';
-TT1 = ' ';
-# %%%%%%%%%
+
+# Numbering nodes
 for i = 1:node_count;
-    #
-    IR = i;
-    TTT = eval(sprintf('%i', IR));
-    TST = int2str(TTT);
- 
-    #text(node_coordinates(IR, 1), node_coordinates(IR, 2) + 0.17, TST)
-    text(node_coordinates(IR, 1), node_coordinates(IR, 2) + 0.25, TST)
-    #
+    text(node_coordinates(IR, 1), node_coordinates(IR, 2) + 0.25, sprintf('%i', i))
 endfor
-#
-# %% Varraste numbrid
+
+# Numbering elements
 for j = 1:element_count;
-    #
-    IR = j;
-    TTT = eval(sprintf('%i', IR));
-    TST = int2str(TTT);
-    text((VGRx(IR, 1) + VGRx(IR, 2)) / 2 + 0.1, (VGRz(IR, 1) + VGRz(IR, 2)) / 2, TST)
-    #
+    text((VGRx(IR, 1) + VGRx(IR, 2)) / 2 + 0.1, (VGRz(IR, 1) + VGRz(IR, 2)) / 2, sprintf('%i', j))
 endfor
-#text(L / 2 - d / 2, - H - d / 2, 'Raamskeem')
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 xvalg = - 1.0;
-#yvalg = - 15.5;
 yvalg = - H - 6.0;
-sammuga = 0.5;
-#sammuga = 0.8;
-text(- 1.0, yvalg - 1.5 * sammuga, 'Numeration of displacements and forces ')
-#TSA = [TSA1 Tyhk TSA2 Tyhk TSA3];
+samm = 0.5;
+
+text(- 1.0, yvalg - 1.5 * samm, 'Numeration of displacements and forces ')
 text(- 2.0, yvalg, 'u w fi N Q M at the beginning')
-# %xvalg=xvalg+sammuga;
-yvalg = yvalg + sammuga;
+yvalg = yvalg + samm;
 
 for i = 1:element_count;
-    #siireVardaA joudVardaA(i, 1:3)
-    TTA1 = eval(sprintf('%3i', siireVardaA(i, 1)));
-    TTA2 = eval(sprintf('%3i', siireVardaA(i, 2)));
-    TTA3 = eval(sprintf('%3i', siireVardaA(i, 3)));
-    TTA4 = eval(sprintf('%3i', joudVardaA(i, 1)));
-    TTA5 = eval(sprintf('%3i', joudVardaA(i, 2)));
-    TTA6 = eval(sprintf('%3i', joudVardaA(i, 3)));
-    TSA1 = int2str(TTA1);
-    TSA2 = int2str(TTA2);
-    TSA3 = int2str(TTA3);
-    TSA4 = int2str(TTA4);
-    TSA5 = int2str(TTA5);
-    TSA6 = int2str(TTA6);
-    Tyhk = '  ';
-    TSA = [TSA1 Tyhk TSA2 Tyhk TSA3 Tyhk TSA4 Tyhk TSA5 Tyhk TSA6];
-    text(xvalg, yvalg, TSA)
-    # %xvalg=xvalg+sammuga;
-    yvalg = yvalg + sammuga;
+    str = sprintf('%3i  %3i  %3i  %3i  %3i  %3i', siireVardaA(i, 1:3), joudVardaA(i, 1:3));
+    text(xvalg, yvalg, str)
+    yvalg = yvalg + samm;
 endfor
-yvalg = yvalg + sammuga;
+yvalg = yvalg + samm;
 
 text(- 1.0, yvalg, 'Support reactions: 85 86 87 88 89 90 91 92 ')
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 xvalg = 7.0;
-#xvalg = 10.0;
-#yvalg = - 15.5;
 yvalg = - H - 6.0;
-sammuga = 0.5;
-#sammuga = 0.8;
-#TSA = [TSA1 Tyhk TSA2 Tyhk TSA3];
+samm = 0.5;
 text(6.0, yvalg, 'u w fi N Q M at the end')
-#text(9.5, yvalg, 'u w fi N Q M at the end')
-# %xvalg=xvalg+sammuga;
-yvalg = yvalg + sammuga;
+
+yvalg = yvalg + samm;
 for i = 1:element_count;
-    #siireVardaL joudVardaL(i, 1:3)
-    TTA1 = eval(sprintf('%3i', siireVardaL(i, 1)));
-    TTA2 = eval(sprintf('%3i', siireVardaL(i, 2)));
-    TTA3 = eval(sprintf('%3i', siireVardaL(i, 3)));
-    TTA4 = eval(sprintf('%3i', joudVardaL(i, 1)));
-    TTA5 = eval(sprintf('%3i', joudVardaL(i, 2)));
-    TTA6 = eval(sprintf('%3i', joudVardaL(i, 3)));
-    TSA1 = int2str(TTA1);
-    TSA2 = int2str(TTA2);
-    TSA3 = int2str(TTA3);
-    TSA4 = int2str(TTA4);
-    TSA5 = int2str(TTA5);
-    TSA6 = int2str(TTA6);
-    Tyhk = '  ';
-    TSA = [TSA1 Tyhk TSA2 Tyhk TSA3 Tyhk TSA4 Tyhk TSA5 Tyhk TSA6];
-    text(xvalg, yvalg, TSA)
-    # %xvalg=xvalg+sammuga;
-    yvalg = yvalg + sammuga;
+    str = sprintf('%3i  %3i  %3i  %3i  %3i  %3i', siireVardaL(i, 1:3), joudVardaL(i, 1:3));
+    text(xvalg, yvalg, str)
+    yvalg = yvalg + samm;
 endfor
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-#
 ###### hold off
-#
+
 #Vaata: http://www.gnu.org/software/octave/doc/interpreter/Printing-Plots.html
 #print('-deps', 'spESTframe1DefWFI.eps');
 #print('-dpng', 'spESTframe1DefWFI.png');
 print('-dfig', '-landscape', '-mono', '-solid', 'spESTframe1DefWFI.fig');
 refresh
-#
-# %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 figure(2)
 spy(spA)
 title('spy(spA,14) - the sparse matrix spA(92,92) non zero elements [3%] ')
@@ -655,10 +601,7 @@ refresh
 print('-dfig', '-landscape', 'spESTframe1DefWFI_sparse_matrix.fig');
 %%print('-dfig','-landscape','-mono','-solid','spESTframe1DefWFI_sparse_matrix.fig');
 refresh
-#
-# octave
-disp('-----------------------------------')
-disp('  ')
+
+disp('')
 disp(' The END ')
-# %%%%%%%%%%%%%%%
 

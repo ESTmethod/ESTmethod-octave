@@ -52,15 +52,15 @@ global spA
 global X
 global siireVardaA
 
-element_count = size(element_properties)(1);
-node_count = size(coordinates)(1);
+element_count = size(element_properties, 1);
+node_count = size(coordinates, 1);
 NNK = 12 * element_count + support_reactions_count;
-support_nodes_count = size(support_nodes)(1);
+support_nodes_count = size(support_nodes, 1);
 
 number_of_support_reactions = 0;
-for i = 1:support_nodes_count
+for id = 1:support_nodes_count
     for j = 2:3
-        if support_nodes(i, j) == 1
+        if support_nodes(id, j) == 1
             number_of_support_reactions += 1;
         endif
     endfor
@@ -111,21 +111,21 @@ for i = 1:element_count
     Li = lvarras(i, 1);
     xx = Li;
 
-    Fjoud = esFjoud(:, 1:3, i);
-    %       Fz    Fx     a
-    %Fjoud=[0.0    0.0   0.0;
-    qkoormus = esQkoormus(:, 1:4, i);
-    %       qz     qx     qA      qL
-    %qkoormus=[0.0   0.0   0.0  0.0   0.0;
+    # Force matrix [Fx Fx a]
+    Fjoud = point_forces(:, 1:3, i);
+    
+    # Load matrix [qz qx qA qL]
+    qkoormus = distributed_load(:, 1:4, i);
 
-    # --------- The transfer matrix equation --------
-    spvF = ysplvfmhvI(baasi0, xx, Li, EA, GAr, EI);
-    vB = ESTFrKrmus(baasi0, Li, Li, Fjoud, qkoormus, EA, EI);
-    IIv = i * 6 - 5;
-    IJv = i * 12 - 11;
-    spA = spInsertBtoA(spA, IIv, IJv, spvF);
-    B = addBtoA(B, vB, IIv, 1);
+    # The transfer matrix equation
+    spvF = ysplvfmhvI(scale, xx, Li, EA, GAr, EI);
+    vB = ESTFrKrmus(scale, Li, Li, Fjoud, qkoormus, EA, EI);
+    position_row = i * 6 - 5;
+    position_col = i * 12 - 11;
+    spA = spInsertBtoA(spA, position_row, position_col, spvF);
+    B = addBtoA(B, vB, position_row, 1);
 endfor
+
 
 equation_count = size(spA);
 non_zero_elements_in_the_basic_equations = nnz(spA);
@@ -134,11 +134,11 @@ disp('-------- Basic equations are inserted into spA --------')
 disp(sprintf('Rows of basic equations: %d', equation_count(1)))
 disp(sprintf('Cols of basic equations: %d', equation_count(2)))
 disp(sprintf('Nonzero elements in basic equations: %d', nnz(spA)))
-disp('  ')
-Nr1 = equation_count(1) + 1;
+disp('')
 
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Compatibility equations of displacements at nodes ')
+Nr1 = equation_count(1) + 1;
 From_row = sprintf('Compatibility equations begin from row: %d', Nr1)
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 
@@ -155,33 +155,29 @@ for i = 1:node_count
             AVSsum = AVS(1, 11) + AVS(j, 11);
 
             if AVSsum == 0
-                unit = SpTeisendusMaatriks(node_count, element_count, Varras1, coordinates, element_properties);
-                spA = spInsertBtoA(spA, Nr1, AVS(1, 2), unit);
-                unit = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
-                spA = spInsertBtoA(spA, Nr1, AVS(j, 2), -unit);
+                identity = SpTeisendusMaatriks(node_count, element_count, Varras1, coordinates, element_properties);
+                spA = spInsertBtoA(spA, Nr1, AVS(1, 2), identity);
+                identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
+                spA = spInsertBtoA(spA, Nr1, AVS(j, 2), -identity);
                 Nr1 += 3;
             else
-                unit = SpTeisendusMaatriks2x2(node_count, element_count, Varras1, coordinates, element_properties);
-                spA = spInsertBtoA(spA, Nr1, AVS(1, 2), unit);
-                unit = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
-                spA = spInsertBtoA(spA, Nr1, AVS(j, 2), -unit);
+                identity = SpTeisendusMaatriks2x2(node_count, element_count, Varras1, coordinates, element_properties);
+                spA = spInsertBtoA(spA, Nr1, AVS(1, 2), identity);
+                identity = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
+                spA = spInsertBtoA(spA, Nr1, AVS(j, 2), -identity);
                 Nr1 += 2;
             endif
         endfor
     endif
 endfor
 
-disp('-----')
-spA_rowsD = size(spA)(1)
+spA_rowsD = size(spA, 1);
 nnzD = nnz(spA);
-disp('  ')
 disp('----- Compatibility equations of displacements are inserted into spA  ----  ')
-disp('  ')
+disp('')
 compatibility_equations_rows = spA_rowsD - equation_count(2)
 non_zero_elements_in_compatibility_equations = nnzD - non_zero_elements_in_the_basic_equations
-disp('  ')
-# %
-toemuutuja = equation_count(2) + 1;
+disp('')
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Joint equilibrium equations at nodes ')
 From_rows = sprintf('Joint equilibrium equations begin from row: %d', Nr1)
@@ -197,40 +193,42 @@ for i = 1:node_count
     endfor
 endfor
 
+toemuutuja = equation_count(2) + 1;
+
 for i = 1:node_count
     Node = i;
     AVS = VardadSolmes(node_count, element_count, Node, AB, ABB);
     uvfiLaiend(Node, 1) = sum(support_nodes_extension(Node, 2:4));
 
-    Nr1 = size(spA)(1) + 1;
+    Nr1 = size(spA, 1) + 1;
     uvfi = 0;
 
     AVSdim = size(AVS);
     if AVSdim(1) == 1
         if uvfiLaiend(Node, 1) == 0
             VarrasN = AVS(1, 1);
-            unit = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
-            spA = spInsertBtoA(spA, Nr1, AVS(1, 5), unit);
+            identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
+            spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
             Arv123 = 3;
-            B(Nr1 : Nr1+2, 1) = sNodeF(1:3, 1, Node);
+            B(Nr1 : Nr1+2, 1) = node_forces(1:3, 1, Node);
             Nr1 += 3;
         endif
 
-        for k = 1 : size(support_nodes)(1)
+        for k = 1 : size(support_nodes, 1)
             if support_nodes(k, 1) == Node
                 uvfi = sum(support_nodes(k, 2:4));
-                Nr1 = size(spA)(1) + 1;
+                Nr1 = size(spA, 1) + 1;
 
                 VarrasN = AVS(1, 1);
                 if uvfi == 3
-                    unit = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
-                    spA = spInsertBtoA(spA, Nr1, AVS(1, 5), unit);
+                    identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
+                    spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
                     spA = spInsertBtoA(spA, Nr1, toemuutuja, -sparse(eye(uvfi)));
                     Nr1 += uvfi;
                     toemuutuja += uvfi;
                 elseif uvfi == 2
-                    unit = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
-                    spA = spInsertBtoA(spA, Nr1, AVS(1, 5), unit);
+                    identity = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
+                    spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
                     spA = spInsertBtoA(spA, Nr1, toemuutuja, -sparse(eye(uvfi)));
                     Nr1 += uvfi;
                     toemuutuja += uvfi;
@@ -238,15 +236,15 @@ for i = 1:node_count
                     TugiX = support_nodes(k, 2);
                     TugiZ = support_nodes(k, 3);
                     if TugiX == 1
-                        unit = SpToeReaktsioonXvektor(node_count, element_count, VarrasN, coordinates, element_properties);
-                        spA = spInsertBtoA(spA, Nr1, AVS(1, 5), unit);
+                        identity = SpToeReaktsioonXvektor(node_count, element_count, VarrasN, coordinates, element_properties);
+                        spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
                         Nr1 += uvfi
                         toemuutuja += uvfi;
                     endif
 
                     if TugiZ == 1
-                        unit = SpToeReaktsioonZvektor(node_count, element_count, VarrasN, coordinates, element_properties);
-                        spA = spInsertBtoA(spA, Nr1, AVS(1, 5), unit);
+                        identity = SpToeReaktsioonZvektor(node_count, element_count, VarrasN, coordinates, element_properties);
+                        spA = spInsertBtoA(spA, Nr1, AVS(1, 5), identity);
                         spA = spSisestaArv(spA, Nr1, toemuutuja, 1);
                         Nr1 += uvfi
                         toemuutuja += uvfi;
@@ -265,13 +263,13 @@ for i = 1:node_count
             Arv123 = 3;
 
             if AVStas == 0
-                unit = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
+                identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
             else
-                unit = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
+                identity = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
                 b2 -= 1;
                 Arv123 -= 1;
             endif
-            spA = spInsertBtoA(spA, Nr1, AVS(j, 5), unit);
+            spA = spInsertBtoA(spA, Nr1, AVS(j, 5), identity);
 
             has_supports = 0;
             is_support_node = sum(support_nodes_extension(Node, 2:4));
@@ -304,21 +302,21 @@ for i = 1:node_count
             toemuutuja += has_supports;
         endif
 
-    B(b1:b2, 1) = sNodeF(1:Arv123, 1, Node);
+    B(b1:b2, 1) = node_forces(1:Arv123, 1, Node);
  
-    Nr1 = size(spA)(1) + 1;
+    Nr1 = size(spA, 1) + 1;
     endif
 endfor
 
-spA_rowsE = size(spA)(1);
+spA_rowsE = size(spA, 1);
 nnzE = nnz(spA);
-disp('  ')
+disp('')
 disp('-----Equilibrium equations are inserted into spA  ----  ')
-disp('  ')
+disp('')
 equilibrium_equations_rows = spA_rowsE - spA_rowsD
 non_zero_elements_in_equilibrium_equations = nnzE - nnzD
 
-Nr1 = size(spA)(1) + 1;
+Nr1 = size(spA, 1) + 1;
 ABBdim = size(ABB);
 #
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
@@ -337,54 +335,49 @@ for i = 1:ABBdim(1)
     endif
 endfor
 
-spA_rows = size(spA)(1);
-
 nnzN = nnz(spA);
-disp('  ')
+disp('')
 disp('----- Side conditions are inserted into spA  ----  ')
-disp('  ')
-side_condition_rows = spA_rows - spA_rowsE
+disp('')
+side_condition_rows = size(spA, 1) - spA_rowsE
 non_zero_elements_in_side_condition = nnzN - nnzE
-
-Nr1 = size(spA)(1) + 1;
-
-toereaktsioonid_algavad = Nr1;
 
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Restrictions on support displacements ')
-From_rows = sprintf('Restrictions on support displacements begin from row: %d', Nr1)
+support_reactions_start = size(spA, 1) + 1;
+From_rows = sprintf('Restrictions on support displacements begin from row: %d', support_reactions_start)
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 
-support_nodes_count = size(support_nodes)(1);
+support_nodes_count = size(support_nodes, 1);
 
 number_of_support_reactions = sum(sum(support_nodes(:, 2:4)))
 support_reactions = zeros(number_of_support_reactions, 6);
 
-ToeNodees = zeros(support_nodes_count, 8);
-ToeNodees(:, 1:4) = support_nodes(:, 1:4);
+in_support_node = zeros(support_nodes_count, 8);
+in_support_node(:, 1:4) = support_nodes(:, 1:4);
 
 for i = 1:support_nodes_count
     support_node_number = support_nodes(i, 1);
     for j = 1:ABBdim(1)
         if support_node_number == ABB(j, 8)
-            ToeNodees(i, 5:8) = ABB(j, 1:4);
+            in_support_node(i, 5:8) = ABB(j, 1:4);
             break;
         endif
     endfor
 endfor
 
 # Support node
-ToeSiireRealNR = toereaktsioonid_algavad - 1;
+ToeSiireRealNR = support_reactions_start - 1;
 nmr = 1;
 for j = 1:support_nodes_count
     for k = 2:4
         if support_nodes(j, k) == 1
             ToeSiireRealNR += 1;
             support_reactions(nmr, 1) = ToeSiireRealNR;
-            support_reactions(nmr, 2) = ToeNodees(j, 5);
+            support_reactions(nmr, 2) = in_support_node(j, 5);
             support_reactions(nmr, 3) = k - 1;
-            support_reactions(nmr, 4:6) = ToeNodees(j, 6:8);
-            support_reactions(nmr, 7) = ToeNodees(j, 1);
+            support_reactions(nmr, 4:6) = in_support_node(j, 6:8);
+            support_reactions(nmr, 7) = in_support_node(j, 1);
             nmr += 1;
         endif
     endfor
@@ -397,7 +390,7 @@ for i = 1:number_of_support_reactions
     UWFi = support_reactions(i, 3);
     NodeA = support_reactions(i, 4);
     NodeB = support_reactions(i, 7);
-    shift = tSiire(UWFi, 1, NodeB);
+    shift = support_shift(UWFi, 1, NodeB);
 
     switch (UWFi);
         case{1}
@@ -414,25 +407,25 @@ for i = 1:number_of_support_reactions
             spA = spInsertBtoA(spA, n, NodeA, SpTV);
             d = 'y';
     endswitch
-    disp(sprintf('Support shift tSiire(%i, 1, %i) = %i in %s direction at the node %i', UWFi, NodeB, shift, d, NodeB))
+    disp(sprintf('Support shift support_shift(%i, 1, %i) = %i in %s direction at the node %i', UWFi, NodeB, shift, d, NodeB))
 endfor
 
 nnzR = nnz(spA);
-disp('  ')
+disp('')
 disp('----- Restriction equations are inserted into spA  ----  ')
-disp('  ')
+disp('')
 non_zero_elements_in_restrtictions_equations = nnzR - nnzN
 
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 
-Bsuurus = size(B)(1);
+Bsuurus = size(B, 1);
 
 disp(' No    B ')
-disp('  ')
+disp('')
 for i = 1:Bsuurus
     disp(sprintf('%2i %7.3f', i, B(i, 1)))
 endfor
-disp('  ')
+disp('')
 
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Solving system of sparse equations. ')
@@ -444,14 +437,14 @@ disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 X = spA \ B;
 
 disp(' No     X ')
-disp('  ')
+disp('')
 for i = 1:Bsuurus
     disp(sprintf('%2i   %9.3e', i, X(i, 1)))
 endfor
-disp('  ')
+disp('')
 
-display(sprintf('Support reactions begin from row X: %d', toereaktsioonid_algavad))
-disp('  ')
+display(sprintf('Support reactions begin from row X: %d', support_reactions_start))
+disp('')
 
 for i = 1:element_count
     elemendiN(i, 1) = i;
@@ -478,7 +471,7 @@ for i = 1:element_count
 endfor
 
 disp('-------------------------------------------------------')
-disp(' ')
+disp('')
 disp('==================================================================')
 disp(' Displacements and forces numbers at end of the element  ')
 disp('   No,    u,   w,   fi     N,   Q,   M  ')
@@ -488,22 +481,22 @@ for i = 1:element_count
 endfor
 #
 disp('-------------------------------------------------------')
-disp(' ')
+disp('')
 #
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 disp(' Initial parameter vectors for elements displacements and forces  ')
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
-disp(' ')
-disp('-------- Descaling multiplier for the displacements = 1/baasi0 --------  ')
-disp(' ')
+disp('')
+disp('-------- Descaling multiplier for the displacements = 1/scale --------  ')
+disp('')
 
 AlgPar = zeros(element_count, 6)
 for i = 1:element_count
-    displacement = X(siireVardaA(i, 1:3))' / baasi0;
+    displacement = X(siireVardaA(i, 1:3))' / scale;
     force = X(joudVardaA(i, 1:3), 1)';
     SiireJoud(2*i-1, :) = [displacement force];
     AlgPar(i, :) = [displacement force];
-    displacement = X(siireVardaL(i, 1:3))' / baasi0;
+    displacement = X(siireVardaL(i, 1:3))' / scale;
     force = X(joudVardaL(i, 1:3), 1)';
     SiireJoud(2*i, :) = [displacement force];
 endfor
@@ -533,19 +526,19 @@ endfor
 disp('----------------------------------------------------------------------------')
 disp('')
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
-Support_reactions = sprintf('Support reactions begin from row X: %d', toereaktsioonid_algavad)
+Support_reactions = sprintf('Support reactions begin from row X: %d', support_reactions_start)
 disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
-disp('  ')
+disp('')
 disp('======================================================================')
 disp(' No         X          Node   (Cx <=> 1 /Cz <=> x / Cy(moment) <=> 3) ')
 disp('----------------------------------------------------------------------')
 disp('')
-for i = toereaktsioonid_algavad:Bsuurus
-    toenr = i - toereaktsioonid_algavad + 1
+for i = support_reactions_start:Bsuurus
+    toenr = i - support_reactions_start + 1
     disp(sprintf('%3i   %+12.6e    %3i            %3i ', i, X(i, 1), support_reactions(toenr, 7), support_reactions(toenr, 3)))
 endfor
 disp('--------------------------------------------------------------')
-disp('  ')
+disp('')
 
 AlgPar;
 endfunction
