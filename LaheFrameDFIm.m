@@ -160,15 +160,15 @@ for nid = 1:node_count
             node_elemssum = node_elems(1, 11) + node_elems(eid, 11);
 
             if node_elemssum == 0
-                identity = SpTeisendusMaatriks(node_count, element_count, element_first, coordinates, element_properties);
+                identity = spTransformation(3, element_first, coordinates, element_properties);
                 spA = spInsertBtoA(spA, row, node_elems(1, 2), identity);
-                identity = SpTeisendusMaatriks(node_count, element_count, element_n, coordinates, element_properties);
+                identity = spTransformation(3, element_n, coordinates, element_properties);
                 spA = spInsertBtoA(spA, row, node_elems(eid, 2), -identity);
                 row += 3;
             else
-                identity = SpTeisendusMaatriks2x2(node_count, element_count, element_first, coordinates, element_properties);
+                identity = spTransformation(2, element_first, coordinates, element_properties);
                 spA = spInsertBtoA(spA, row, node_elems(1, 2), identity);
-                identity = SpTeisendusMaatriks2x2(node_count, element_count, element_n, coordinates, element_properties);
+                identity = spTransformation(2, element_n, coordinates, element_properties);
                 spA = spInsertBtoA(spA, row, node_elems(eid, 2), -identity);
                 row += 2;
             endif
@@ -211,7 +211,7 @@ for nid = 1:node_count
     if node_elemsdim == 1
         if uvfiLaiend(nid, 1) == 0
             element_n = node_elems(1, 1);
-            identity = SpTeisendusMaatriks(node_count, element_count, element_n, coordinates, element_properties);
+            identity = spTransformation(3, element_n, coordinates, element_properties);
             spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
             Arv123 = 3;
             B(row : row+2) = node_forces(nid, 1, 1:3);
@@ -225,13 +225,13 @@ for nid = 1:node_count
 
                 element_n = node_elems(1, 1);
                 if uvfi == 3
-                    identity = SpTeisendusMaatriks(node_count, element_count, element_n, coordinates, element_properties);
+                    identity = spTransformation(3, element_n, coordinates, element_properties);
                     spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
                     spA = spInsertBtoA(spA, row, toemuutuja, -speye(uvfi));
                     row += uvfi;
                     toemuutuja += uvfi;
                 elseif uvfi == 2
-                    identity = SpTeisendusMaatriks2x2(node_count, element_count, element_n, coordinates, element_properties);
+                    identity = spTransformation(2, element_n, coordinates, element_properties);
                     spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
                     spA = spInsertBtoA(spA, row, toemuutuja, -speye(uvfi));
                     row += uvfi;
@@ -265,9 +265,9 @@ for nid = 1:node_count
             Arv123 = 3;
 
             if node_elemstas == 0
-                identity = SpTeisendusMaatriks(node_count, element_count, element_n, coordinates, element_properties);
+                identity = spTransformation(3, element_n, coordinates, element_properties);
             else
-                identity = SpTeisendusMaatriks2x2(node_count, element_count, element_n, coordinates, element_properties);
+                identity = spTransformation(2, element_n, coordinates, element_properties);
                 b2 -= 1;
                 Arv123 -= 1;
             endif
@@ -293,7 +293,7 @@ for nid = 1:node_count
         endfor
 
         if has_supports == 11
-            transmatrix = -SpTeisendusUhikMaatriks0x1v(1);
+            transmatrix = -speye(1);
             spA = spInsertBtoA(spA, row, toemuutuja, transmatrix);
             row += 1;
             toemuutuja += 1;
