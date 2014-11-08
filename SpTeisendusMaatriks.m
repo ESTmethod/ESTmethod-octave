@@ -22,39 +22,35 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function identity = SpTeisendusMaatriks(NSARV, NEARV, n, krdn, selem)
+function identity = SpTeisendusMaatriks(node_count, element_count, eid, coordinates, element_properties)
 ##disp(' The matrix for transformation the vector [N, Q, M]'' ')
 ##disp(' from local to global coordinates.')
 ##disp(' OUTPUT: SpTM3x3 -- the transformation Matrix as sparse matrix. ')
 
-## NSARV - the number of frame nodes
-## NEARV - the number of elements
-## krdn - the nodal coordinates
-## selem - the topology
-## n - the number of the element
+## node_count - the number of frame nodes
+## element_count - the number of elements
+## coordinates - the nodal coordinates
+## element_properties - the topology
+## eid - the number of the element
 ##
 if nargin != 5
     error(' Function SpTeisendusMaatriks has wrong number of input arguments.')
 end
 
-LkoordN = selem(n, 16);
-AkoordN = selem(n, 17);
-dX = krdn(LkoordN, 1) - krdn(AkoordN, 1);
-dZ = krdn(LkoordN, 2) - krdn(AkoordN, 2);
-len = sqrt(dX^2 + dZ ^ 2);
+end_nid = element_properties(eid, 16);
+start_nid = element_properties(eid, 17);
+dX = coordinates(end_nid, 1) - coordinates(start_nid, 1);
+dZ = coordinates(end_nid, 2) - coordinates(start_nid, 2);
+len = sqrt(dX^2 + dZ^2);
 cosAlpha = dX / len;
 cosBeta = dZ / len;
-# --------- The direction cosines of element -------
-suunakosin = zeros(3, 3);
-suunakosin(1, 1) = cosAlpha;
-suunakosin(1, 2) = -cosBeta;
-suunakosin(1, 3) = 0.0;
-suunakosin(2, 1) = cosBeta;
-suunakosin(2, 2) = cosAlpha;
-suunakosin(2, 3) = 0.0;
-suunakosin(3, 1) = 0.0;
-suunakosin(3, 2) = 0.0;
-suunakosin(3, 3) = 1.0;
-identity = sparse(suunakosin);
+# The direction cosines of element
+dir_cosine = zeros(3, 3);
+dir_cosine(1, 1) = cosAlpha;
+dir_cosine(1, 2) = -cosBeta;
+dir_cosine(2, 1) = cosBeta;
+dir_cosine(2, 2) = cosAlpha;
+dir_cosine(3, 3) = 1.0;
+identity = sparse(dir_cosine);
 endfunction
 

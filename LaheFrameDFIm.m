@@ -149,27 +149,27 @@ disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
 
 for nid = 1:node_count
     Node = nid;
-    el_node = VardadSolmes(node_count, element_count, nid, AB, ABB);
-    el_nodedim = size(el_node, 1);
+    node_elems = VardadSolmes(node_count, element_count, nid, AB, ABB);
+    node_elemsdim = size(node_elems, 1);
 
-    if el_nodedim > 1
-        for eid = 2:el_nodedim
-            Varras1 = el_node(1, 1);
-            VarrasN = el_node(eid, 1);
+    if node_elemsdim > 1
+        for eid = 2:node_elemsdim
+            element_first = node_elems(1, 1);
+            element_n = node_elems(eid, 1);
 
-            el_nodesum = el_node(1, 11) + el_node(eid, 11);
+            node_elemssum = node_elems(1, 11) + node_elems(eid, 11);
 
-            if el_nodesum == 0
-                identity = SpTeisendusMaatriks(node_count, element_count, Varras1, coordinates, element_properties);
-                spA = spInsertBtoA(spA, row, el_node(1, 2), identity);
-                identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
-                spA = spInsertBtoA(spA, row, el_node(eid, 2), -identity);
+            if node_elemssum == 0
+                identity = SpTeisendusMaatriks(node_count, element_count, element_first, coordinates, element_properties);
+                spA = spInsertBtoA(spA, row, node_elems(1, 2), identity);
+                identity = SpTeisendusMaatriks(node_count, element_count, element_n, coordinates, element_properties);
+                spA = spInsertBtoA(spA, row, node_elems(eid, 2), -identity);
                 row += 3;
             else
-                identity = SpTeisendusMaatriks2x2(node_count, element_count, Varras1, coordinates, element_properties);
-                spA = spInsertBtoA(spA, row, el_node(1, 2), identity);
-                identity = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
-                spA = spInsertBtoA(spA, row, el_node(eid, 2), -identity);
+                identity = SpTeisendusMaatriks2x2(node_count, element_count, element_first, coordinates, element_properties);
+                spA = spInsertBtoA(spA, row, node_elems(1, 2), identity);
+                identity = SpTeisendusMaatriks2x2(node_count, element_count, element_n, coordinates, element_properties);
+                spA = spInsertBtoA(spA, row, node_elems(eid, 2), -identity);
                 row += 2;
             endif
         endfor
@@ -201,20 +201,20 @@ endfor
 toemuutuja = equation_count(2) + 1;
 
 for nid = 1:node_count
-    el_node = VardadSolmes(node_count, element_count, nid, AB, ABB);
+    node_elems = VardadSolmes(node_count, element_count, nid, AB, ABB);
     uvfiLaiend(nid, 1) = sum(support_nodes_extension(nid, 2:4));
 
     row = size(spA, 1) + 1;
     uvfi = 0;
 
-    el_nodedim = size(el_node, 1);
-    if el_nodedim == 1
+    node_elemsdim = size(node_elems, 1);
+    if node_elemsdim == 1
         if uvfiLaiend(nid, 1) == 0
-            VarrasN = el_node(1, 1);
-            identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
-            spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
+            element_n = node_elems(1, 1);
+            identity = SpTeisendusMaatriks(node_count, element_count, element_n, coordinates, element_properties);
+            spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
             Arv123 = 3;
-            B(row : row+2, 1) = node_forces(nid, 1, 1:3);
+            B(row : row+2) = node_forces(nid, 1, 1:3);
             row += 3;
         endif
 
@@ -223,16 +223,16 @@ for nid = 1:node_count
                 uvfi = sum(support_nodes(k, 2:4));
                 row = size(spA, 1) + 1;
 
-                VarrasN = el_node(1, 1);
+                element_n = node_elems(1, 1);
                 if uvfi == 3
-                    identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
-                    spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
+                    identity = SpTeisendusMaatriks(node_count, element_count, element_n, coordinates, element_properties);
+                    spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
                     spA = spInsertBtoA(spA, row, toemuutuja, -speye(uvfi));
                     row += uvfi;
                     toemuutuja += uvfi;
                 elseif uvfi == 2
-                    identity = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
-                    spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
+                    identity = SpTeisendusMaatriks2x2(node_count, element_count, element_n, coordinates, element_properties);
+                    spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
                     spA = spInsertBtoA(spA, row, toemuutuja, -speye(uvfi));
                     row += uvfi;
                     toemuutuja += uvfi;
@@ -240,13 +240,13 @@ for nid = 1:node_count
                     TugiX = support_nodes(k, 2);
                     TugiZ = support_nodes(k, 3);
                     if TugiX == 1
-                        identity = SpToeReaktsioonXvektor(node_count, element_count, VarrasN, coordinates, element_properties);
-                        spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
+                        identity = SpToeReaktsioonXvektor(node_count, element_count, element_n, coordinates, element_properties);
+                        spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
                         row += uvfi
                         toemuutuja += uvfi;
                     elseif TugiZ == 1
-                        identity = SpToeReaktsioonZvektor(node_count, element_count, VarrasN, coordinates, element_properties);
-                        spA = spInsertBtoA(spA, row, el_node(1, 5), identity);
+                        identity = SpToeReaktsioonZvektor(node_count, element_count, element_n, coordinates, element_properties);
+                        spA = spInsertBtoA(spA, row, node_elems(1, 5), identity);
                         spA = spSisestaArv(spA, row, toemuutuja, 1);
                         row += uvfi
                         toemuutuja += uvfi;
@@ -256,22 +256,22 @@ for nid = 1:node_count
         endfor
     endif
 
-    if el_nodedim > 1
-        for eid = 1:el_nodedim
-            VarrasN = el_node(eid, 1);
-            el_nodetas = el_node(eid, 11);
+    if node_elemsdim > 1
+        for eid = 1:node_elemsdim
+            element_n = node_elems(eid, 1);
+            node_elemstas = node_elems(eid, 11);
             b1 = row
             b2 = row + 2;
             Arv123 = 3;
 
-            if el_nodetas == 0
-                identity = SpTeisendusMaatriks(node_count, element_count, VarrasN, coordinates, element_properties);
+            if node_elemstas == 0
+                identity = SpTeisendusMaatriks(node_count, element_count, element_n, coordinates, element_properties);
             else
-                identity = SpTeisendusMaatriks2x2(node_count, element_count, VarrasN, coordinates, element_properties);
+                identity = SpTeisendusMaatriks2x2(node_count, element_count, element_n, coordinates, element_properties);
                 b2 -= 1;
                 Arv123 -= 1;
             endif
-            spA = spInsertBtoA(spA, row, el_node(eid, 5), identity);
+            spA = spInsertBtoA(spA, row, node_elems(eid, 5), identity);
 
             has_supports = 0;
             is_support_node = sum(support_nodes_extension(Node, 2:4));
@@ -304,7 +304,7 @@ for nid = 1:node_count
             toemuutuja += has_supports;
         endif
 
-    B(b1:b2, 1) = node_forces(Node, 1, 1:Arv123);
+    B(b1:b2) = node_forces(Node, 1, 1:Arv123);
  
     row = size(spA, 1) + 1;
     endif
@@ -397,7 +397,7 @@ for i = 1:number_of_support_reactions
     switch (UWFi);
         case{1}
             SpTv = SpToeSiirdeUvektor(node_count, element_count, VarrasS, coordinates, element_properties);
-            B(n, 1) = shift;
+            B(n) = shift;
             spA = spInsertBtoA(spA, n, NodeA, SpTv);
             d = 'x';
         case{2}
@@ -425,7 +425,7 @@ B_size = size(B, 1);
 disp(' No     B   ')
 disp('------------')
 for i = 1:B_size
-    b = B(i, 1);
+    b = B(i);
     if b != 0
         disp(sprintf('%3i %8.3f', i, b))
     endif

@@ -41,7 +41,7 @@
 %> @param M Height of matrix B (not used).
 %> @param N Width of matrix B (not used).
 %>
-%> @retval A The new combined matrix.
+%> @retval The new combined matrix.
 %======================================================================
 function A = InsertBtoA(A, I, J, IM, JN, B, M, N)
 if nargin != 8
