@@ -44,7 +44,7 @@ dX = krdn(LkoordN, 1) - krdn(AkoordN, 1);
 dZ = krdn(LkoordN, 2) - krdn(AkoordN, 2);
 len = sqrt(dX^2 + dZ ^ 2);
 cosAlpha = dX / len;
-cosBeta = dZ / len
+cosBeta = dZ / len;
 # --------- The direction cosines of element -------
 suunakosin = zeros(2, 2);
 suunakosin(1, 1) = cosAlpha;

@@ -21,10 +21,10 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function unit = SpTeisendusUhikMaatriks2x2()
+function identity = SpTeisendusUhikMaatriks2x2()
 ##
 ##   The sparse identity matrix of reaction at the node
 ##
-unit = sparse(eye(2))
+identity = sparse(eye(2))
 endfunction
 

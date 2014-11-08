@@ -22,7 +22,7 @@
 ## http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 ##=========================================================================
 
-function unit = SpTeisendusMaatriks(NSARV, NEARV, n, krdn, selem)
+function identity = SpTeisendusMaatriks(NSARV, NEARV, n, krdn, selem)
 ##disp(' The matrix for transformation the vector [N, Q, M]'' ')
 ##disp(' from local to global coordinates.')
 ##disp(' OUTPUT: SpTM3x3 -- the transformation Matrix as sparse matrix. ')
@@ -43,7 +43,7 @@ dX = krdn(LkoordN, 1) - krdn(AkoordN, 1);
 dZ = krdn(LkoordN, 2) - krdn(AkoordN, 2);
 len = sqrt(dX^2 + dZ ^ 2);
 cosAlpha = dX / len;
-cosBeta = dZ / len
+cosBeta = dZ / len;
 # --------- The direction cosines of element -------
 suunakosin = zeros(3, 3);
 suunakosin(1, 1) = cosAlpha;
@@ -55,6 +55,6 @@ suunakosin(2, 3) = 0.0;
 suunakosin(3, 1) = 0.0;
 suunakosin(3, 2) = 0.0;
 suunakosin(3, 3) = 1.0;
-unit = sparse(suunakosin);
+identity = sparse(suunakosin);
 endfunction
 
