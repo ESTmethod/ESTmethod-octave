@@ -38,6 +38,7 @@ if nargin != 7
     error('Function yzfzv has wrong number of input arguments!')
 end
 
+Fzx = zeros(6, 1);
 xp = x - a;
 if xp >= 0
     Fzx(1, 1) = - scale * Fx * xp / EA;
@@ -46,8 +47,6 @@ if xp >= 0
     Fzx(4, 1) = - Fx;
     Fzx(5, 1) = - Fz;
     Fzx(6, 1) = - Fz * xp;
-else
-    Fzx = zeros(6, 1);
 endif
 endfunction
 

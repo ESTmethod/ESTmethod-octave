@@ -482,7 +482,7 @@ for eid = 1:element_count;
     y2 += step;
     str = sprintf('%3i %3i %3i %3i %3i %3i', siireVardaA(eid, 1:3), joudVardaA(eid, 1:3));
     text(x1, y1, str, 'fontsize', 9)
-    str = sprintf('%3i %3i %3i %3i %3i %3i', siireVardaL(i, 1:3), joudVardaL(i, 1:3));
+    str = sprintf('%3i %3i %3i %3i %3i %3i', siireVardaL(eid, 1:3), joudVardaL(eid, 1:3));
     text(x2, y2, str, 'fontsize', 9)
 endfor
 y1 += 2*step;

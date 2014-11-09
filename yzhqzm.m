@@ -36,6 +36,7 @@ if nargin != 7
     error('Function yzhqz has wrong number of input arguments!')
 end
 
+Zq0 = zeros(6, 1)
 if (x - a) >= 0
     Zq0(1, 1) = -scale * qx * x^2 / (2 * EA);
     Zq0(2, 1) = scale * qz * x^4 / (24 * EJ);
@@ -43,8 +44,6 @@ if (x - a) >= 0
     Zq0(4, 1) = -qx * x;
     Zq0(5, 1) = -qz * x;
     Zq0(6, 1) = -qz * x^2 / 2;
-else
-    Zq0 = zeros(6, 1)
 endif
 endfunction
 

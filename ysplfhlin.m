@@ -46,10 +46,7 @@ if nargin != 5
     error('Function ysplfhlin has wrong number of input arguments!')
 end
 
-F = zeros(6, 6);
-F(1, 1) = 1.0;
-F(2, 2) = 1.0;
-F(3, 3) = 1.0;
+F = eye(6);
 F(1, 4) = -scale * x / EA;
 F(2, 3) = -x;
 F(2, 5) = scale * x^3 / (6 * EJ);
