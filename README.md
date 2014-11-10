@@ -3,6 +3,19 @@ ESTmethod-octave
 
 Octave files for EST Method developed by Andres Lahe at Tallinn University of Technology.
 
+Where to start?
+---------------
+
+Using this is not too hard. Fork this code, run
+`git clone git@github.com:ESTmethod/ESTmethod-octave.git`
+
+To run the best working example (others will follow sometime), run
+`octave spESTframe1LaheDefWFI.m`
+
+Software requirements:
+* Octave >=3.0
+* gnuplot (if you need figures)
+
 Documentation
 -------------
 
